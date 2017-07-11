@@ -2,7 +2,7 @@
 Debug
 Release
 x64
-regex_parser_engine.VC.db
-regex_parser_engine/Release
-regex_parser_engine/Debug
-regex_parser_engine/x64
+Syntactic Analyzer.VC.db
+Syntactic Analyzer/Release
+Syntactic Analyzer/Debug
+Syntactic Analyzer/x64
