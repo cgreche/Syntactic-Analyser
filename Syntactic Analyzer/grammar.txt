@@ -1,0 +1,1645 @@
+Dumping Grammar:
+Grammar Symbols:
+0. $eof - Terminal
+1. IDENTIFIER - Terminal
+2. tag_name - Nonterminal
+3. attr_name - Nonterminal
+4. target - Nonterminal
+5. text - Nonterminal
+6. attr_value - Nonterminal
+7. SINGLE_QUOTED_STRING - Terminal
+8. DOUBLE_QUOTED_STRING - Terminal
+9. attr - Nonterminal
+10. = - Terminal
+11. attr_list - Nonterminal
+12. > - Terminal
+13. < - Terminal
+14. start_tag - Nonterminal
+15. </ - Terminal
+16. end_tag - Nonterminal
+17. /> - Terminal
+18. self_closing_tag - Nonterminal
+19. element - Nonterminal
+20. element_list - Nonterminal
+21. content_elem - Nonterminal
+22. processing_instruction - Nonterminal
+23. comment - Nonterminal
+24. content - Nonterminal
+25. --> - Terminal
+26. <!-- - Terminal
+27. STRING - Terminal
+28. ?> - Terminal
+29. <? - Terminal
+30. DOCTYPE - Nonterminal
+31. <! - Terminal
+32. doctype - Nonterminal
+33. comment_or_pi - Nonterminal
+34. comment_or_pi_list - Nonterminal
+35. prolog - Nonterminal
+36. document - Nonterminal
+37. root_element - Nonterminal
+38. $start - Nonterminal
+
+Grammar Productions rules:
+0. tag_name -> IDENTIFIER 
+1. attr_name -> IDENTIFIER 
+2. target -> IDENTIFIER 
+3. text -> IDENTIFIER 
+4. attr_value -> IDENTIFIER 
+5. attr_value -> SINGLE_QUOTED_STRING 
+6. attr_value -> DOUBLE_QUOTED_STRING 
+7. attr -> attr_name 
+8. attr -> attr_name = attr_value 
+9. attr_list -> attr 
+10. attr_list -> attr_list attr 
+11. start_tag -> < tag_name > 
+12. start_tag -> < tag_name attr_list > 
+13. end_tag -> </ tag_name > 
+14. self_closing_tag -> < tag_name /> 
+15. self_closing_tag -> < tag_name attr_list /> 
+16. element_list -> element 
+17. element_list -> element_list element 
+18. content_elem -> element 
+19. content_elem -> processing_instruction 
+20. content_elem -> comment 
+21. content_elem -> text 
+22. content -> content_elem 
+23. content -> content content_elem 
+24. comment -> <!-- --> 
+25. comment -> <!-- STRING --> 
+26. processing_instruction -> <? target ?> 
+27. processing_instruction -> <? target STRING ?> 
+28. doctype -> <! DOCTYPE > 
+29. comment_or_pi -> comment 
+30. comment_or_pi -> processing_instruction 
+31. comment_or_pi_list -> comment_or_pi 
+32. comment_or_pi_list -> comment_or_pi_list comment_or_pi 
+33. element -> self_closing_tag 
+34. element -> start_tag end_tag 
+35. element -> start_tag content end_tag 
+36. prolog -> doctype 
+37. prolog -> comment_or_pi_list doctype 
+38. prolog -> doctype comment_or_pi_list 
+39. prolog -> comment_or_pi_list doctype comment_or_pi_list 
+40. document -> prolog 
+41. document -> prolog root_element 
+42. document -> prolog root_element comment_or_pi_list 
+43. document -> element 
+44. document -> element comment_or_pi_list 
+45. document -> comment_or_pi_list 
+46. $start -> document $eof 
+
+Generating states...
+State 0:
+K  - [$start -> .document $eof]
+NK - [document -> .prolog]
+NK - [document -> .prolog root_element]
+NK - [document -> .prolog root_element comment_or_pi_list]
+NK - [document -> .element]
+NK - [document -> .element comment_or_pi_list]
+NK - [document -> .comment_or_pi_list]
+NK - [prolog -> .doctype]
+NK - [prolog -> .comment_or_pi_list doctype]
+NK - [prolog -> .doctype comment_or_pi_list]
+NK - [prolog -> .comment_or_pi_list doctype comment_or_pi_list]
+NK - [element -> .self_closing_tag]
+NK - [element -> .start_tag end_tag]
+NK - [element -> .start_tag content end_tag]
+NK - [comment_or_pi_list -> .comment_or_pi]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi]
+NK - [doctype -> .<! DOCTYPE >]
+NK - [self_closing_tag -> .< tag_name />]
+NK - [self_closing_tag -> .< tag_name attr_list />]
+NK - [start_tag -> .< tag_name >]
+NK - [start_tag -> .< tag_name attr_list >]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+Processing state: 0
+Creating itemsets from state: 0
+State 1:
+K  - [document -> comment_or_pi_list.]
+K  - [prolog -> comment_or_pi_list .doctype]
+K  - [prolog -> comment_or_pi_list .doctype comment_or_pi_list]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi]
+NK - [doctype -> .<! DOCTYPE >]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 2:
+K  - [document -> element.]
+K  - [document -> element .comment_or_pi_list]
+NK - [comment_or_pi_list -> .comment_or_pi]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 3:
+K  - [comment_or_pi -> comment.]
+State 4:
+K  - [document -> prolog.]
+K  - [document -> prolog .root_element]
+K  - [document -> prolog .root_element comment_or_pi_list]
+State 5:
+K  - [$start -> document .$eof]
+State 6:
+K  - [element -> start_tag .end_tag]
+K  - [element -> start_tag .content end_tag]
+NK - [end_tag -> .</ tag_name >]
+NK - [content -> .content_elem]
+NK - [content -> .content content_elem]
+NK - [content_elem -> .element]
+NK - [content_elem -> .processing_instruction]
+NK - [content_elem -> .comment]
+NK - [content_elem -> .text]
+NK - [element -> .self_closing_tag]
+NK - [element -> .start_tag end_tag]
+NK - [element -> .start_tag content end_tag]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [text -> .IDENTIFIER]
+NK - [self_closing_tag -> .< tag_name />]
+NK - [self_closing_tag -> .< tag_name attr_list />]
+NK - [start_tag -> .< tag_name >]
+NK - [start_tag -> .< tag_name attr_list >]
+State 7:
+K  - [comment_or_pi -> processing_instruction.]
+State 8:
+K  - [element -> self_closing_tag.]
+State 9:
+K  - [prolog -> doctype.]
+K  - [prolog -> doctype .comment_or_pi_list]
+NK - [comment_or_pi_list -> .comment_or_pi]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 10:
+K  - [comment_or_pi_list -> comment_or_pi.]
+State 11:
+K  - [self_closing_tag -> < .tag_name />]
+K  - [self_closing_tag -> < .tag_name attr_list />]
+K  - [start_tag -> < .tag_name >]
+K  - [start_tag -> < .tag_name attr_list >]
+NK - [tag_name -> .IDENTIFIER]
+State 12:
+K  - [comment -> <!-- .-->]
+K  - [comment -> <!-- .STRING -->]
+State 13:
+K  - [processing_instruction -> <? .target ?>]
+K  - [processing_instruction -> <? .target STRING ?>]
+NK - [target -> .IDENTIFIER]
+State 14:
+K  - [doctype -> <! .DOCTYPE >]
+
+Processing state: 1State: 1, Saving reduction to rule45
+
+Creating itemsets from state: 1
+State 3 already created
+State 7 already created
+State 15:
+K  - [prolog -> comment_or_pi_list doctype.]
+K  - [prolog -> comment_or_pi_list doctype .comment_or_pi_list]
+NK - [comment_or_pi_list -> .comment_or_pi]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 16:
+K  - [comment_or_pi_list -> comment_or_pi_list comment_or_pi.]
+State 12 already created
+State 13 already created
+State 14 already created
+
+Processing state: 2State: 2, Saving reduction to rule43
+
+Creating itemsets from state: 2
+State 17:
+K  - [document -> element comment_or_pi_list.]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 3 already created
+State 7 already created
+State 10 already created
+State 12 already created
+State 13 already created
+
+Processing state: 3State: 3, Saving reduction to rule29
+
+Creating itemsets from state: 3
+
+Processing state: 4State: 4, Saving reduction to rule40
+
+Creating itemsets from state: 4
+State 18:
+K  - [document -> prolog root_element.]
+K  - [document -> prolog root_element .comment_or_pi_list]
+NK - [comment_or_pi_list -> .comment_or_pi]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+
+Processing state: 5
+Creating itemsets from state: 5
+State 19:
+K  - [$start -> document $eof.]
+
+Processing state: 6
+Creating itemsets from state: 6
+State 20:
+K  - [content_elem -> element.]
+State 21:
+K  - [content -> content_elem.]
+State 22:
+K  - [content_elem -> comment.]
+State 23:
+K  - [element -> start_tag content .end_tag]
+K  - [content -> content .content_elem]
+NK - [end_tag -> .</ tag_name >]
+NK - [content_elem -> .element]
+NK - [content_elem -> .processing_instruction]
+NK - [content_elem -> .comment]
+NK - [content_elem -> .text]
+NK - [element -> .self_closing_tag]
+NK - [element -> .start_tag end_tag]
+NK - [element -> .start_tag content end_tag]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [text -> .IDENTIFIER]
+NK - [self_closing_tag -> .< tag_name />]
+NK - [self_closing_tag -> .< tag_name attr_list />]
+NK - [start_tag -> .< tag_name >]
+NK - [start_tag -> .< tag_name attr_list >]
+State 6 already created
+State 24:
+K  - [content_elem -> processing_instruction.]
+State 25:
+K  - [element -> start_tag end_tag.]
+State 8 already created
+State 26:
+K  - [content_elem -> text.]
+State 27:
+K  - [end_tag -> </ .tag_name >]
+NK - [tag_name -> .IDENTIFIER]
+State 11 already created
+State 28:
+K  - [text -> IDENTIFIER.]
+State 12 already created
+State 13 already created
+
+Processing state: 7State: 7, Saving reduction to rule30
+
+Creating itemsets from state: 7
+
+Processing state: 8State: 8, Saving reduction to rule33
+
+Creating itemsets from state: 8
+
+Processing state: 9State: 9, Saving reduction to rule36
+
+Creating itemsets from state: 9
+State 29:
+K  - [prolog -> doctype comment_or_pi_list.]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 3 already created
+State 7 already created
+State 10 already created
+State 12 already created
+State 13 already created
+
+Processing state: 10State: 10, Saving reduction to rule31
+
+Creating itemsets from state: 10
+
+Processing state: 11
+Creating itemsets from state: 11
+State 30:
+K  - [self_closing_tag -> < tag_name ./>]
+K  - [self_closing_tag -> < tag_name .attr_list />]
+K  - [start_tag -> < tag_name .>]
+K  - [start_tag -> < tag_name .attr_list >]
+NK - [attr_list -> .attr]
+NK - [attr_list -> .attr_list attr]
+NK - [attr -> .attr_name]
+NK - [attr -> .attr_name = attr_value]
+NK - [attr_name -> .IDENTIFIER]
+State 31:
+K  - [tag_name -> IDENTIFIER.]
+
+Processing state: 12
+Creating itemsets from state: 12
+State 32:
+K  - [comment -> <!-- -->.]
+State 33:
+K  - [comment -> <!-- STRING .-->]
+
+Processing state: 13
+Creating itemsets from state: 13
+State 34:
+K  - [processing_instruction -> <? target .?>]
+K  - [processing_instruction -> <? target .STRING ?>]
+State 35:
+K  - [target -> IDENTIFIER.]
+
+Processing state: 14
+Creating itemsets from state: 14
+State 36:
+K  - [doctype -> <! DOCTYPE .>]
+
+Processing state: 15State: 15, Saving reduction to rule37
+
+Creating itemsets from state: 15
+State 37:
+K  - [prolog -> comment_or_pi_list doctype comment_or_pi_list.]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 3 already created
+State 7 already created
+State 10 already created
+State 12 already created
+State 13 already created
+
+Processing state: 16State: 16, Saving reduction to rule32
+
+Creating itemsets from state: 16
+
+Processing state: 17State: 17, Saving reduction to rule44
+
+Creating itemsets from state: 17
+State 3 already created
+State 7 already created
+State 16 already created
+State 12 already created
+State 13 already created
+
+Processing state: 18State: 18, Saving reduction to rule41
+
+Creating itemsets from state: 18
+State 38:
+K  - [document -> prolog root_element comment_or_pi_list.]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 3 already created
+State 7 already created
+State 10 already created
+State 12 already created
+State 13 already created
+
+Processing state: 19State: 19, Saving reduction to rule46
+
+Creating itemsets from state: 19
+
+Processing state: 20State: 20, Saving reduction to rule18
+
+Creating itemsets from state: 20
+
+Processing state: 21State: 21, Saving reduction to rule22
+
+Creating itemsets from state: 21
+
+Processing state: 22State: 22, Saving reduction to rule20
+
+Creating itemsets from state: 22
+
+Processing state: 23
+Creating itemsets from state: 23
+State 20 already created
+State 39:
+K  - [content -> content content_elem.]
+State 22 already created
+State 6 already created
+State 24 already created
+State 40:
+K  - [element -> start_tag content end_tag.]
+State 8 already created
+State 26 already created
+State 27 already created
+State 11 already created
+State 28 already created
+State 12 already created
+State 13 already created
+
+Processing state: 24State: 24, Saving reduction to rule19
+
+Creating itemsets from state: 24
+
+Processing state: 25State: 25, Saving reduction to rule34
+
+Creating itemsets from state: 25
+
+Processing state: 26State: 26, Saving reduction to rule21
+
+Creating itemsets from state: 26
+
+Processing state: 27
+Creating itemsets from state: 27
+State 41:
+K  - [end_tag -> </ tag_name .>]
+State 31 already created
+
+Processing state: 28State: 28, Saving reduction to rule3
+
+Creating itemsets from state: 28
+
+Processing state: 29State: 29, Saving reduction to rule38
+
+Creating itemsets from state: 29
+State 3 already created
+State 7 already created
+State 16 already created
+State 12 already created
+State 13 already created
+
+Processing state: 30
+Creating itemsets from state: 30
+State 42:
+K  - [attr_list -> attr.]
+State 43:
+K  - [self_closing_tag -> < tag_name attr_list ./>]
+K  - [start_tag -> < tag_name attr_list .>]
+K  - [attr_list -> attr_list .attr]
+NK - [attr -> .attr_name]
+NK - [attr -> .attr_name = attr_value]
+NK - [attr_name -> .IDENTIFIER]
+State 44:
+K  - [attr -> attr_name.]
+K  - [attr -> attr_name .= attr_value]
+State 45:
+K  - [self_closing_tag -> < tag_name />.]
+State 46:
+K  - [start_tag -> < tag_name >.]
+State 47:
+K  - [attr_name -> IDENTIFIER.]
+
+Processing state: 31State: 31, Saving reduction to rule0
+
+Creating itemsets from state: 31
+
+Processing state: 32State: 32, Saving reduction to rule24
+
+Creating itemsets from state: 32
+
+Processing state: 33
+Creating itemsets from state: 33
+State 48:
+K  - [comment -> <!-- STRING -->.]
+
+Processing state: 34
+Creating itemsets from state: 34
+State 49:
+K  - [processing_instruction -> <? target ?>.]
+State 50:
+K  - [processing_instruction -> <? target STRING .?>]
+
+Processing state: 35State: 35, Saving reduction to rule2
+
+Creating itemsets from state: 35
+
+Processing state: 36
+Creating itemsets from state: 36
+State 51:
+K  - [doctype -> <! DOCTYPE >.]
+
+Processing state: 37State: 37, Saving reduction to rule39
+
+Creating itemsets from state: 37
+State 3 already created
+State 7 already created
+State 16 already created
+State 12 already created
+State 13 already created
+
+Processing state: 38State: 38, Saving reduction to rule42
+
+Creating itemsets from state: 38
+State 3 already created
+State 7 already created
+State 16 already created
+State 12 already created
+State 13 already created
+
+Processing state: 39State: 39, Saving reduction to rule23
+
+Creating itemsets from state: 39
+
+Processing state: 40State: 40, Saving reduction to rule35
+
+Creating itemsets from state: 40
+
+Processing state: 41
+Creating itemsets from state: 41
+State 52:
+K  - [end_tag -> </ tag_name >.]
+
+Processing state: 42State: 42, Saving reduction to rule9
+
+Creating itemsets from state: 42
+
+Processing state: 43
+Creating itemsets from state: 43
+State 53:
+K  - [attr_list -> attr_list attr.]
+State 44 already created
+State 54:
+K  - [self_closing_tag -> < tag_name attr_list />.]
+State 55:
+K  - [start_tag -> < tag_name attr_list >.]
+State 47 already created
+
+Processing state: 44State: 44, Saving reduction to rule7
+
+Creating itemsets from state: 44
+State 56:
+K  - [attr -> attr_name = .attr_value]
+NK - [attr_value -> .IDENTIFIER]
+NK - [attr_value -> .SINGLE_QUOTED_STRING]
+NK - [attr_value -> .DOUBLE_QUOTED_STRING]
+
+Processing state: 45State: 45, Saving reduction to rule14
+
+Creating itemsets from state: 45
+
+Processing state: 46State: 46, Saving reduction to rule11
+
+Creating itemsets from state: 46
+
+Processing state: 47State: 47, Saving reduction to rule1
+
+Creating itemsets from state: 47
+
+Processing state: 48State: 48, Saving reduction to rule25
+
+Creating itemsets from state: 48
+
+Processing state: 49State: 49, Saving reduction to rule26
+
+Creating itemsets from state: 49
+
+Processing state: 50
+Creating itemsets from state: 50
+State 57:
+K  - [processing_instruction -> <? target STRING ?>.]
+
+Processing state: 51State: 51, Saving reduction to rule28
+
+Creating itemsets from state: 51
+
+Processing state: 52State: 52, Saving reduction to rule13
+
+Creating itemsets from state: 52
+
+Processing state: 53State: 53, Saving reduction to rule10
+
+Creating itemsets from state: 53
+
+Processing state: 54State: 54, Saving reduction to rule15
+
+Creating itemsets from state: 54
+
+Processing state: 55State: 55, Saving reduction to rule12
+
+Creating itemsets from state: 55
+
+Processing state: 56
+Creating itemsets from state: 56
+State 58:
+K  - [attr -> attr_name = attr_value.]
+State 59:
+K  - [attr_value -> SINGLE_QUOTED_STRING.]
+State 60:
+K  - [attr_value -> IDENTIFIER.]
+State 61:
+K  - [attr_value -> DOUBLE_QUOTED_STRING.]
+
+Processing state: 57State: 57, Saving reduction to rule27
+
+Creating itemsets from state: 57
+
+Processing state: 58State: 58, Saving reduction to rule8
+
+Creating itemsets from state: 58
+
+Processing state: 59State: 59, Saving reduction to rule5
+
+Creating itemsets from state: 59
+
+Processing state: 60State: 60, Saving reduction to rule4
+
+Creating itemsets from state: 60
+
+Processing state: 61State: 61, Saving reduction to rule6
+
+Creating itemsets from state: 61
+
+LR(0) - State list:
+State 0:
+K  - [$start -> .document $eof]
+NK - [document -> .prolog]
+NK - [document -> .prolog root_element]
+NK - [document -> .prolog root_element comment_or_pi_list]
+NK - [document -> .element]
+NK - [document -> .element comment_or_pi_list]
+NK - [document -> .comment_or_pi_list]
+NK - [prolog -> .doctype]
+NK - [prolog -> .comment_or_pi_list doctype]
+NK - [prolog -> .doctype comment_or_pi_list]
+NK - [prolog -> .comment_or_pi_list doctype comment_or_pi_list]
+NK - [element -> .self_closing_tag]
+NK - [element -> .start_tag end_tag]
+NK - [element -> .start_tag content end_tag]
+NK - [comment_or_pi_list -> .comment_or_pi]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi]
+NK - [doctype -> .<! DOCTYPE >]
+NK - [self_closing_tag -> .< tag_name />]
+NK - [self_closing_tag -> .< tag_name attr_list />]
+NK - [start_tag -> .< tag_name >]
+NK - [start_tag -> .< tag_name attr_list >]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 1:
+K  - [document -> comment_or_pi_list.]
+K  - [prolog -> comment_or_pi_list .doctype]
+K  - [prolog -> comment_or_pi_list .doctype comment_or_pi_list]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi]
+NK - [doctype -> .<! DOCTYPE >]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 2:
+K  - [document -> element.]
+K  - [document -> element .comment_or_pi_list]
+NK - [comment_or_pi_list -> .comment_or_pi]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 3:
+K  - [comment_or_pi -> comment.]
+State 4:
+K  - [document -> prolog.]
+K  - [document -> prolog .root_element]
+K  - [document -> prolog .root_element comment_or_pi_list]
+State 5:
+K  - [$start -> document .$eof]
+State 6:
+K  - [element -> start_tag .end_tag]
+K  - [element -> start_tag .content end_tag]
+NK - [end_tag -> .</ tag_name >]
+NK - [content -> .content_elem]
+NK - [content -> .content content_elem]
+NK - [content_elem -> .element]
+NK - [content_elem -> .processing_instruction]
+NK - [content_elem -> .comment]
+NK - [content_elem -> .text]
+NK - [element -> .self_closing_tag]
+NK - [element -> .start_tag end_tag]
+NK - [element -> .start_tag content end_tag]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [text -> .IDENTIFIER]
+NK - [self_closing_tag -> .< tag_name />]
+NK - [self_closing_tag -> .< tag_name attr_list />]
+NK - [start_tag -> .< tag_name >]
+NK - [start_tag -> .< tag_name attr_list >]
+State 7:
+K  - [comment_or_pi -> processing_instruction.]
+State 8:
+K  - [element -> self_closing_tag.]
+State 9:
+K  - [prolog -> doctype.]
+K  - [prolog -> doctype .comment_or_pi_list]
+NK - [comment_or_pi_list -> .comment_or_pi]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 10:
+K  - [comment_or_pi_list -> comment_or_pi.]
+State 11:
+K  - [self_closing_tag -> < .tag_name />]
+K  - [self_closing_tag -> < .tag_name attr_list />]
+K  - [start_tag -> < .tag_name >]
+K  - [start_tag -> < .tag_name attr_list >]
+NK - [tag_name -> .IDENTIFIER]
+State 12:
+K  - [comment -> <!-- .-->]
+K  - [comment -> <!-- .STRING -->]
+State 13:
+K  - [processing_instruction -> <? .target ?>]
+K  - [processing_instruction -> <? .target STRING ?>]
+NK - [target -> .IDENTIFIER]
+State 14:
+K  - [doctype -> <! .DOCTYPE >]
+State 15:
+K  - [prolog -> comment_or_pi_list doctype.]
+K  - [prolog -> comment_or_pi_list doctype .comment_or_pi_list]
+NK - [comment_or_pi_list -> .comment_or_pi]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 16:
+K  - [comment_or_pi_list -> comment_or_pi_list comment_or_pi.]
+State 17:
+K  - [document -> element comment_or_pi_list.]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 18:
+K  - [document -> prolog root_element.]
+K  - [document -> prolog root_element .comment_or_pi_list]
+NK - [comment_or_pi_list -> .comment_or_pi]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 19:
+K  - [$start -> document $eof.]
+State 20:
+K  - [content_elem -> element.]
+State 21:
+K  - [content -> content_elem.]
+State 22:
+K  - [content_elem -> comment.]
+State 23:
+K  - [element -> start_tag content .end_tag]
+K  - [content -> content .content_elem]
+NK - [end_tag -> .</ tag_name >]
+NK - [content_elem -> .element]
+NK - [content_elem -> .processing_instruction]
+NK - [content_elem -> .comment]
+NK - [content_elem -> .text]
+NK - [element -> .self_closing_tag]
+NK - [element -> .start_tag end_tag]
+NK - [element -> .start_tag content end_tag]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [text -> .IDENTIFIER]
+NK - [self_closing_tag -> .< tag_name />]
+NK - [self_closing_tag -> .< tag_name attr_list />]
+NK - [start_tag -> .< tag_name >]
+NK - [start_tag -> .< tag_name attr_list >]
+State 24:
+K  - [content_elem -> processing_instruction.]
+State 25:
+K  - [element -> start_tag end_tag.]
+State 26:
+K  - [content_elem -> text.]
+State 27:
+K  - [end_tag -> </ .tag_name >]
+NK - [tag_name -> .IDENTIFIER]
+State 28:
+K  - [text -> IDENTIFIER.]
+State 29:
+K  - [prolog -> doctype comment_or_pi_list.]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 30:
+K  - [self_closing_tag -> < tag_name ./>]
+K  - [self_closing_tag -> < tag_name .attr_list />]
+K  - [start_tag -> < tag_name .>]
+K  - [start_tag -> < tag_name .attr_list >]
+NK - [attr_list -> .attr]
+NK - [attr_list -> .attr_list attr]
+NK - [attr -> .attr_name]
+NK - [attr -> .attr_name = attr_value]
+NK - [attr_name -> .IDENTIFIER]
+State 31:
+K  - [tag_name -> IDENTIFIER.]
+State 32:
+K  - [comment -> <!-- -->.]
+State 33:
+K  - [comment -> <!-- STRING .-->]
+State 34:
+K  - [processing_instruction -> <? target .?>]
+K  - [processing_instruction -> <? target .STRING ?>]
+State 35:
+K  - [target -> IDENTIFIER.]
+State 36:
+K  - [doctype -> <! DOCTYPE .>]
+State 37:
+K  - [prolog -> comment_or_pi_list doctype comment_or_pi_list.]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 38:
+K  - [document -> prolog root_element comment_or_pi_list.]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi]
+NK - [comment_or_pi -> .comment]
+NK - [comment_or_pi -> .processing_instruction]
+NK - [comment -> .<!-- -->]
+NK - [comment -> .<!-- STRING -->]
+NK - [processing_instruction -> .<? target ?>]
+NK - [processing_instruction -> .<? target STRING ?>]
+State 39:
+K  - [content -> content content_elem.]
+State 40:
+K  - [element -> start_tag content end_tag.]
+State 41:
+K  - [end_tag -> </ tag_name .>]
+State 42:
+K  - [attr_list -> attr.]
+State 43:
+K  - [self_closing_tag -> < tag_name attr_list ./>]
+K  - [start_tag -> < tag_name attr_list .>]
+K  - [attr_list -> attr_list .attr]
+NK - [attr -> .attr_name]
+NK - [attr -> .attr_name = attr_value]
+NK - [attr_name -> .IDENTIFIER]
+State 44:
+K  - [attr -> attr_name.]
+K  - [attr -> attr_name .= attr_value]
+State 45:
+K  - [self_closing_tag -> < tag_name />.]
+State 46:
+K  - [start_tag -> < tag_name >.]
+State 47:
+K  - [attr_name -> IDENTIFIER.]
+State 48:
+K  - [comment -> <!-- STRING -->.]
+State 49:
+K  - [processing_instruction -> <? target ?>.]
+State 50:
+K  - [processing_instruction -> <? target STRING .?>]
+State 51:
+K  - [doctype -> <! DOCTYPE >.]
+State 52:
+K  - [end_tag -> </ tag_name >.]
+State 53:
+K  - [attr_list -> attr_list attr.]
+State 54:
+K  - [self_closing_tag -> < tag_name attr_list />.]
+State 55:
+K  - [start_tag -> < tag_name attr_list >.]
+State 56:
+K  - [attr -> attr_name = .attr_value]
+NK - [attr_value -> .IDENTIFIER]
+NK - [attr_value -> .SINGLE_QUOTED_STRING]
+NK - [attr_value -> .DOUBLE_QUOTED_STRING]
+State 57:
+K  - [processing_instruction -> <? target STRING ?>.]
+State 58:
+K  - [attr -> attr_name = attr_value.]
+State 59:
+K  - [attr_value -> SINGLE_QUOTED_STRING.]
+State 60:
+K  - [attr_value -> IDENTIFIER.]
+State 61:
+K  - [attr_value -> DOUBLE_QUOTED_STRING.]
+
+Nullable sets:
+nullable(tag_name) = false
+nullable(attr_name) = false
+nullable(target) = false
+nullable(text) = false
+nullable(attr_value) = false
+nullable(attr) = false
+nullable(attr_list) = false
+nullable(start_tag) = false
+nullable(end_tag) = false
+nullable(self_closing_tag) = false
+nullable(element) = false
+nullable(element_list) = false
+nullable(content_elem) = false
+nullable(processing_instruction) = false
+nullable(comment) = false
+nullable(content) = false
+nullable(DOCTYPE) = true
+nullable(doctype) = false
+nullable(comment_or_pi) = false
+nullable(comment_or_pi_list) = false
+nullable(prolog) = false
+nullable(document) = false
+nullable(root_element) = true
+nullable($start) = false
+
+FIRST sets:
+FIRST($eof) = {$eof}
+FIRST(IDENTIFIER) = {IDENTIFIER}
+FIRST(tag_name) = {IDENTIFIER}
+FIRST(attr_name) = {IDENTIFIER}
+FIRST(target) = {IDENTIFIER}
+FIRST(text) = {IDENTIFIER}
+FIRST(attr_value) = {IDENTIFIER,SINGLE_QUOTED_STRING,DOUBLE_QUOTED_STRING}
+FIRST(SINGLE_QUOTED_STRING) = {SINGLE_QUOTED_STRING}
+FIRST(DOUBLE_QUOTED_STRING) = {DOUBLE_QUOTED_STRING}
+FIRST(attr) = {IDENTIFIER}
+FIRST(=) = {=}
+FIRST(attr_list) = {IDENTIFIER}
+FIRST(>) = {>}
+FIRST(<) = {<}
+FIRST(start_tag) = {<}
+FIRST(</) = {</}
+FIRST(end_tag) = {</}
+FIRST(/>) = {/>}
+FIRST(self_closing_tag) = {<}
+FIRST(element) = {<}
+FIRST(element_list) = {<}
+FIRST(content_elem) = {<,<?,<!--,IDENTIFIER}
+FIRST(processing_instruction) = {<?}
+FIRST(comment) = {<!--}
+FIRST(content) = {<,<?,<!--,IDENTIFIER}
+FIRST(-->) = {-->}
+FIRST(<!--) = {<!--}
+FIRST(STRING) = {STRING}
+FIRST(?>) = {?>}
+FIRST(<?) = {<?}
+FIRST(DOCTYPE) = {}
+FIRST(<!) = {<!}
+FIRST(doctype) = {<!}
+FIRST(comment_or_pi) = {<!--,<?}
+FIRST(comment_or_pi_list) = {<!--,<?}
+FIRST(prolog) = {<!,<!--,<?}
+FIRST(document) = {<!,<!--,<?,<}
+FIRST(root_element) = {}
+FIRST($start) = {<!,<!--,<?,<}
+
+FOLLOW sets:
+FOLLOW(tag_name) = {>,IDENTIFIER,/>}
+FOLLOW(attr_name) = {=,IDENTIFIER,>,/>}
+FOLLOW(target) = {?>,STRING}
+FOLLOW(text) = {</,<,<?,<!--,IDENTIFIER}
+FOLLOW(attr_value) = {IDENTIFIER,>,/>}
+FOLLOW(attr) = {IDENTIFIER,>,/>}
+FOLLOW(attr_list) = {IDENTIFIER,>,/>}
+FOLLOW(start_tag) = {</,<,<?,<!--,IDENTIFIER}
+FOLLOW(end_tag) = {<,<!--,<?,</,IDENTIFIER,$eof}
+FOLLOW(self_closing_tag) = {<,<!--,<?,</,IDENTIFIER,$eof}
+FOLLOW(element) = {<,<!--,<?,</,IDENTIFIER,$eof}
+FOLLOW(element_list) = {<}
+FOLLOW(content_elem) = {</,<,<?,<!--,IDENTIFIER}
+FOLLOW(processing_instruction) = {</,<,<?,<!--,IDENTIFIER,<!,$eof}
+FOLLOW(comment) = {</,<,<?,<!--,IDENTIFIER,<!,$eof}
+FOLLOW(content) = {</,<,<?,<!--,IDENTIFIER}
+FOLLOW(DOCTYPE) = {>}
+FOLLOW(doctype) = {<!--,<?,$eof}
+FOLLOW(comment_or_pi) = {<!--,<?,<!,$eof}
+FOLLOW(comment_or_pi_list) = {<!--,<?,<!,$eof}
+FOLLOW(prolog) = {$eof}
+FOLLOW(document) = {$eof}
+FOLLOW(root_element) = {<!--,<?,$eof}
+FOLLOW($start) = {$eof}
+
+
+State 0:
+K  - [$start -> .document $eof, $eof]
+NK - [document -> .prolog, $eof]
+NK - [document -> .prolog root_element, $eof]
+NK - [document -> .prolog root_element comment_or_pi_list, $eof]
+NK - [document -> .element, $eof]
+NK - [document -> .element comment_or_pi_list, $eof]
+NK - [document -> .comment_or_pi_list, $eof]
+NK - [prolog -> .doctype, $eof]
+NK - [prolog -> .comment_or_pi_list doctype, $eof]
+NK - [prolog -> .doctype comment_or_pi_list, $eof]
+NK - [prolog -> .comment_or_pi_list doctype comment_or_pi_list, $eof]
+NK - [element -> .self_closing_tag, $eof/<!--/<?]
+NK - [element -> .start_tag end_tag, $eof/<!--/<?]
+NK - [element -> .start_tag content end_tag, $eof/<!--/<?]
+NK - [comment_or_pi_list -> .comment_or_pi, $eof/<!/<!--/<?]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi, $eof/<!/<!--/<?]
+NK - [doctype -> .<! DOCTYPE >, $eof/<!--/<?]
+NK - [self_closing_tag -> .< tag_name />, $eof/<!--/<?]
+NK - [self_closing_tag -> .< tag_name attr_list />, $eof/<!--/<?]
+NK - [start_tag -> .< tag_name >, <//</<?/<!--/IDENTIFIER]
+NK - [start_tag -> .< tag_name attr_list >, <//</<?/<!--/IDENTIFIER]
+NK - [comment_or_pi -> .comment, $eof/<!/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!/<!--/<?]
+State 1:
+K  - [document -> comment_or_pi_list., $eof]
+K  - [prolog -> comment_or_pi_list .doctype, $eof]
+K  - [prolog -> comment_or_pi_list .doctype comment_or_pi_list, $eof]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi, $eof/<!/<!--/<?]
+NK - [doctype -> .<! DOCTYPE >, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!/<!--/<?]
+State 2:
+K  - [document -> element., $eof]
+K  - [document -> element .comment_or_pi_list, $eof]
+NK - [comment_or_pi_list -> .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 3:
+K  - [comment_or_pi -> comment., $eof/<!/<!--/<?]
+State 4:
+K  - [document -> prolog., $eof]
+K  - [document -> prolog .root_element, $eof]
+K  - [document -> prolog .root_element comment_or_pi_list, $eof]
+State 5:
+K  - [$start -> document .$eof, $eof]
+State 6:
+K  - [element -> start_tag .end_tag, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [element -> start_tag .content end_tag, $eof/<!--/<?/<//</IDENTIFIER]
+NK - [end_tag -> .</ tag_name >, $eof/<!--/<?/<//</IDENTIFIER]
+NK - [content -> .content_elem, <//</<?/<!--/IDENTIFIER]
+NK - [content -> .content content_elem, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .element, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .processing_instruction, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .comment, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .text, <//</<?/<!--/IDENTIFIER]
+NK - [element -> .self_closing_tag, <//</<?/<!--/IDENTIFIER]
+NK - [element -> .start_tag end_tag, <//</<?/<!--/IDENTIFIER]
+NK - [element -> .start_tag content end_tag, <//</<?/<!--/IDENTIFIER]
+NK - [processing_instruction -> .<? target ?>, <//</<?/<!--/IDENTIFIER]
+NK - [processing_instruction -> .<? target STRING ?>, <//</<?/<!--/IDENTIFIER]
+NK - [comment -> .<!-- -->, <//</<?/<!--/IDENTIFIER]
+NK - [comment -> .<!-- STRING -->, <//</<?/<!--/IDENTIFIER]
+NK - [text -> .IDENTIFIER, <//</<?/<!--/IDENTIFIER]
+NK - [self_closing_tag -> .< tag_name />, <//</<?/<!--/IDENTIFIER]
+NK - [self_closing_tag -> .< tag_name attr_list />, <//</<?/<!--/IDENTIFIER]
+NK - [start_tag -> .< tag_name >, <//</<?/<!--/IDENTIFIER]
+NK - [start_tag -> .< tag_name attr_list >, <//</<?/<!--/IDENTIFIER]
+State 7:
+K  - [comment_or_pi -> processing_instruction., $eof/<!/<!--/<?]
+State 8:
+K  - [element -> self_closing_tag., $eof/<!--/<?/<//</IDENTIFIER]
+State 9:
+K  - [prolog -> doctype., $eof]
+K  - [prolog -> doctype .comment_or_pi_list, $eof]
+NK - [comment_or_pi_list -> .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 10:
+K  - [comment_or_pi_list -> comment_or_pi., $eof/<!/<!--/<?]
+State 11:
+K  - [self_closing_tag -> < .tag_name />, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [self_closing_tag -> < .tag_name attr_list />, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [start_tag -> < .tag_name >, <//</<?/<!--/IDENTIFIER]
+K  - [start_tag -> < .tag_name attr_list >, <//</<?/<!--/IDENTIFIER]
+NK - [tag_name -> .IDENTIFIER, />/IDENTIFIER/>]
+State 12:
+K  - [comment -> <!-- .-->, $eof/<!/<!--/<?/<//</IDENTIFIER]
+K  - [comment -> <!-- .STRING -->, $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 13:
+K  - [processing_instruction -> <? .target ?>, $eof/<!/<!--/<?/<//</IDENTIFIER]
+K  - [processing_instruction -> <? .target STRING ?>, $eof/<!/<!--/<?/<//</IDENTIFIER]
+NK - [target -> .IDENTIFIER, ?>/STRING]
+State 14:
+K  - [doctype -> <! .DOCTYPE >, $eof/<!--/<?]
+State 15:
+K  - [prolog -> comment_or_pi_list doctype., $eof]
+K  - [prolog -> comment_or_pi_list doctype .comment_or_pi_list, $eof]
+NK - [comment_or_pi_list -> .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 16:
+K  - [comment_or_pi_list -> comment_or_pi_list comment_or_pi., $eof/<!/<!--/<?]
+State 17:
+K  - [document -> element comment_or_pi_list., $eof]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 18:
+K  - [document -> prolog root_element., $eof]
+K  - [document -> prolog root_element .comment_or_pi_list, $eof]
+NK - [comment_or_pi_list -> .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 19:
+K  - [$start -> document $eof., $eof]
+State 20:
+K  - [content_elem -> element., <//</<?/<!--/IDENTIFIER]
+State 21:
+K  - [content -> content_elem., <//</<?/<!--/IDENTIFIER]
+State 22:
+K  - [content_elem -> comment., <//</<?/<!--/IDENTIFIER]
+State 23:
+K  - [element -> start_tag content .end_tag, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [content -> content .content_elem, <//</<?/<!--/IDENTIFIER]
+NK - [end_tag -> .</ tag_name >, $eof/<!--/<?/<//</IDENTIFIER]
+NK - [content_elem -> .element, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .processing_instruction, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .comment, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .text, <//</<?/<!--/IDENTIFIER]
+NK - [element -> .self_closing_tag, <//</<?/<!--/IDENTIFIER]
+NK - [element -> .start_tag end_tag, <//</<?/<!--/IDENTIFIER]
+NK - [element -> .start_tag content end_tag, <//</<?/<!--/IDENTIFIER]
+NK - [processing_instruction -> .<? target ?>, <//</<?/<!--/IDENTIFIER]
+NK - [processing_instruction -> .<? target STRING ?>, <//</<?/<!--/IDENTIFIER]
+NK - [comment -> .<!-- -->, <//</<?/<!--/IDENTIFIER]
+NK - [comment -> .<!-- STRING -->, <//</<?/<!--/IDENTIFIER]
+NK - [text -> .IDENTIFIER, <//</<?/<!--/IDENTIFIER]
+NK - [self_closing_tag -> .< tag_name />, <//</<?/<!--/IDENTIFIER]
+NK - [self_closing_tag -> .< tag_name attr_list />, <//</<?/<!--/IDENTIFIER]
+NK - [start_tag -> .< tag_name >, <//</<?/<!--/IDENTIFIER]
+NK - [start_tag -> .< tag_name attr_list >, <//</<?/<!--/IDENTIFIER]
+State 24:
+K  - [content_elem -> processing_instruction., <//</<?/<!--/IDENTIFIER]
+State 25:
+K  - [element -> start_tag end_tag., $eof/<!--/<?/<//</IDENTIFIER]
+State 26:
+K  - [content_elem -> text., <//</<?/<!--/IDENTIFIER]
+State 27:
+K  - [end_tag -> </ .tag_name >, $eof/<!--/<?/<//</IDENTIFIER]
+NK - [tag_name -> .IDENTIFIER, >]
+State 28:
+K  - [text -> IDENTIFIER., <//</<?/<!--/IDENTIFIER]
+State 29:
+K  - [prolog -> doctype comment_or_pi_list., $eof]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 30:
+K  - [self_closing_tag -> < tag_name ./>, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [self_closing_tag -> < tag_name .attr_list />, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [start_tag -> < tag_name .>, <//</<?/<!--/IDENTIFIER]
+K  - [start_tag -> < tag_name .attr_list >, <//</<?/<!--/IDENTIFIER]
+NK - [attr_list -> .attr, />/>/IDENTIFIER]
+NK - [attr_list -> .attr_list attr, />/>/IDENTIFIER]
+NK - [attr -> .attr_name, />/>/IDENTIFIER]
+NK - [attr -> .attr_name = attr_value, />/>/IDENTIFIER]
+NK - [attr_name -> .IDENTIFIER, />/>/=/IDENTIFIER]
+State 31:
+K  - [tag_name -> IDENTIFIER., />/IDENTIFIER/>]
+State 32:
+K  - [comment -> <!-- -->., $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 33:
+K  - [comment -> <!-- STRING .-->, $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 34:
+K  - [processing_instruction -> <? target .?>, $eof/<!/<!--/<?/<//</IDENTIFIER]
+K  - [processing_instruction -> <? target .STRING ?>, $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 35:
+K  - [target -> IDENTIFIER., ?>/STRING]
+State 36:
+K  - [doctype -> <! DOCTYPE .>, $eof/<!--/<?]
+State 37:
+K  - [prolog -> comment_or_pi_list doctype comment_or_pi_list., $eof]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 38:
+K  - [document -> prolog root_element comment_or_pi_list., $eof]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 39:
+K  - [content -> content content_elem., <//</<?/<!--/IDENTIFIER]
+State 40:
+K  - [element -> start_tag content end_tag., $eof/<!--/<?/<//</IDENTIFIER]
+State 41:
+K  - [end_tag -> </ tag_name .>, $eof/<!--/<?/<//</IDENTIFIER]
+State 42:
+K  - [attr_list -> attr., />/>/IDENTIFIER]
+State 43:
+K  - [self_closing_tag -> < tag_name attr_list ./>, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [start_tag -> < tag_name attr_list .>, <//</<?/<!--/IDENTIFIER]
+K  - [attr_list -> attr_list .attr, />/>/IDENTIFIER]
+NK - [attr -> .attr_name, />/>/IDENTIFIER]
+NK - [attr -> .attr_name = attr_value, />/>/IDENTIFIER]
+NK - [attr_name -> .IDENTIFIER, />/>/IDENTIFIER/=]
+State 44:
+K  - [attr -> attr_name., />/>/IDENTIFIER]
+K  - [attr -> attr_name .= attr_value, />/>/IDENTIFIER]
+State 45:
+K  - [self_closing_tag -> < tag_name />., $eof/<!--/<?/<//</IDENTIFIER]
+State 46:
+K  - [start_tag -> < tag_name >., <//</<?/<!--/IDENTIFIER]
+State 47:
+K  - [attr_name -> IDENTIFIER., />/>/=/IDENTIFIER]
+State 48:
+K  - [comment -> <!-- STRING -->., $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 49:
+K  - [processing_instruction -> <? target ?>., $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 50:
+K  - [processing_instruction -> <? target STRING .?>, $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 51:
+K  - [doctype -> <! DOCTYPE >., $eof/<!--/<?]
+State 52:
+K  - [end_tag -> </ tag_name >., $eof/<!--/<?/<//</IDENTIFIER]
+State 53:
+K  - [attr_list -> attr_list attr., />/>/IDENTIFIER]
+State 54:
+K  - [self_closing_tag -> < tag_name attr_list />., $eof/<!--/<?/<//</IDENTIFIER]
+State 55:
+K  - [start_tag -> < tag_name attr_list >., <//</<?/<!--/IDENTIFIER]
+State 56:
+K  - [attr -> attr_name = .attr_value, />/>/IDENTIFIER]
+NK - [attr_value -> .IDENTIFIER, />/>/IDENTIFIER]
+NK - [attr_value -> .SINGLE_QUOTED_STRING, />/>/IDENTIFIER]
+NK - [attr_value -> .DOUBLE_QUOTED_STRING, />/>/IDENTIFIER]
+State 57:
+K  - [processing_instruction -> <? target STRING ?>., $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 58:
+K  - [attr -> attr_name = attr_value., />/>/IDENTIFIER]
+State 59:
+K  - [attr_value -> SINGLE_QUOTED_STRING., />/>/IDENTIFIER]
+State 60:
+K  - [attr_value -> IDENTIFIER., />/>/IDENTIFIER]
+State 61:
+K  - [attr_value -> DOUBLE_QUOTED_STRING., />/>/IDENTIFIER]
+LALR(1) - State list:
+State 0:
+K  - [$start -> .document $eof, $eof]
+NK - [document -> .prolog, $eof]
+NK - [document -> .prolog root_element, $eof]
+NK - [document -> .prolog root_element comment_or_pi_list, $eof]
+NK - [document -> .element, $eof]
+NK - [document -> .element comment_or_pi_list, $eof]
+NK - [document -> .comment_or_pi_list, $eof]
+NK - [prolog -> .doctype, $eof]
+NK - [prolog -> .comment_or_pi_list doctype, $eof]
+NK - [prolog -> .doctype comment_or_pi_list, $eof]
+NK - [prolog -> .comment_or_pi_list doctype comment_or_pi_list, $eof]
+NK - [element -> .self_closing_tag, $eof/<!--/<?]
+NK - [element -> .start_tag end_tag, $eof/<!--/<?]
+NK - [element -> .start_tag content end_tag, $eof/<!--/<?]
+NK - [comment_or_pi_list -> .comment_or_pi, $eof/<!/<!--/<?]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi, $eof/<!/<!--/<?]
+NK - [doctype -> .<! DOCTYPE >, $eof/<!--/<?]
+NK - [self_closing_tag -> .< tag_name />, $eof/<!--/<?]
+NK - [self_closing_tag -> .< tag_name attr_list />, $eof/<!--/<?]
+NK - [start_tag -> .< tag_name >, <//</<?/<!--/IDENTIFIER]
+NK - [start_tag -> .< tag_name attr_list >, <//</<?/<!--/IDENTIFIER]
+NK - [comment_or_pi -> .comment, $eof/<!/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!/<!--/<?]
+State 1:
+K  - [document -> comment_or_pi_list., $eof]
+K  - [prolog -> comment_or_pi_list .doctype, $eof]
+K  - [prolog -> comment_or_pi_list .doctype comment_or_pi_list, $eof]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi, $eof/<!/<!--/<?]
+NK - [doctype -> .<! DOCTYPE >, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!/<!--/<?]
+State 2:
+K  - [document -> element., $eof]
+K  - [document -> element .comment_or_pi_list, $eof]
+NK - [comment_or_pi_list -> .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 3:
+K  - [comment_or_pi -> comment., $eof/<!/<!--/<?]
+State 4:
+K  - [document -> prolog., $eof]
+K  - [document -> prolog .root_element, $eof]
+K  - [document -> prolog .root_element comment_or_pi_list, $eof]
+State 5:
+K  - [$start -> document .$eof, $eof]
+State 6:
+K  - [element -> start_tag .end_tag, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [element -> start_tag .content end_tag, $eof/<!--/<?/<//</IDENTIFIER]
+NK - [end_tag -> .</ tag_name >, $eof/<!--/<?/<//</IDENTIFIER]
+NK - [content -> .content_elem, <//</<?/<!--/IDENTIFIER]
+NK - [content -> .content content_elem, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .element, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .processing_instruction, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .comment, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .text, <//</<?/<!--/IDENTIFIER]
+NK - [element -> .self_closing_tag, <//</<?/<!--/IDENTIFIER]
+NK - [element -> .start_tag end_tag, <//</<?/<!--/IDENTIFIER]
+NK - [element -> .start_tag content end_tag, <//</<?/<!--/IDENTIFIER]
+NK - [processing_instruction -> .<? target ?>, <//</<?/<!--/IDENTIFIER]
+NK - [processing_instruction -> .<? target STRING ?>, <//</<?/<!--/IDENTIFIER]
+NK - [comment -> .<!-- -->, <//</<?/<!--/IDENTIFIER]
+NK - [comment -> .<!-- STRING -->, <//</<?/<!--/IDENTIFIER]
+NK - [text -> .IDENTIFIER, <//</<?/<!--/IDENTIFIER]
+NK - [self_closing_tag -> .< tag_name />, <//</<?/<!--/IDENTIFIER]
+NK - [self_closing_tag -> .< tag_name attr_list />, <//</<?/<!--/IDENTIFIER]
+NK - [start_tag -> .< tag_name >, <//</<?/<!--/IDENTIFIER]
+NK - [start_tag -> .< tag_name attr_list >, <//</<?/<!--/IDENTIFIER]
+State 7:
+K  - [comment_or_pi -> processing_instruction., $eof/<!/<!--/<?]
+State 8:
+K  - [element -> self_closing_tag., $eof/<!--/<?/<//</IDENTIFIER]
+State 9:
+K  - [prolog -> doctype., $eof]
+K  - [prolog -> doctype .comment_or_pi_list, $eof]
+NK - [comment_or_pi_list -> .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 10:
+K  - [comment_or_pi_list -> comment_or_pi., $eof/<!/<!--/<?]
+State 11:
+K  - [self_closing_tag -> < .tag_name />, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [self_closing_tag -> < .tag_name attr_list />, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [start_tag -> < .tag_name >, <//</<?/<!--/IDENTIFIER]
+K  - [start_tag -> < .tag_name attr_list >, <//</<?/<!--/IDENTIFIER]
+NK - [tag_name -> .IDENTIFIER, />/IDENTIFIER/>]
+State 12:
+K  - [comment -> <!-- .-->, $eof/<!/<!--/<?/<//</IDENTIFIER]
+K  - [comment -> <!-- .STRING -->, $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 13:
+K  - [processing_instruction -> <? .target ?>, $eof/<!/<!--/<?/<//</IDENTIFIER]
+K  - [processing_instruction -> <? .target STRING ?>, $eof/<!/<!--/<?/<//</IDENTIFIER]
+NK - [target -> .IDENTIFIER, ?>/STRING]
+State 14:
+K  - [doctype -> <! .DOCTYPE >, $eof/<!--/<?]
+State 15:
+K  - [prolog -> comment_or_pi_list doctype., $eof]
+K  - [prolog -> comment_or_pi_list doctype .comment_or_pi_list, $eof]
+NK - [comment_or_pi_list -> .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 16:
+K  - [comment_or_pi_list -> comment_or_pi_list comment_or_pi., $eof/<!/<!--/<?]
+State 17:
+K  - [document -> element comment_or_pi_list., $eof]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 18:
+K  - [document -> prolog root_element., $eof]
+K  - [document -> prolog root_element .comment_or_pi_list, $eof]
+NK - [comment_or_pi_list -> .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi_list -> .comment_or_pi_list comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 19:
+K  - [$start -> document $eof., $eof]
+State 20:
+K  - [content_elem -> element., <//</<?/<!--/IDENTIFIER]
+State 21:
+K  - [content -> content_elem., <//</<?/<!--/IDENTIFIER]
+State 22:
+K  - [content_elem -> comment., <//</<?/<!--/IDENTIFIER]
+State 23:
+K  - [element -> start_tag content .end_tag, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [content -> content .content_elem, <//</<?/<!--/IDENTIFIER]
+NK - [end_tag -> .</ tag_name >, $eof/<!--/<?/<//</IDENTIFIER]
+NK - [content_elem -> .element, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .processing_instruction, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .comment, <//</<?/<!--/IDENTIFIER]
+NK - [content_elem -> .text, <//</<?/<!--/IDENTIFIER]
+NK - [element -> .self_closing_tag, <//</<?/<!--/IDENTIFIER]
+NK - [element -> .start_tag end_tag, <//</<?/<!--/IDENTIFIER]
+NK - [element -> .start_tag content end_tag, <//</<?/<!--/IDENTIFIER]
+NK - [processing_instruction -> .<? target ?>, <//</<?/<!--/IDENTIFIER]
+NK - [processing_instruction -> .<? target STRING ?>, <//</<?/<!--/IDENTIFIER]
+NK - [comment -> .<!-- -->, <//</<?/<!--/IDENTIFIER]
+NK - [comment -> .<!-- STRING -->, <//</<?/<!--/IDENTIFIER]
+NK - [text -> .IDENTIFIER, <//</<?/<!--/IDENTIFIER]
+NK - [self_closing_tag -> .< tag_name />, <//</<?/<!--/IDENTIFIER]
+NK - [self_closing_tag -> .< tag_name attr_list />, <//</<?/<!--/IDENTIFIER]
+NK - [start_tag -> .< tag_name >, <//</<?/<!--/IDENTIFIER]
+NK - [start_tag -> .< tag_name attr_list >, <//</<?/<!--/IDENTIFIER]
+State 24:
+K  - [content_elem -> processing_instruction., <//</<?/<!--/IDENTIFIER]
+State 25:
+K  - [element -> start_tag end_tag., $eof/<!--/<?/<//</IDENTIFIER]
+State 26:
+K  - [content_elem -> text., <//</<?/<!--/IDENTIFIER]
+State 27:
+K  - [end_tag -> </ .tag_name >, $eof/<!--/<?/<//</IDENTIFIER]
+NK - [tag_name -> .IDENTIFIER, >]
+State 28:
+K  - [text -> IDENTIFIER., <//</<?/<!--/IDENTIFIER]
+State 29:
+K  - [prolog -> doctype comment_or_pi_list., $eof]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 30:
+K  - [self_closing_tag -> < tag_name ./>, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [self_closing_tag -> < tag_name .attr_list />, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [start_tag -> < tag_name .>, <//</<?/<!--/IDENTIFIER]
+K  - [start_tag -> < tag_name .attr_list >, <//</<?/<!--/IDENTIFIER]
+NK - [attr_list -> .attr, />/>/IDENTIFIER]
+NK - [attr_list -> .attr_list attr, />/>/IDENTIFIER]
+NK - [attr -> .attr_name, />/>/IDENTIFIER]
+NK - [attr -> .attr_name = attr_value, />/>/IDENTIFIER]
+NK - [attr_name -> .IDENTIFIER, />/>/=/IDENTIFIER]
+State 31:
+K  - [tag_name -> IDENTIFIER., />/IDENTIFIER/>]
+State 32:
+K  - [comment -> <!-- -->., $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 33:
+K  - [comment -> <!-- STRING .-->, $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 34:
+K  - [processing_instruction -> <? target .?>, $eof/<!/<!--/<?/<//</IDENTIFIER]
+K  - [processing_instruction -> <? target .STRING ?>, $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 35:
+K  - [target -> IDENTIFIER., ?>/STRING]
+State 36:
+K  - [doctype -> <! DOCTYPE .>, $eof/<!--/<?]
+State 37:
+K  - [prolog -> comment_or_pi_list doctype comment_or_pi_list., $eof]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 38:
+K  - [document -> prolog root_element comment_or_pi_list., $eof]
+K  - [comment_or_pi_list -> comment_or_pi_list .comment_or_pi, $eof/<!--/<?]
+NK - [comment_or_pi -> .comment, $eof/<!--/<?]
+NK - [comment_or_pi -> .processing_instruction, $eof/<!--/<?]
+NK - [comment -> .<!-- -->, $eof/<!--/<?]
+NK - [comment -> .<!-- STRING -->, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target ?>, $eof/<!--/<?]
+NK - [processing_instruction -> .<? target STRING ?>, $eof/<!--/<?]
+State 39:
+K  - [content -> content content_elem., <//</<?/<!--/IDENTIFIER]
+State 40:
+K  - [element -> start_tag content end_tag., $eof/<!--/<?/<//</IDENTIFIER]
+State 41:
+K  - [end_tag -> </ tag_name .>, $eof/<!--/<?/<//</IDENTIFIER]
+State 42:
+K  - [attr_list -> attr., />/>/IDENTIFIER]
+State 43:
+K  - [self_closing_tag -> < tag_name attr_list ./>, $eof/<!--/<?/<//</IDENTIFIER]
+K  - [start_tag -> < tag_name attr_list .>, <//</<?/<!--/IDENTIFIER]
+K  - [attr_list -> attr_list .attr, />/>/IDENTIFIER]
+NK - [attr -> .attr_name, />/>/IDENTIFIER]
+NK - [attr -> .attr_name = attr_value, />/>/IDENTIFIER]
+NK - [attr_name -> .IDENTIFIER, />/>/IDENTIFIER/=]
+State 44:
+K  - [attr -> attr_name., />/>/IDENTIFIER]
+K  - [attr -> attr_name .= attr_value, />/>/IDENTIFIER]
+State 45:
+K  - [self_closing_tag -> < tag_name />., $eof/<!--/<?/<//</IDENTIFIER]
+State 46:
+K  - [start_tag -> < tag_name >., <//</<?/<!--/IDENTIFIER]
+State 47:
+K  - [attr_name -> IDENTIFIER., />/>/=/IDENTIFIER]
+State 48:
+K  - [comment -> <!-- STRING -->., $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 49:
+K  - [processing_instruction -> <? target ?>., $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 50:
+K  - [processing_instruction -> <? target STRING .?>, $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 51:
+K  - [doctype -> <! DOCTYPE >., $eof/<!--/<?]
+State 52:
+K  - [end_tag -> </ tag_name >., $eof/<!--/<?/<//</IDENTIFIER]
+State 53:
+K  - [attr_list -> attr_list attr., />/>/IDENTIFIER]
+State 54:
+K  - [self_closing_tag -> < tag_name attr_list />., $eof/<!--/<?/<//</IDENTIFIER]
+State 55:
+K  - [start_tag -> < tag_name attr_list >., <//</<?/<!--/IDENTIFIER]
+State 56:
+K  - [attr -> attr_name = .attr_value, />/>/IDENTIFIER]
+NK - [attr_value -> .IDENTIFIER, />/>/IDENTIFIER]
+NK - [attr_value -> .SINGLE_QUOTED_STRING, />/>/IDENTIFIER]
+NK - [attr_value -> .DOUBLE_QUOTED_STRING, />/>/IDENTIFIER]
+State 57:
+K  - [processing_instruction -> <? target STRING ?>., $eof/<!/<!--/<?/<//</IDENTIFIER]
+State 58:
+K  - [attr -> attr_name = attr_value., />/>/IDENTIFIER]
+State 59:
+K  - [attr_value -> SINGLE_QUOTED_STRING., />/>/IDENTIFIER]
+State 60:
+K  - [attr_value -> IDENTIFIER., />/>/IDENTIFIER]
+State 61:
+K  - [attr_value -> DOUBLE_QUOTED_STRING., />/>/IDENTIFIER]
+

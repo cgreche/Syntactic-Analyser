@@ -1,0 +1,15 @@
+int a = 1;
+typedef struct wow{
+    int a;
+    int b;
+    char c;
+} test;
+
+int f() {
+    return 2;
+}
+
+void h() {
+    typedef int INT;
+    INT a = 2;
+}
