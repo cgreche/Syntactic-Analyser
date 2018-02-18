@@ -46,7 +46,6 @@
     <ClCompile Include="src\lib\nametable.cpp" />
     <ClCompile Include="src\lib\stack.cpp" />
     <ClCompile Include="src\production.cpp" />
-    <ClCompile Include="src\languageparser.h" />
     <ClCompile Include="src\state.cpp" />
     <ClCompile Include="src\symbol.cpp" />
     <ClCompile Include="test.cpp" />
@@ -79,6 +78,7 @@
     <ClInclude Include="src\grammar.h" />
     <ClInclude Include="src\grammaranalyzer.h" />
     <ClInclude Include="src\language.h" />
+    <ClInclude Include="src\languageparser.h" />
     <ClInclude Include="src\lexer.h" />
     <ClInclude Include="src\lib\hashtable.h" />
     <ClInclude Include="src\lib\nametable.h" />

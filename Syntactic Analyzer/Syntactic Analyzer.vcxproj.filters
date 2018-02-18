@@ -117,9 +117,6 @@
     <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\RegexParser.cpp">
       <Filter>regex_parser_engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\languageparser.h">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\languageparser.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -228,6 +225,9 @@
       <Filter>regex_parser_engine\util</Filter>
     </ClInclude>
     <ClInclude Include="src\language.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\languageparser.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
