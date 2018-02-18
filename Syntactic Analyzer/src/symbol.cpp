@@ -23,7 +23,7 @@ namespace syntacticanalyzer {
 			}
 		}
 
-		append(sym);
+		m_symbols.push_back(sym);
 		return true;
 	}
 

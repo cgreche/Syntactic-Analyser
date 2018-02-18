@@ -1,5 +1,5 @@
 
-//Last Edit: 26/06/2016
+//Last Edit: 17/02/2018
 
 #ifndef __SYNTACTIC_ANALYZER_STATE_H__
 #define __SYNTACTIC_ANALYZER_STATE_H__
@@ -21,15 +21,14 @@ namespace syntacticanalyzer {
 
 	public:
 		LRItem(Production &pro, unsigned int markIndex)
-			: m_production(&pro), m_markIndex(markIndex)
-		{
+			: m_production(&pro), m_markIndex(markIndex) {
 		}
 
 		Production* production() const { return m_production; }
 		unsigned int markIndex() const { return m_markIndex; }
 
 		Symbol *readyToSee() const { return m_production->rhs(m_markIndex); }
-		void appendLookAhead(Symbol *sym) { m_lookAhead.appendUnique(sym); }
+		void appendLookAhead(Symbol *sym) { m_lookAhead.append(sym); }
 		SymbolList& lookAheadSet() { return m_lookAhead; }
 	};
 
@@ -73,8 +72,8 @@ namespace syntacticanalyzer {
 		std::vector<ShiftAction> shifts;
 		std::vector<ReductionAction> reductions;
 		std::vector<ShiftAction> gotos;
-		void addTransition(Symbol *acessingSymbol, State& state);
-		void addReduction(Production &pro);
+		void addShiftAction(Symbol *acessingSymbol, State& state);
+		void addReduceAction(Production &pro);
 
 		State(unsigned int number, Symbol *acessingSymbol, Itemset &itemset);
 

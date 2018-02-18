@@ -69,7 +69,7 @@ namespace syntacticanalyzer {
 		return false;
 	}
 
-	void State::addTransition(Symbol *acessingSymbol, State &state)
+	void State::addShiftAction(Symbol *acessingSymbol, State &state)
 	{
 		if(acessingSymbol->symClass() == TERMINAL)
 			shifts.push_back(ShiftAction(acessingSymbol, state));
@@ -80,7 +80,7 @@ namespace syntacticanalyzer {
 		}
 	}
 
-	void State::addReduction(Production &pro)
+	void State::addReduceAction(Production &pro)
 	{
 		reductions.push_back(ReductionAction(pro));
 	}

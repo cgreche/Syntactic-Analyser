@@ -1,5 +1,5 @@
 
-//Last edit: 26/06/2017 19:23
+//Last edit: 17/02/2018 22:37
 
 #include "grammaranalyzer.h"
 #include <iostream>
@@ -66,7 +66,7 @@ namespace syntacticanalyzer {
 			for(unsigned int j = 0; j < pro->nrhs(); ++j) {
 				Symbol *_rhs = pro->rhs(j);
 				_fillFirst(_rhs);
-				m_firstSets[sym->index()].mergeUnique(m_firstSets[_rhs->index()]);
+				m_firstSets[sym->index()].merge(m_firstSets[_rhs->index()]);
 				if(!m_nullable[_rhs->index()]) {
 					break;
 				}
@@ -187,19 +187,19 @@ namespace syntacticanalyzer {
 							if(!rhs->isNonTerminal())
 								continue;
 
-							if(m_followSets[rhs->index()].mergeUnique(m_firstSets[next->index()]) > 0)
+							if(m_followSets[rhs->index()].merge(m_firstSets[next->index()]) > 0)
 								++changes;
 
 							if(k+1 == (pro->nrhs()-1)) {
 								if(m_nullable[next->index()]) {
-									if(m_followSets[rhs->index()].mergeUnique(m_followSets[lhs->index()]) > 0)
+									if(m_followSets[rhs->index()].merge(m_followSets[lhs->index()]) > 0)
 										++changes;
 								}
 							}
 						}
 
 						if(pro->rhs(k)->isNonTerminal()) {
-							if(m_followSets[pro->rhs(k)->index()].mergeUnique(m_followSets[lhs->index()]) > 0)
+							if(m_followSets[pro->rhs(k)->index()].merge(m_followSets[lhs->index()]) > 0)
 								++changes;
 						}
 					}
@@ -277,7 +277,7 @@ namespace syntacticanalyzer {
 					DEBUG_PRINT(*stream, "Saving reduction to rule");
 					DEBUG_PRINT(*stream, item.production()->number());
 					DEBUG_PRINT(*stream, std::endl);
-					state(st)->addReduction(*item.production());
+					state(st)->addReduceAction(*item.production());
 				}
 			}
 
@@ -314,7 +314,7 @@ namespace syntacticanalyzer {
 				//check if state (itemset) already exists
 					unsigned int n_states = stateCount();
 					State *state = addState(sym, newItemset);
-					this->state(st)->addTransition(sym, *state);
+					this->state(st)->addShiftAction(sym, *state);
 				//	printf("%s action: %s %d\n",sym->symClass() == TERMINAL ? "SHIFT" : "GOTO",sym->name(),state->number());
 					if(stateCount() == n_states) {
 						(*stream) << "State " << state->number() << " already created" << std::endl;
@@ -408,11 +408,11 @@ namespace syntacticanalyzer {
 					bool nullable = true;
 					Symbol *nextSym = pro->rhs(item.markIndex()+1);
 					if(nextSym) {
-						firstSet.mergeUnique(m_firstSets[nextSym->index()]);
+						firstSet.merge(m_firstSets[nextSym->index()]);
 						nullable = m_nullable[nextSym->index()];
 					}
 					if(nullable)
-						firstSet.mergeUnique(item.lookAheadSet());
+						firstSet.merge(item.lookAheadSet());
 
 					//
 					//copy lookahead to all productions starting with rhs sym in this itemset
@@ -424,7 +424,7 @@ namespace syntacticanalyzer {
 						Symbol *sym2 = pro2->lhs();
 						if(sym != sym2)
 							continue;
-						changes += item2.lookAheadSet().mergeUnique(firstSet);
+						changes += item2.lookAheadSet().merge(firstSet);
 					}
 				}
 
@@ -449,7 +449,7 @@ namespace syntacticanalyzer {
 								if(item2.markIndex() > 0 || item2.production() == m_grammar->initialProduction()) {
 									//check for same core
 									if(pro == item2.production()) {
-										changes += item2.lookAheadSet().mergeUnique(item.lookAheadSet());
+										changes += item2.lookAheadSet().merge(item.lookAheadSet());
 									}
 								}
 							}
@@ -474,7 +474,7 @@ namespace syntacticanalyzer {
 								if(item2.markIndex() > 0 || item2.production() == m_grammar->initialProduction()) {
 									//check for same core
 									if(pro == item2.production()) {
-										changes += item2.lookAheadSet().mergeUnique(item.lookAheadSet());
+										changes += item2.lookAheadSet().merge(item.lookAheadSet());
 									}
 								}
 							}
@@ -511,7 +511,7 @@ namespace syntacticanalyzer {
 					for(u32 k = 0; k < s->reductions.size(); ++k) {
 						Symbol *redlhs = s->reductions[k].pro->lhs();
 						if(redlhs && redlhs == pro->lhs())
-							s->reductions[k].lookAhead.mergeUnique(item.lookAheadSet());
+							s->reductions[k].lookAhead.merge(item.lookAheadSet());
 					}
 				}
 			}
