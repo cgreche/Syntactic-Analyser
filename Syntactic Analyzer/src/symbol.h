@@ -1,5 +1,5 @@
 
-//Last edit: 02/06/2017 14:00
+//Last edit: 17/02/2018 21:59
 
 #ifndef __SYMBOL_H__
 #define __SYMBOL_H__
@@ -22,8 +22,7 @@ namespace syntacticanalyzer {
 	} SYMBOL_CLASS;
 
 
-	class Symbol
-	{
+	class Symbol {
 		int m_index; //unique index
 		SYMBOL_CLASS m_class; //terminal, nonterminal
 		const char *m_name; //symbol name (tag)
@@ -83,15 +82,12 @@ namespace syntacticanalyzer {
 	};
 
 
-	class SymbolList
-	{
+	class SymbolList {
 		std::vector<Symbol*> m_symbols;
 
 	public:
-		void append(Symbol* sym) { m_symbols.push_back(sym); }
-		bool appendUnique(Symbol *sym);
-		void merge(const SymbolList& symList);
-		unsigned int mergeUnique(const SymbolList& symList);
+		bool append(Symbol* sym);
+		unsigned int merge(const SymbolList& symList);
 		bool contains(Symbol* sym);
 		void clear() { if(!m_symbols.empty()) m_symbols.clear(); }
 

@@ -1,7 +1,7 @@
 
-//Last edit: 31/05/2017 16:52
+//Last edit: 17/02/2018 21:59
 
-#include "grammar.h"
+#include "symbol.h"
 #include <stdarg.h>
 
 namespace syntacticanalyzer {
@@ -10,7 +10,7 @@ namespace syntacticanalyzer {
 // SymbolList
 //
 
-	bool SymbolList::appendUnique(Symbol *sym)
+	bool SymbolList::append(Symbol *sym)
 	{
 		if(!sym)
 			return false;
@@ -27,12 +27,12 @@ namespace syntacticanalyzer {
 		return true;
 	}
 
-	unsigned int SymbolList::mergeUnique(const SymbolList &symList)
+	unsigned int SymbolList::merge(const SymbolList &symList)
 	{
 		unsigned int i;
 		unsigned int appendCount = 0;
 		for(i = 0; i < symList.count(); ++i) {
-			if(appendUnique(symList[i]))
+			if(append(symList[i]))
 				++appendCount;
 		}
 
