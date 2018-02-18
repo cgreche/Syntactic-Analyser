@@ -72,9 +72,6 @@
     <ClCompile Include="src\lib\stack.cpp">
       <Filter>src\lib</Filter>
     </ClCompile>
-    <ClCompile Include="src\lib\string.cpp">
-      <Filter>src\lib</Filter>
-    </ClCompile>
     <ClCompile Include="file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -120,6 +117,12 @@
     <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\RegexParser.cpp">
       <Filter>regex_parser_engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\languageparser.h">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\languageparser.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c_language\c_actions_decl.h">
@@ -159,9 +162,6 @@
       <Filter>src\lib</Filter>
     </ClInclude>
     <ClInclude Include="src\lib\stack.h">
-      <Filter>src\lib</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lib\string.h">
       <Filter>src\lib</Filter>
     </ClInclude>
     <ClInclude Include="src\lib\types.h">
@@ -226,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\utils\bitset.h">
       <Filter>regex_parser_engine\util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\language.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

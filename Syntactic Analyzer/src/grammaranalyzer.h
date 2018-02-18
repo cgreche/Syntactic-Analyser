@@ -1,5 +1,5 @@
 
-//Last edit: 26/06/2017 03:03
+//Last edit: 18/02/2018 02:07
 
 #ifndef __GRAMMARANALYZER_H__
 #define __GRAMMARANALYZER_H__
@@ -22,6 +22,8 @@ namespace syntacticanalyzer {
 	class SymbolList;
 	class Production;
 
+	class Language;
+
 #define ACTION_ERROR 0
 #define ACTION_SHIFT 1
 #define ACTION_REDUCE 2
@@ -39,51 +41,6 @@ namespace syntacticanalyzer {
 #define FIRST_COMPUTED 1<<8
 #define FOLLOW_COMPUTED 1<<9
 
-#define SARG_(x) state->semanticStack[state->semanticArgsIndex + x]
-#define SARG_COUNT (state->semanticStack.size() - state->semanticArgsIndex)
-#define SARG_TOK(x) (SARG_(x).tok)
-#define SARG_TEXT(x) (SARG_(x).text)
-#define SARG(x,t) ((t)SARG_(x).value.pval)
-#define SARG_CVAL(x) (SARG_(x).value.cval)
-#define SARG_SVAL(x) (SARG_(x).value.sval)
-#define SARG_LVAL(x) (SARG_(x).value.lval)
-#define SARG_UCVAL(x) (SARG_(x).value.ucval)
-#define SARG_USVAL(x) (SARG_(x).value.usval)
-#define SARG_ULVAL(x) (SARG_(x).value.ulval)
-#define SARG_IVAL(x) (SARG_(x).value.ival)
-#define SARG_UVAL(x) (SARG_(x).value.uval)
-#define SARG_PVAL(x) (SARG_(x).value.pval)
-#define SARG_FVAL(x) (SARG_(x).value.fval)
-#define SARG_DVAL(x) (SARG_(x).value.dval)
-#define SRET(x) ret.value.pval = (void*)x
-#define SRET_CVAL(x) (ret.value.cval = x)
-#define SRET_SVAL(x) (ret.value.sval = x)
-#define SRET_LVAL(x) (ret.value.lval = x)
-#define SRET_UCVAL(x) (ret.value.ucval = x)
-#define SRET_USVAL(x) (ret.value.usval = x)
-#define SRET_ULVAL(x) (ret.value.ulval = x)
-#define SRET_IVAL(x) (ret.value.ival = x)
-#define SRET_UVAL(x) (ret.value.uval = x)
-#define SRET_PVAL(x) (ret.value.pval = x)
-#define SRET_FVAL(x) (ret.value.fval = x)
-#define SRET_DVAL(x) (ret.value.dval = x)
-
-	typedef std::vector<unsigned int> StateStack;
-	typedef std::vector<Token> SemanticStack;
-
-	struct ParsingState
-	{
-		GrammarAnalyzer &analyzer;
-		int currentState;
-		StateStack stateStack;
-		SemanticStack semanticStack;
-		unsigned int semanticArgsIndex;
-
-		ParsingState(GrammarAnalyzer &analyzer)
-			: analyzer(analyzer), currentState(NULL) {
-		}
-	};
-
 	class GrammarAnalyzer
 	{
 		Grammar *m_grammar;
@@ -95,26 +52,16 @@ namespace syntacticanalyzer {
 
 		//LR states
 		std::vector<State*> m_states;
+		int **m_parsingTable;
 
 		u32 m_analysisState; //0: nothing, 1: lr applied, 2: parsing
 		u32 m_analysisMethod;
 
 		void _clean(); //reset parsing info (useful if we want to change the Grammar to be parsed)
 
-		//
-		ParsingState *m_parsingState;
-		int **m_parsingTable;
-
-		//Tokenization
-		Lexer *m_lexer;
-		Token m_curToken;
-
 	private:
 		State *addState(Symbol* acessingSymbol, Itemset &itemset);
 		State *findState(Itemset &itemset);
-
-		bool parse(std::ostream *stream); //main parsing method
-		int getNextToken();
 
 		bool _isnullable(Symbol *sym);
 		void _fillFirst(Symbol *sym);
@@ -148,30 +95,8 @@ namespace syntacticanalyzer {
 		void dumpFirstFollowNullable(std::ostream& stream);
 		void dumpParsingTable(std::ostream &stream);
 
-		//
-		void setTokenizer(Lexer *lexer);
-		bool parse(const char *input, std::ostream *stream); //parse an input file
+		Language *generateLanguage();
 	};
-
-	/*
-	class Language {
-		Grammar *grammar;
-		int **m_parsingTable;
-	};
-
-	class LanguageParser {
-		Language *m_language;
-		Lexer *m_lexer;
-
-		Token m_curToken;
-
-	public:
-		LanguageParser(Language *language);
-		void setTokenizer();
-		bool parse(const char *input, std::ostream *stream); //parse an input file
-		bool parse(unsigned int *input, std::ostream *stream); //parse a tokenized input file
-	};
-	*/
 
 }
 

@@ -41,11 +41,12 @@
     <ClCompile Include="src\defaultlexer.cpp" />
     <ClCompile Include="src\grammar.cpp" />
     <ClCompile Include="src\grammaranalyzer.cpp" />
+    <ClCompile Include="src\languageparser.cpp" />
     <ClCompile Include="src\lib\hashtable.cpp" />
     <ClCompile Include="src\lib\nametable.cpp" />
     <ClCompile Include="src\lib\stack.cpp" />
-    <ClCompile Include="src\lib\string.cpp" />
     <ClCompile Include="src\production.cpp" />
+    <ClCompile Include="src\languageparser.h" />
     <ClCompile Include="src\state.cpp" />
     <ClCompile Include="src\symbol.cpp" />
     <ClCompile Include="test.cpp" />
@@ -77,11 +78,11 @@
     <ClInclude Include="src\defaultlexer.h" />
     <ClInclude Include="src\grammar.h" />
     <ClInclude Include="src\grammaranalyzer.h" />
+    <ClInclude Include="src\language.h" />
     <ClInclude Include="src\lexer.h" />
     <ClInclude Include="src\lib\hashtable.h" />
     <ClInclude Include="src\lib\nametable.h" />
     <ClInclude Include="src\lib\stack.h" />
-    <ClInclude Include="src\lib\string.h" />
     <ClInclude Include="src\lib\types.h" />
     <ClInclude Include="src\production.h" />
     <ClInclude Include="src\state.h" />
@@ -148,7 +149,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>E:\CGR\Cpp Projects\regex_parser_engine\regex_parser_engine\src;$(IncludePath)</IncludePath>
+    <IncludePath>D:\CGR\Cpp Projects\regex_parser_engine\regex_parser_engine\src;$(IncludePath)</IncludePath>
     <SourcePath>E:\CGR\Cpp Projects\regex_parser_engine\regex_parser_engine\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

@@ -1,5 +1,5 @@
 
-//Last edit: 17/02/2018 22:37
+//Last edit: 18/02/2018 03:18
 
 #include "grammaranalyzer.h"
 #include <iostream>
@@ -7,6 +7,7 @@
 #include <sstream>
 #include <set>
 #include <cstdlib> //abs
+#include "language.h"
 
 namespace syntacticanalyzer {
 	//
@@ -17,7 +18,6 @@ namespace syntacticanalyzer {
 	{
 		m_grammar = &grammar;
 		m_parsingTable = NULL;
-		m_lexer = NULL;
 	}
 
 	GrammarAnalyzer::~GrammarAnalyzer()
@@ -323,7 +323,7 @@ namespace syntacticanalyzer {
 
 					dumpStateInfo(*state, *stream);
 	#else
-					state(st)->addTransition(sym, *addState(sym, newItemset));
+					state(st)->addShiftAction(sym, *addState(sym, newItemset));
 	#endif
 				}
 			}
@@ -608,6 +608,12 @@ namespace syntacticanalyzer {
 		m_parsingTable = table;
 	}
 
+	Language *GrammarAnalyzer::generateLanguage() {
+		if(!m_parsingTable)
+			return NULL;
+		return new Language(m_grammar, m_parsingTable);
+	}
+
 	inline int center(int a, int b) {
 		return (int)fabs((a - (float)b)/2);
 	}
@@ -704,7 +710,7 @@ namespace syntacticanalyzer {
 			std::ostringstream ostr;
 			ostr << i;
 			printCenter(firstColWidth, ostr.str().c_str(), stream);
-			for(int j = 0; j < m_grammar->m_termSymList.count(); ++j) {
+			for(j = 0; j < m_grammar->m_termSymList.count(); ++j) {
 				int symIndex = m_grammar->m_termSymList[j]->index();
 				int action = table[i][symIndex] >> 0x10;
 				int value = table[i][symIndex] & 0xffff;
@@ -743,167 +749,6 @@ namespace syntacticanalyzer {
 
 		delete[] colCaptionWidth;
 	}
-
-	void GrammarAnalyzer::setTokenizer(Lexer *lexer) {
-		m_lexer = lexer;
-	}
-
-	bool GrammarAnalyzer::parse(const char *input, std::ostream *stream)
-	{
-		if(!m_lexer)
-			return false;
-		m_lexer->setInput(input);
-		m_lexer->setPos(0);
-		return parse(stream);
-	}
-
-	bool GrammarAnalyzer::parse(std::ostream *stream)
-	{
-		int curState;
-		unsigned int i;
-	//	unsigned int *input = m_parsingState.parsingInput;
-
-		if(!m_parsingTable) {
-			dumpParsingTable(*stream);
-		}
-
-		m_parsingState = new ParsingState(*this);
-
-		if(!stream)
-			stream = &std::cout;
-
-		//[Debug]
-		DEBUG_PRINT(*stream, "Start parsing.\n");
-		//[/Debug]
-
-		m_parsingState->currentState = curState = 0;
-		m_parsingState->stateStack.push_back(0);
-
-		int tok;
-		tok = getNextToken();
-		for(;;) {
-			char *text = m_curToken.text;
-
-			DEBUG_PRINT(*stream, "Current State: ");
-			DEBUG_PRINT(*stream, curState);
-			DEBUG_PRINT(*stream, std::endl);
-		
-			DEBUG_PRINT(*stream, "Current Token: ");
-			DEBUG_PRINT(*stream, (tok == -1 ? "Undefined" : m_grammar->symbolList()[tok]->name()));
-			DEBUG_PRINT(*stream, " (\"");
-			DEBUG_PRINT(*stream, text);
-			DEBUG_PRINT(*stream, "\")");
-			DEBUG_PRINT(*stream, std::endl);
-
-			if(tok == -1) {
-				//undefined token
-				//todo: error
-				tok = getNextToken();
-				continue;
-			}
-
-			unsigned int action = 0;
-
-	#if 1
-			int **table = m_parsingTable;
-			int value;
-			action = GET_ACTION(table[curState][tok]);
-			value = GET_VALUE(table[curState][tok]);
-			if(action == ACTION_SHIFT) {
-
-				//[DEBUG]
-				DEBUG_PRINT(*stream, "Action: shift ");
-				DEBUG_PRINT(*stream, value);
-				DEBUG_PRINT(*stream, " (");
-				DEBUG_PRINT(*stream, m_grammar->symbol(tok)->name());
-				DEBUG_PRINT(*stream, ')');
-				DEBUG_PRINT(*stream, std::endl);
-				//[/DEBUG]
-
-				m_parsingState->currentState = curState = value;
-				m_parsingState->stateStack.push_back(value);
-				m_parsingState->semanticStack.push_back(m_curToken);
-
- 				tok = getNextToken();
-			}
-			else if(action == ACTION_REDUCE) {
-				Production *pro = m_grammar->production(value);
-				//[Debug]
-				DEBUG_PRINT(*stream, "Action: reduce ");
-				DEBUG_PRINT(*stream, value);
-				DEBUG_PRINT(*stream, " (");
-				DEBUG_PRINT(*stream, pro->lhs()->name());
-				DEBUG_PRINT(*stream, " -> ");
-	#ifdef _DEBUG
-				for(u32 nsym = 0; nsym < pro->nrhs(); ++nsym) {
-					DEBUG_PRINT(*stream, pro->rhs(nsym)->name());
-					if(nsym < pro->nrhs()-1)
-						DEBUG_PRINT(*stream, " ");
-				}
-	#endif
-				DEBUG_PRINT(*stream, ')');
-				DEBUG_PRINT(*stream, std::endl);
-				//[/Debug]
-
-				//do semantic action
-				Token retToken;
-				m_parsingState->semanticArgsIndex = m_parsingState->semanticStack.size()-pro->nrhs();
-				retToken.value = m_parsingState->semanticStack[m_parsingState->semanticArgsIndex].value; // defaults to first semantic arg
-				memset(retToken.text,0,sizeof(retToken.text));
-
-				if(pro->semanticAction()) {
-					pro->semanticAction()(this->m_parsingState,retToken);
-				}
-
-				for(unsigned int j = 0; j < pro->nrhs(); ++j) {
-					m_parsingState->stateStack.pop_back();
-					m_parsingState->semanticStack.pop_back();
-				}
-				m_parsingState->currentState = curState = m_parsingState->stateStack.back();
-				m_parsingState->semanticStack.push_back(retToken);
-
-				//do the goto
-				value = GET_VALUE(table[curState][pro->lhs()->index()]);
-				m_parsingState->currentState = curState = value;
-				m_parsingState->stateStack.push_back(value);
-			}
-			else if(action == ACTION_ACCEPT) {
-				//[DEBUG]
-				DEBUG_PRINT(*stream, "Action: accept");
-				DEBUG_PRINT(*stream, std::endl);
-				//[/DEBUG]
-				int accept = 1;
-				return true;
-			}
-			else {
-				int a = 1;
-				//error
-				break;
-			}
-
-	#endif
-			DEBUG_PRINT(*stream, std::endl);
-		}
-
-		if(m_parsingState)
-			delete m_parsingState;
-		return false;
-	}
-
-	int GrammarAnalyzer::getNextToken()
-	{
-		//reset tok info
-		m_curToken.tok = -1;
-		memset(m_curToken.text,0,sizeof(m_curToken.text));
- 		return m_lexer->nextToken(&m_curToken);
-	}
-
-
-
-
-
-
-
 
 
 	void GrammarAnalyzer::dumpGrammar(std::ostream &stream)

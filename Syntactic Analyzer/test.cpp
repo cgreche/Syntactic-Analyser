@@ -14,21 +14,20 @@
 
 #include "file.h"
 #include "src/grammaranalyzer.h"
+#include "src/languageparser.h"
 
 #undef min
 #undef max
 
 using namespace syntacticanalyzer;
 
-DefaultLexer defaultLexer;
-
-
 struct GrammarTest
 {
 	const char *grammarName;
 	Grammar* (*grammarCreate)();
 	void (*grammarDestroy)(Grammar *grammar);
-	void (*postParsing)(Grammar *grammar);
+	bool (*preParsing)(Grammar *grammar);
+	void (*postParsing)(Grammar *grammar, bool result);
 };
 
 Grammar *testGrammar_create()
@@ -133,10 +132,11 @@ extern Grammar *C_grammar_init();
 extern int c_lex(GrammarAnalyzer& gramAnalyzer, Token *pToken);
 };
 
-void C_postParsing(Grammar *grammar);
+void C_postParsing(Grammar *grammar, bool result);
 GrammarTest c_grammarTest = {
 	"C Grammar",
 	C_language::C_grammar_init,
+	NULL,
 	NULL,
 	C_postParsing,
 };
@@ -144,10 +144,10 @@ GrammarTest c_grammarTest = {
 
 
 //////////////////////
-// DOM
+// XML
 //////////////////////
 
-Grammar *dom_create()
+Grammar *xml_create()
 {
 	Grammar *g = new Grammar;
 	Grammar &grammar = *g;
@@ -230,18 +230,19 @@ Grammar *dom_create()
 	return g;
 }
 
-void dom_destroy(Grammar *grammar)
+void xml_destroy(Grammar *grammar)
 {
 	if(grammar)
 		delete grammar;
 }
 
 
-GrammarTest dom = {
-	"Document Object Model",
-	dom_create,
-	dom_destroy,
+GrammarTest xml = {
+	"XML",
+	xml_create,
+	xml_destroy,
 	NULL,
+	NULL
 };
 
 class GrammarsManager
@@ -275,7 +276,7 @@ GrammarsManager::GrammarsManager()
 	m_grammars.push_back(&testGrammar);
 	m_grammars.push_back(&mathExpr);
 	m_grammars.push_back(&c_grammarTest);
-	m_grammars.push_back(&dom);
+	m_grammars.push_back(&xml);
 }
 
 void GrammarsManager::showGrammarList()
@@ -345,15 +346,6 @@ bool GrammarsManager::selectGrammar(unsigned int i)
 	file.open(".\\parsingTable.txt");
 	m_grammarAnalyzer->dumpParsingTable(file);
 	file.close();
-	//m_grammarAnalyzer->setTokenizer(new C_language::c_hcLexer(*m_grammarAnalyzer));
-	//m_grammarAnalyzer->addToken("<",(TerminalSymbol*)grammar->findSymbol("<"));
-	//m_grammarAnalyzer->addToken(">",(TerminalSymbol*)grammar->findSymbol(">"));
-	defaultLexer.addToken("</",grammar->findSymbol("</")->index());
-	defaultLexer.addToken("[_a-zA-Z][_a-zA-Z0-9]*",grammar->findSymbol("IDENTIFIER")->index());
-	defaultLexer.addToken("/>",grammar->findSymbol("/>")->index());
-	defaultLexer.addToken("([[:alnum:] ]|(-[[:alnum:] ]))+",grammar->findSymbol("STRING")->index());
-	defaultLexer.makeDefaultTerminalTokens(grammar);
-	m_grammarAnalyzer->setTokenizer(&defaultLexer);
 	m_usingGrammar = grammar;
 	grammarOptions();
 
@@ -362,20 +354,39 @@ bool GrammarsManager::selectGrammar(unsigned int i)
 
 void GrammarsManager::parseInput(const char *input) {
 //	std::ofstream file;
-	if(m_grammarAnalyzer->parse(input, NULL)) {
-		std::cout << "Valid input." << std::endl;
+	LanguageParser *parser = new LanguageParser(m_grammarAnalyzer->generateLanguage());
+
+	DefaultLexer *lexer = new DefaultLexer;
+
+	lexer->addToken("</",m_usingGrammar->findSymbol("</")->index());
+	lexer->addToken("[_a-zA-Z][_a-zA-Z0-9]*",m_usingGrammar->findSymbol("IDENTIFIER")->index());
+	lexer->addToken("/>",m_usingGrammar->findSymbol("/>")->index());
+	lexer->addToken("([[:alnum:] ]|(-[[:alnum:] ]))+",m_usingGrammar->findSymbol("STRING")->index());
+	lexer->makeDefaultTerminalTokens(m_usingGrammar);
+	parser->setTokenizer(lexer);
+
+	bool result = true;
+	if(m_usingGrammarInfo->preParsing)
+		result = m_usingGrammarInfo->preParsing(m_usingGrammar);
+	if(result) {
+		result = parser->parse(input, NULL);
+		if(result) {
+			std::cout << "Valid input." << std::endl;
+		}
+		else
+			std::cout << "Syntax error." << std::endl;
 		if(m_usingGrammarInfo->postParsing)
-			m_usingGrammarInfo->postParsing(m_usingGrammar);
+			m_usingGrammarInfo->postParsing(m_usingGrammar, result);
 	}
-	else
-		std::cout << "Syntax error." << std::endl;
+
+	delete parser->lexer();
+	delete parser->language();
 }
 
 
 void GrammarsManager::grammarOptions()
 {
 	int opt;
-	int i, j;
 	
 	if(!m_usingGrammar) {
 		printf("No grammar selected.");
@@ -403,9 +414,6 @@ void GrammarsManager::grammarOptions()
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 		const char *name = "";
-		NonterminalSymbol *lhs;
-		Symbol *rhs;
-		Production *pro;
 
 		if(opt == 1) {
 			selectedGrammar->addTerminal(name);
@@ -421,6 +429,7 @@ void GrammarsManager::grammarOptions()
 		}
 		else if(opt == 5) {
 			/*
+			NonterminalSymbol *lhs;
 			Production *proToRemove = NULL;
 			const char *rhsName;
 			lhs = selectedGrammar->findSymbol(lhs->name());
@@ -754,7 +763,7 @@ void C_processLabeledStatement(C_language::LabeledStatement *stmt)
 	printf("Label: %s\n","todo");
 }
 
-void C_postParsing(Grammar *grammar)
+void C_postParsing(Grammar *grammar, bool result)
 {
 	//Check for Main Symbol
 	C_language::Scope *scope = C_language::C_globalScope();

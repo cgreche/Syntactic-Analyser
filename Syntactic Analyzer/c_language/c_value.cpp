@@ -1,5 +1,4 @@
 
-#include "../src/lib/string.h"
 #include "c_value.h"
 #include "c_symboltype.h"
 
@@ -110,7 +109,7 @@ Value *Value::fromString(const char *str)
 	charType->setConst(true);
 	arrayType->setNext(charType);
 
-	string resStr;
+	std::string resStr;
 
 	char *c = (char*)str;
 	++c; //ignore first ' " '
@@ -170,7 +169,7 @@ Value *Value::fromString(const char *str)
 	arrayType->setElementCount(strSize);
 	ret->m_symType = arrayType;
 	ret->m_value.strVal = new char[strSize];
-	string_op::copy(ret->m_value.strVal,resStr.data(),strSize);
+	strncpy(ret->m_value.strVal,resStr.c_str(),strSize);
 	return ret;
 }
 

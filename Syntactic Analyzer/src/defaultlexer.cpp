@@ -16,7 +16,7 @@ namespace syntacticanalyzer {
 
 	bool DefaultLexer::addToken(const char *regex, int id, __tokenCallback callback) {
 
-		for(int i = 0; i < m_tokList.size(); ++i) {
+		for(unsigned int i = 0; i < m_tokList.size(); ++i) {
 			if(m_tokList[i]->regex == regex) {
 				return false;
 			}
@@ -43,7 +43,7 @@ namespace syntacticanalyzer {
 		if(*c == '\0')
 			return 0;
 
-		for(int i = 0; i < m_tokList.size(); ++i) {
+		for(unsigned int i = 0; i < m_tokList.size(); ++i) {
 			RegexMatcher *matcher = m_tokList[i]->matcher;
 			if(res |= matcher->matchPartially(c, &matchLen)) {
 				if(matchLen > biggestMatchLen) {
@@ -83,7 +83,7 @@ namespace syntacticanalyzer {
 		SymbolList terminals = grammar->terminalSymbols();
 
 		TerminalSymbol *eofSym = (TerminalSymbol*)grammar->findSymbol("$eof");
-		for(int i = 0; i < termCount; ++i) {
+		for(unsigned int i = 0; i < termCount; ++i) {
 			if(terminals[i] != eofSym) {
 				std::string name = terminals[i]->name();
 
