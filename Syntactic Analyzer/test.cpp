@@ -20,6 +20,8 @@
 
 using namespace syntacticanalyzer;
 
+DefaultLexer defaultLexer;
+
 
 struct GrammarTest
 {
@@ -346,11 +348,12 @@ bool GrammarsManager::selectGrammar(unsigned int i)
 	//m_grammarAnalyzer->setTokenizer(new C_language::c_hcLexer(*m_grammarAnalyzer));
 	//m_grammarAnalyzer->addToken("<",(TerminalSymbol*)grammar->findSymbol("<"));
 	//m_grammarAnalyzer->addToken(">",(TerminalSymbol*)grammar->findSymbol(">"));
-	m_grammarAnalyzer->addToken("</",(TerminalSymbol*)grammar->findSymbol("</"));
-	m_grammarAnalyzer->addToken("[_a-zA-Z][_a-zA-Z0-9]*",(TerminalSymbol*)grammar->findSymbol("IDENTIFIER"));
-	m_grammarAnalyzer->addToken("/>",(TerminalSymbol*)grammar->findSymbol("/>"));
-	m_grammarAnalyzer->addToken("([[:alnum:] ]|(-[[:alnum:] ]))+",(TerminalSymbol*)grammar->findSymbol("STRING"));
-	m_grammarAnalyzer->makeDefaultTerminalTokens();
+	defaultLexer.addToken("</",grammar->findSymbol("</")->index());
+	defaultLexer.addToken("[_a-zA-Z][_a-zA-Z0-9]*",grammar->findSymbol("IDENTIFIER")->index());
+	defaultLexer.addToken("/>",grammar->findSymbol("/>")->index());
+	defaultLexer.addToken("([[:alnum:] ]|(-[[:alnum:] ]))+",grammar->findSymbol("STRING")->index());
+	defaultLexer.makeDefaultTerminalTokens(grammar);
+	m_grammarAnalyzer->setTokenizer(&defaultLexer);
 	m_usingGrammar = grammar;
 	grammarOptions();
 

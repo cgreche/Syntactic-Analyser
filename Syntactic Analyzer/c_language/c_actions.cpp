@@ -21,7 +21,7 @@ bool g_thisFuncHasVargs = false;
 SEMANTIC_ACTION_C(primary_expression1, IDENTIFIER)
 {
 	int a = 1;
-	const char *name = parser.sArg(0)->text;
+	const char *name = state->semanticStack[state->semanticArgsIndex].text;
 	CSymbol *sym = C_curScope()->findSymbol(name);
 	if(!sym) {
 		//undeclared idenifier
@@ -816,7 +816,7 @@ SEMANTIC_ACTION_C(type_specifier11, enum_specifier)
 
 SEMANTIC_ACTION_C(type_specifier12, TYPE_NAME)
 {
-	char *token = SARG_(0)->text;
+	char *token = SARG_TEXT(0);
 	CSymbol *sym = C_curScope()->findSymbol(token);
 
 	SymbolType *type = sym->type();

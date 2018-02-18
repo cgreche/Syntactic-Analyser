@@ -609,9 +609,7 @@ namespace syntacticanalyzer {
 	}
 
 	inline int center(int a, int b) {
-		float _a = a;
-		float _b = b;
-		return (int)(fabs(a - b) / 2);
+		return (int)fabs((a - (float)b)/2);
 	}
 
 	inline void printCenter(int colWidth, const char *str, std::ostream &stream) {
@@ -750,62 +748,26 @@ namespace syntacticanalyzer {
 		m_lexer = lexer;
 	}
 
-	u32 GrammarAnalyzer::addToken(const char *regExp, TerminalSymbol *symbol) {
-		//todo: search for duplicate
-		m_defaultLexer.addToken(regExp,symbol->index());
-		return 1;
-	}
-
-	void GrammarAnalyzer::makeDefaultTerminalTokens() {
-		uint termCount = m_grammar->terminalCount();
-		SymbolList terminals = m_grammar->terminalSymbols();
-
-		TerminalSymbol *eofSym = (TerminalSymbol*)m_grammar->findSymbol("$eof");
-		for(int i = 0; i < termCount; ++i) {
-			if(terminals[i] != eofSym) {
-				std::string name = terminals[i]->name();
-
-				const char *regexOrdinalChars = "^.[$()|*+?{";
-				std::size_t found = name.find_first_of(regexOrdinalChars);
-				while(found != std::string::npos)
-				{
-					char c = name[found];
-					std::string newChars = "\\";
-					newChars += c;
-					name.replace(found, 1, newChars);
-					found = name.find_first_of(regexOrdinalChars, found + newChars.length());
-				}
-				addToken(name.c_str(), (TerminalSymbol*)terminals[i]);
-			}
-		}
-	}
-
 	bool GrammarAnalyzer::parse(const char *input, std::ostream *stream)
 	{
-		if(m_lexer == NULL)
-			m_lexer = &m_defaultLexer;
+		if(!m_lexer)
+			return false;
 		m_lexer->setInput(input);
 		m_lexer->setPos(0);
 		return parse(stream);
 	}
 
-	bool GrammarAnalyzer::parse(unsigned int *input, std::ostream *stream)
-	{
-		if(!input)
-			return false;
-
-		return parse(stream);
-	}
-
 	bool GrammarAnalyzer::parse(std::ostream *stream)
 	{
-		State* curState;
+		int curState;
 		unsigned int i;
 	//	unsigned int *input = m_parsingState.parsingInput;
 
 		if(!m_parsingTable) {
 			dumpParsingTable(*stream);
 		}
+
+		m_parsingState = new ParsingState(*this);
 
 		if(!stream)
 			stream = &std::cout;
@@ -814,11 +776,8 @@ namespace syntacticanalyzer {
 		DEBUG_PRINT(*stream, "Start parsing.\n");
 		//[/Debug]
 
-		m_parsingState.currentState = curState = state(0);
-		if(!curState)
-			return false;
-
-		m_parsingState.stack.push_back(0);
+		m_parsingState->currentState = curState = 0;
+		m_parsingState->stateStack.push_back(0);
 
 		int tok;
 		tok = getNextToken();
@@ -826,7 +785,7 @@ namespace syntacticanalyzer {
 			char *text = m_curToken.text;
 
 			DEBUG_PRINT(*stream, "Current State: ");
-			DEBUG_PRINT(*stream, curState->number());
+			DEBUG_PRINT(*stream, curState);
 			DEBUG_PRINT(*stream, std::endl);
 		
 			DEBUG_PRINT(*stream, "Current Token: ");
@@ -848,8 +807,8 @@ namespace syntacticanalyzer {
 	#if 1
 			int **table = m_parsingTable;
 			int value;
-			action = GET_ACTION(table[curState->number()][tok]);
-			value = GET_VALUE(table[curState->number()][tok]);
+			action = GET_ACTION(table[curState][tok]);
+			value = GET_VALUE(table[curState][tok]);
 			if(action == ACTION_SHIFT) {
 
 				//[DEBUG]
@@ -861,9 +820,9 @@ namespace syntacticanalyzer {
 				DEBUG_PRINT(*stream, std::endl);
 				//[/DEBUG]
 
-				m_parsingState.currentState = curState = state(value);
-				m_parsingState.stack.push_back(value);
-				m_parsingState.semanticStack.push_back(m_curToken);
+				m_parsingState->currentState = curState = value;
+				m_parsingState->stateStack.push_back(value);
+				m_parsingState->semanticStack.push_back(m_curToken);
 
  				tok = getNextToken();
 			}
@@ -888,25 +847,25 @@ namespace syntacticanalyzer {
 
 				//do semantic action
 				Token retToken;
-				m_parsingState.semanticArgsIndex = m_parsingState.semanticStack.size()-pro->nrhs();
-				retToken.value = this->sArg(0)->value; // defaults to first semantic arg
+				m_parsingState->semanticArgsIndex = m_parsingState->semanticStack.size()-pro->nrhs();
+				retToken.value = m_parsingState->semanticStack[m_parsingState->semanticArgsIndex].value; // defaults to first semantic arg
 				memset(retToken.text,0,sizeof(retToken.text));
 
 				if(pro->semanticAction()) {
-					pro->semanticAction()(*this,retToken);
+					pro->semanticAction()(this->m_parsingState,retToken);
 				}
 
 				for(unsigned int j = 0; j < pro->nrhs(); ++j) {
-					m_parsingState.stack.pop_back();
-					m_parsingState.semanticStack.pop_back();
+					m_parsingState->stateStack.pop_back();
+					m_parsingState->semanticStack.pop_back();
 				}
-				m_parsingState.currentState = curState = state(m_parsingState.stack.back());
-				m_parsingState.semanticStack.push_back(retToken);
+				m_parsingState->currentState = curState = m_parsingState->stateStack.back();
+				m_parsingState->semanticStack.push_back(retToken);
 
 				//do the goto
-				value = GET_VALUE(table[curState->number()][pro->lhs()->index()]);
-				m_parsingState.currentState = curState = state(value);
-				m_parsingState.stack.push_back(value);
+				value = GET_VALUE(table[curState][pro->lhs()->index()]);
+				m_parsingState->currentState = curState = value;
+				m_parsingState->stateStack.push_back(value);
 			}
 			else if(action == ACTION_ACCEPT) {
 				//[DEBUG]
@@ -923,146 +882,11 @@ namespace syntacticanalyzer {
 			}
 
 	#endif
-	#if 0
-			//[Debug]
-	//		i = m_parsingState.inputPos;
-	//		(*stream) << "Input: ";
-	//		for(;;) {
-	//			unsigned int t = input[i++];
-	//			(*stream) << t;
-	//			if(t == 0)
-	//				break;
-	//			(*stream) << ", ";
-	//		}
-	//		(*stream) << std::endl;
-
-	#ifdef _DEBUG
-			(*stream) << "Stack: [";
-			for(i = 0; i < m_parsingState.stack.size(); ++i) {
-				(*stream) << m_parsingState.stack[i];
-				if((i+1) != m_parsingState.stack.size())
-					(*stream) << ", ";
-			}
-			(*stream) << "]" << std::endl;
-	#endif
-			//[/Debug]
-
-			if(action == 0 && curState->shifts.size() > 0) {
-
-				if(!preShiftProcessed && m_preShiftAction) {
-					tok = m_preShiftAction(*this,tok,&m_curSemantic);
-				}
-
-				preShiftProcessed = true;
-
-				for(i = 0; i < curState->shifts.size(); ++i) {
-					Symbol *sym = curState->shifts[i].acessingSymbol;
-					if(sym->index() == tok) {
-
-						//[DEBUG]
-						DEBUG_PRINT(*stream, "Action: shift ");
-						DEBUG_PRINT(*stream, curState->shifts[i].state->number());
-						DEBUG_PRINT(*stream, " (");
-						DEBUG_PRINT(*stream, curState->shifts[i].acessingSymbol->name());
-						DEBUG_PRINT(*stream, ')');
-						DEBUG_PRINT(*stream, std::endl);
-						//[/DEBUG]
-
-						m_parsingState.currentState = curState = curState->shifts[i].state;
-						m_parsingState.stack.push_back(curState->number());
-	//					if(tok != 0)
-	//						m_parsingState.inputPos++;
-						action = 1;
-						m_parsingState.semanticStack.push_back(m_curSemantic);
-
- 						tok = getNextToken();
-						preShiftProcessed = false;
-						break;
-					}
-				}
-			}
-
-			if(action == 0 && curState->reductions.size() > 0) {
-				for(i = 0; i < curState->reductions.size(); ++i) {
-					if(curState->reductions[i].lookAhead.contains(m_grammar->symbol(tok))) {
-
-						Production *pro = curState->reductions[i].pro;
-
-						if(pro == m_grammar->findSymbol("$start")->proList()[0]) {
-							//[DEBUG]
-							DEBUG_PRINT(*stream, "Action: accept");
-							DEBUG_PRINT(*stream, std::endl);
-							//[/DEBUG]
-							int accept = 1;
-							return true;
-						}
-
-						//[Debug]
-						DEBUG_PRINT(*stream, "Action: reduce ");
-						DEBUG_PRINT(*stream, pro->number());
-						DEBUG_PRINT(*stream, " (");
-						DEBUG_PRINT(*stream, pro->lhs()->name());
-						DEBUG_PRINT(*stream, " -> ");
-	#ifdef _DEBUG
-						for(u32 nsym = 0; nsym < pro->nrhs(); ++nsym) {
-							DEBUG_PRINT(*stream, pro->rhs(nsym)->name());
-							if(nsym < pro->nrhs()-1)
-								DEBUG_PRINT(*stream, " ");
-						}
-	#endif
-						DEBUG_PRINT(*stream, ')');
-						DEBUG_PRINT(*stream, std::endl);
-						//[/Debug]
-
-						//do semantic action
-						SemanticValue retSemantic;
-						m_parsingState.semanticArgsIndex = m_parsingState.semanticStack.size()-pro->nrhs();
-						retSemantic.value = this->sArg(0)->value; // defaults to first semantic arg
-						memset(retSemantic.token,0,sizeof(retSemantic.token));
-
-						if(pro->semanticAction()) {
-							pro->semanticAction()(*this,retSemantic);
-						}
-
-						int test = m_parsingState.semanticStack.size();
-						int test2 = pro->nrhs();
-						int a = 1;
-
-						for(unsigned int j = 0; j < pro->nrhs(); ++j) {
-							m_parsingState.stack.pop_back();
-							m_parsingState.semanticStack.pop_back();
-						}
-						m_parsingState.currentState = curState = state(m_parsingState.stack.back());
-						m_parsingState.semanticStack.push_back(retSemantic);
-
-						//do the goto
-						for(i = 0; i < curState->gotos.size(); ++i) {
-							Symbol *sym = curState->gotos[i].acessingSymbol;
-							if(sym == pro->lhs()) {
-								m_parsingState.currentState = curState = curState->gotos[i].state;
-								m_parsingState.stack.push_back(curState->number());
-								action = 2;
-								break;
-							}
-						}
-
-						if(action != 0)
-							break;
-					}
-				}
-			}
-
-			if(action == 0) {
-				DEBUG_PRINT(*stream, "Action: error");
-				DEBUG_PRINT(*stream, " ");
-				DEBUG_PRINT(*stream, "(");
-				DEBUG_PRINT(*stream, (tok == -1 ? "Undefined" : m_grammar->symbolList()[tok]->name()));
-				DEBUG_PRINT(*stream, ")\n");
-				break;
-			}
-	#endif
 			DEBUG_PRINT(*stream, std::endl);
 		}
+
+		if(m_parsingState)
+			delete m_parsingState;
 		return false;
 	}
 

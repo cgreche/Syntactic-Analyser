@@ -16,6 +16,7 @@
 namespace syntacticanalyzer {
 
 	typedef int(*__tokenCallback)(Token*);
+	class Grammar;
 
 	class DefaultLexer : public Lexer
 	{
@@ -32,7 +33,9 @@ namespace syntacticanalyzer {
 		DefaultLexer();
 		~DefaultLexer();
 		virtual int nextToken(Token *pToken);
-		bool addToken(const char *regex, int id, __tokenCallback callback = NULL);
+		bool addToken(const char *regex, int id, __tokenCallback callback = 0);
+
+		void makeDefaultTerminalTokens(Grammar *grammar);
 	};
 
 }

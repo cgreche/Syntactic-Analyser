@@ -8,10 +8,10 @@
 
 namespace syntacticanalyzer {
 
-	class GrammarAnalyzer;
+	struct ParsingState;
 	struct Token;
-	typedef void(*SemanticAction)(GrammarAnalyzer &parser, Token &ret);
-#define SEMANTIC_ACTION(x) void x(GrammarAnalyzer &parser, Token &ret)
+	typedef void(*SemanticAction)(ParsingState *state, Token &ret);
+#define SEMANTIC_ACTION(x) void x(ParsingState *state, Token &ret)
 #define SEMANTIC_ACTION_C(x,y) SEMANTIC_ACTION(x) //commented
 
 	class Production

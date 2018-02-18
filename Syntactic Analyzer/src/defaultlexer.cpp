@@ -4,13 +4,14 @@
 
 #include "defaultlexer.h"
 
+#include "grammar.h"
+
 namespace syntacticanalyzer {
 
 	DefaultLexer::DefaultLexer() {
 	}
 
 	DefaultLexer::~DefaultLexer() {
-
 	}
 
 	bool DefaultLexer::addToken(const char *regex, int id, __tokenCallback callback) {
@@ -77,4 +78,27 @@ namespace syntacticanalyzer {
 		return tok;
 	}
 
+	void DefaultLexer::makeDefaultTerminalTokens(Grammar *grammar) {
+		unsigned int termCount = grammar->terminalCount();
+		SymbolList terminals = grammar->terminalSymbols();
+
+		TerminalSymbol *eofSym = (TerminalSymbol*)grammar->findSymbol("$eof");
+		for(int i = 0; i < termCount; ++i) {
+			if(terminals[i] != eofSym) {
+				std::string name = terminals[i]->name();
+
+				const char *regexOrdinalChars = "^.[$()|*+?{";
+				std::size_t found = name.find_first_of(regexOrdinalChars);
+				while(found != std::string::npos)
+				{
+					char c = name[found];
+					std::string newChars = "\\";
+					newChars += c;
+					name.replace(found, 1, newChars);
+					found = name.find_first_of(regexOrdinalChars, found + newChars.length());
+				}
+				addToken(name.c_str(), terminals[i]->index());
+			}
+		}
+	}
 }

@@ -39,21 +39,22 @@ namespace syntacticanalyzer {
 #define FIRST_COMPUTED 1<<8
 #define FOLLOW_COMPUTED 1<<9
 
-#define SARG_(x) parser.sArg(x)
-#define SARG_TOK(x) (SARG_(x)->tok)
-#define SARG_TEXT(x) (SARG_(x)->text)
-#define SARG(x,t) ((t)SARG_(x)->value.pval)
-#define SARG_CVAL(x) (SARG_(x)->value.cval)
-#define SARG_SVAL(x) (SARG_(x)->value.sval)
-#define SARG_LVAL(x) (SARG_(x)->value.lval)
-#define SARG_UCVAL(x) (SARG_(x)->value.ucval)
-#define SARG_USVAL(x) (SARG_(x)->value.usval)
-#define SARG_ULVAL(x) (SARG_(x)->value.ulval)
-#define SARG_IVAL(x) (SARG_(x)->value.ival)
-#define SARG_UVAL(x) (SARG_(x)->value.uval)
-#define SARG_PVAL(x) (SARG_(x)->value.pval)
-#define SARG_FVAL(x) (SARG_(x)->value.fval)
-#define SARG_DVAL(x) (SARG_(x)->value.dval)
+#define SARG_(x) state->semanticStack[state->semanticArgsIndex + x]
+#define SARG_COUNT (state->semanticStack.size() - state->semanticArgsIndex)
+#define SARG_TOK(x) (SARG_(x).tok)
+#define SARG_TEXT(x) (SARG_(x).text)
+#define SARG(x,t) ((t)SARG_(x).value.pval)
+#define SARG_CVAL(x) (SARG_(x).value.cval)
+#define SARG_SVAL(x) (SARG_(x).value.sval)
+#define SARG_LVAL(x) (SARG_(x).value.lval)
+#define SARG_UCVAL(x) (SARG_(x).value.ucval)
+#define SARG_USVAL(x) (SARG_(x).value.usval)
+#define SARG_ULVAL(x) (SARG_(x).value.ulval)
+#define SARG_IVAL(x) (SARG_(x).value.ival)
+#define SARG_UVAL(x) (SARG_(x).value.uval)
+#define SARG_PVAL(x) (SARG_(x).value.pval)
+#define SARG_FVAL(x) (SARG_(x).value.fval)
+#define SARG_DVAL(x) (SARG_(x).value.dval)
 #define SRET(x) ret.value.pval = (void*)x
 #define SRET_CVAL(x) (ret.value.cval = x)
 #define SRET_SVAL(x) (ret.value.sval = x)
@@ -70,15 +71,16 @@ namespace syntacticanalyzer {
 	typedef std::vector<unsigned int> StateStack;
 	typedef std::vector<Token> SemanticStack;
 
-	struct ParsingState_
+	struct ParsingState
 	{
-		State* currentState;
-		StateStack stack;
+		GrammarAnalyzer &analyzer;
+		int currentState;
+		StateStack stateStack;
 		SemanticStack semanticStack;
 		unsigned int semanticArgsIndex;
 
-		ParsingState_()
-			: currentState(NULL) {
+		ParsingState(GrammarAnalyzer &analyzer)
+			: analyzer(analyzer), currentState(NULL) {
 		}
 	};
 
@@ -97,12 +99,11 @@ namespace syntacticanalyzer {
 		u32 m_analysisState; //0: nothing, 1: lr applied, 2: parsing
 		u32 m_analysisMethod;
 
-		//
-		int **m_parsingTable;
-
 		void _clean(); //reset parsing info (useful if we want to change the Grammar to be parsed)
 
-		DefaultLexer m_defaultLexer;
+		//
+		ParsingState *m_parsingState;
+		int **m_parsingTable;
 
 		//Tokenization
 		Lexer *m_lexer;
@@ -122,8 +123,6 @@ namespace syntacticanalyzer {
 		GrammarAnalyzer(Grammar &grammar);
 		~GrammarAnalyzer();
 
-		ParsingState_ m_parsingState;
-
 		Grammar *grammar() const { return m_grammar; }
 
 		void computeNullable();
@@ -138,17 +137,6 @@ namespace syntacticanalyzer {
 		void resolveConflicts();
 		void generateParsingTable();
 
-		u32 addToken(const char *regExp, TerminalSymbol *symbol);
-		void makeDefaultTerminalTokens();
-		void setTokenizer(Lexer *lexer);
-
-		bool parse(const char *input, std::ostream *stream); //parse an input file
-		bool parse(unsigned int *input, std::ostream *stream); //parse a tokenized input file
-
-		//semantic argument return
-		Token *sArg(unsigned int index) { return &m_parsingState.semanticStack[m_parsingState.semanticArgsIndex + index]; }
-		unsigned int sArgCount() { return m_parsingState.semanticStack.size() - m_parsingState.semanticArgsIndex; }
-
 		unsigned int stateCount() const { return m_states.size(); }
 		State *state(unsigned int number) const { return m_states[number]; }
 
@@ -159,7 +147,31 @@ namespace syntacticanalyzer {
 		void dumpStateInfo(State &state, std::ostream &stream);
 		void dumpFirstFollowNullable(std::ostream& stream);
 		void dumpParsingTable(std::ostream &stream);
+
+		//
+		void setTokenizer(Lexer *lexer);
+		bool parse(const char *input, std::ostream *stream); //parse an input file
 	};
+
+	/*
+	class Language {
+		Grammar *grammar;
+		int **m_parsingTable;
+	};
+
+	class LanguageParser {
+		Language *m_language;
+		Lexer *m_lexer;
+
+		Token m_curToken;
+
+	public:
+		LanguageParser(Language *language);
+		void setTokenizer();
+		bool parse(const char *input, std::ostream *stream); //parse an input file
+		bool parse(unsigned int *input, std::ostream *stream); //parse a tokenized input file
+	};
+	*/
 
 }
 
