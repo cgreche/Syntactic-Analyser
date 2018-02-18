@@ -32,11 +32,11 @@ namespace syntacticanalyzer {
 
 	inline bool GrammarAnalyzer::_isnullable(Symbol *sym) {
 		if(sym->isTerminal())
-			return sym == NULL;
+			return false; //todo: check if sym is epsilon (the empty string)
 		if(m_nullable[sym->index()])
 			return true;
 		if(m_beingProcessed[sym->index()])
-			return true;
+			return m_nullable[sym->index()];
 		bool nullable = true;
 		m_beingProcessed[sym->index()] = true;
 		for(unsigned int i = 0; i < ((NonterminalSymbol*)sym)->proList().size(); ++i) {
@@ -101,6 +101,7 @@ namespace syntacticanalyzer {
 
 		computeNullable();
 	
+		//if sym is TERMINAL, FIRST(sym) = sym
 		for(unsigned int i = 0; i < m_grammar->m_termSymList.count(); ++i) {
 			Symbol *sym = m_grammar->m_termSymList[i];
 			m_firstSets[sym->index()].append(sym);
@@ -118,37 +119,27 @@ namespace syntacticanalyzer {
 			changes = 0;
 
 			u32 i;
-			for(i = 0; i < symList.count(); ++i) {
-				Symbol *sym = symList[i];
-				//if sym is TERMINAL, FIRST(sym) = sym
-				if(sym->symClass() == TERMINAL) {
-					if(m_firstSets[sym->index()].appendUnique(sym))
-						++changes;
-				}
-				else if(sym->symClass() == NONTERMINAL) {
-
-					u32 j;
-					for(j = 0; j < sym->proList().size(); ++j) {
-						Production *pro = sym->proList()[j];
-						u32 k;
-						bool nullable = true;
-						for(k = 0; k < pro->nrhs(); ++k) {
-							if(m_firstSets[sym->index()].mergeUnique(m_firstSets[pro->rhs(k)->index()]) > 0)
-								++changes;
-							if(!m_nullable[pro->rhs(k)->index()]) {
-								nullable = false;
-								break;
-							}
-						}
-						if(nullable) {
-							m_nullable[sym->index()] = true;
-	//						if(m_firstSets[sym->index()].appendUnique(&Grammar::epsilon))
-						//		++changes;
+			for(i = 0; i < m_grammar->nonTerminalCount(); ++i) {
+				NonterminalSymbol *sym = (NonterminalSymbol*)m_grammar->m_nontermSymList[i];
+				
+				u32 j;
+				for(j = 0; j < sym->proList().size(); ++j) {
+					Production *pro = sym->proList()[j];
+					bool nullable = true;
+					for(unsigned int k = 0; k < pro->nrhs(); ++k) {
+						if(m_firstSets[sym->index()].merge(m_firstSets[pro->rhs(k)->index()]) > 0)
+							++changes;
+						if(!m_nullable[pro->rhs(k)->index()]) {
+							nullable = false;
+							break;
 						}
 					}
-
+					if(nullable) {
+						m_nullable[sym->index()] = true;
+//						if(m_firstSets[sym->index()].appendUnique(&Grammar::epsilon))
+					//		++changes;
+					}
 				}
-
 			}
 
 		}while(changes > 0);

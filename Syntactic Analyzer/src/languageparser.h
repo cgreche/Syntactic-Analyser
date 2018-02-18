@@ -64,7 +64,6 @@ namespace syntacticanalyzer {
 		Lexer *m_lexer;
 
 		ParsingState *m_parsingState;
-		int **m_parsingTable;
 		Token m_curToken;
 
 		//

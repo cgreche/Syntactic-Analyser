@@ -1,10 +1,11 @@
 
-//Last Edit: 26/06/2017 03:26
+//Last Edit: 18/02/2018 04:45
 
 //Hand coded C lexer
 
-#include "../src/grammaranalyzer.h"
+#include "../src/languageparser.h"
 #include "../src/lib/nametable.h"
+#include "c_hc_lexer.h"
 
 #include "c_language.h"
 
@@ -110,29 +111,10 @@ int c_lexer_onToken_identifier(Token *pToken);
 
 static bool is_lexer_initialized = false;
 
-class c_hcLexer : public Lexer {
-	GrammarAnalyzer &m_gramAnalyzer;
-
-public:
-	c_hcLexer(GrammarAnalyzer& gramAnalyzer);
-	virtual int nextToken(Token *pToken);
-
-	int getch() {
-		if(m_input[m_pos] == '\0')
-			return '\0';
-		return m_input[m_pos++];
-	}
-
-	int ungetch() {
-		return m_input[--m_pos];
-	}
-};
-
-c_hcLexer::c_hcLexer(GrammarAnalyzer& gramAnalyzer)
-	: m_gramAnalyzer(gramAnalyzer)
+c_hcLexer::c_hcLexer(LanguageParser& parser)
+	: m_parser(parser)
 {
-
-	Grammar *grammar = gramAnalyzer.grammar();
+	Grammar *grammar = parser.language()->grammar();
 
 	int i;
 	for(i = 0; i < N_C_TOKENS; ++i)
@@ -241,7 +223,7 @@ int c_hcLexer::nextToken(Token *pToken)
 	if(pToken)
 		text = t = pToken->text;
 
-	Grammar *grammar = m_gramAnalyzer.grammar();
+	Grammar *grammar = m_parser.language()->grammar();
 
 #define GETCH (ch = *t++ = this->getch())
 #define UNGETCH if(ch != '\0') ch = this->ungetch(); *--t = '\0'

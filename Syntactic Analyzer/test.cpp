@@ -1,9 +1,5 @@
 
-//Last edit: 26/06/2017 02:52
-
-#include <windows.h>
-#pragma comment(lib,"Winmm.lib") //for timeGetTime
-#include <Mmsystem.h> //for timeGetTime
+//Last edit: 18/02/2018 04:46
 
 #include <iostream>
 #include <string>
@@ -19,6 +15,21 @@
 #undef min
 #undef max
 
+#ifdef WIN32
+#include <windows.h>
+#pragma comment(lib,"Winmm.lib") //for timeGetTime
+#include <Mmsystem.h> //for timeGetTime
+
+unsigned int getTime() {
+	return timeGetTime();
+}
+
+#else
+unsigned int getTime() {
+	return 0;
+}
+#endif
+
 using namespace syntacticanalyzer;
 
 struct GrammarTest
@@ -26,8 +37,8 @@ struct GrammarTest
 	const char *grammarName;
 	Grammar* (*grammarCreate)();
 	void (*grammarDestroy)(Grammar *grammar);
-	bool (*preParsing)(Grammar *grammar);
-	void (*postParsing)(Grammar *grammar, bool result);
+	bool (*preParsing)(LanguageParser *parser);
+	void (*postParsing)(LanguageParser *parser, bool result);
 };
 
 Grammar *testGrammar_create()
@@ -129,15 +140,15 @@ GrammarTest mathExpr = {
 #include "c_language/c_hc_lexer.h"
 namespace C_language {
 extern Grammar *C_grammar_init();
-extern int c_lex(GrammarAnalyzer& gramAnalyzer, Token *pToken);
 };
 
-void C_postParsing(Grammar *grammar, bool result);
+bool C_preParsing(LanguageParser *parser);
+void C_postParsing(LanguageParser *parser, bool result);
 GrammarTest c_grammarTest = {
 	"C Grammar",
 	C_language::C_grammar_init,
 	NULL,
-	NULL,
+	C_preParsing,
 	C_postParsing,
 };
 
@@ -236,13 +247,30 @@ void xml_destroy(Grammar *grammar)
 		delete grammar;
 }
 
+bool xml_preParsing(LanguageParser *parser) {
+	DefaultLexer *lexer = new DefaultLexer;
+	Grammar *g = parser->language()->grammar();
+	lexer->addToken("</",g->findSymbol("</")->index());
+	lexer->addToken("[_a-zA-Z][_a-zA-Z0-9]*",g->findSymbol("IDENTIFIER")->index());
+	lexer->addToken("/>",g->findSymbol("/>")->index());
+	lexer->addToken("([[:alnum:] ]|(-[[:alnum:] ]))+",g->findSymbol("STRING")->index());
+	lexer->makeDefaultTerminalTokens(g);
+	parser->setTokenizer(lexer);
+	return true;
+}
+
+void xml_postparsing(LanguageParser *parser, bool result) {
+	if(parser->lexer())
+		delete parser->lexer();
+}
+
 
 GrammarTest xml = {
 	"XML",
 	xml_create,
 	xml_destroy,
-	NULL,
-	NULL
+	xml_preParsing,
+	xml_postparsing
 };
 
 class GrammarsManager
@@ -251,10 +279,6 @@ class GrammarsManager
 	GrammarTest *m_usingGrammarInfo;
 	Grammar *m_usingGrammar;
 	GrammarAnalyzer *m_grammarAnalyzer;
-
-	inline float getTime() {
-		return (float)timeGetTime();
-	}
 
 public:
 	GrammarsManager();
@@ -300,12 +324,12 @@ bool GrammarsManager::selectGrammar(unsigned int i)
 	m_usingGrammarInfo = m_grammars[i];
 
 	Grammar *grammar;
-	float xTime, xElapsedTime;
+	unsigned int xTime, xElapsedTime;
 
  	xTime = getTime();
 	grammar = m_grammars[i]->grammarCreate();
-	xElapsedTime = (getTime()-xTime)/1000.0f;
-	std::cout << m_usingGrammarInfo->grammarName << " " << "initialization time: " << xElapsedTime << std::endl;
+	xElapsedTime = getTime() - xTime;
+	std::cout << m_usingGrammarInfo->grammarName << " " << "initialization time (ms): " << xElapsedTime << std::endl;
 
 	if(m_grammarAnalyzer)
 		delete m_grammarAnalyzer;
@@ -323,8 +347,8 @@ bool GrammarsManager::selectGrammar(unsigned int i)
 
 	xTime = getTime();
 	m_grammarAnalyzer->lr0(&file);
-	xElapsedTime = (getTime()-xTime)/1000.0f;
-	std::cout << "LR(0) time: " << xElapsedTime << std::endl;
+	xElapsedTime = getTime()-xTime;
+	std::cout << "LR(0) time (ms): " << xElapsedTime << std::endl;
 	file << "LR(0) - ";
 	m_grammarAnalyzer->dumpStates(file);
 	file << std::endl;
@@ -334,8 +358,8 @@ bool GrammarsManager::selectGrammar(unsigned int i)
 
 	xTime = getTime();
 	m_grammarAnalyzer->lalr(&file);
-	xElapsedTime = (getTime()-xTime)/1000.0f;
-	std::cout << "LALR time: " << xElapsedTime << std::endl;
+	xElapsedTime = getTime()-xTime;
+	std::cout << "LALR time (ms): " << xElapsedTime << std::endl;
 	file << "LALR(1) - ";
 	m_grammarAnalyzer->dumpStates(file);
 	file << std::endl;
@@ -356,18 +380,9 @@ void GrammarsManager::parseInput(const char *input) {
 //	std::ofstream file;
 	LanguageParser *parser = new LanguageParser(m_grammarAnalyzer->generateLanguage());
 
-	DefaultLexer *lexer = new DefaultLexer;
-
-	lexer->addToken("</",m_usingGrammar->findSymbol("</")->index());
-	lexer->addToken("[_a-zA-Z][_a-zA-Z0-9]*",m_usingGrammar->findSymbol("IDENTIFIER")->index());
-	lexer->addToken("/>",m_usingGrammar->findSymbol("/>")->index());
-	lexer->addToken("([[:alnum:] ]|(-[[:alnum:] ]))+",m_usingGrammar->findSymbol("STRING")->index());
-	lexer->makeDefaultTerminalTokens(m_usingGrammar);
-	parser->setTokenizer(lexer);
-
 	bool result = true;
 	if(m_usingGrammarInfo->preParsing)
-		result = m_usingGrammarInfo->preParsing(m_usingGrammar);
+		result = m_usingGrammarInfo->preParsing(parser);
 	if(result) {
 		result = parser->parse(input, NULL);
 		if(result) {
@@ -376,11 +391,11 @@ void GrammarsManager::parseInput(const char *input) {
 		else
 			std::cout << "Syntax error." << std::endl;
 		if(m_usingGrammarInfo->postParsing)
-			m_usingGrammarInfo->postParsing(m_usingGrammar, result);
+			m_usingGrammarInfo->postParsing(parser, result);
 	}
 
-	delete parser->lexer();
-	delete parser->language();
+	if(parser->language())
+		delete parser->language();
 }
 
 
@@ -763,8 +778,14 @@ void C_processLabeledStatement(C_language::LabeledStatement *stmt)
 	printf("Label: %s\n","todo");
 }
 
-void C_postParsing(Grammar *grammar, bool result)
+bool C_preParsing(LanguageParser *parser) {
+	parser->setTokenizer(new C_language::c_hcLexer(*parser));
+	return true;
+}
+
+void C_postParsing(LanguageParser *parser, bool result)
 {
+	delete parser->lexer();
 	//Check for Main Symbol
 	C_language::Scope *scope = C_language::C_globalScope();
 	C_language::CSymbol *symMain = scope->findSymbol("main");

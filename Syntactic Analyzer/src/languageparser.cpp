@@ -25,6 +25,7 @@ namespace syntacticanalyzer {
 
 		m_parsingState->currentState = curState = 0;
 		m_parsingState->stateStack.push_back(0);
+		int **parsingTable = m_language->parsingTable();
 
 		int tok;
 		tok = _getNextToken();
@@ -52,10 +53,10 @@ namespace syntacticanalyzer {
 			unsigned int action = 0;
 
 	#if 1
-			int **table = m_parsingTable;
+			
 			int value;
-			action = GET_ACTION(table[curState][tok]);
-			value = GET_VALUE(table[curState][tok]);
+			action = GET_ACTION(parsingTable[curState][tok]);
+			value = GET_VALUE(parsingTable[curState][tok]);
 			if(action == ACTION_SHIFT) {
 
 				//[DEBUG]
@@ -110,7 +111,7 @@ namespace syntacticanalyzer {
 				m_parsingState->semanticStack.push_back(retToken);
 
 				//do the goto
-				value = GET_VALUE(table[curState][pro->lhs()->index()]);
+				value = GET_VALUE(parsingTable[curState][pro->lhs()->index()]);
 				m_parsingState->currentState = curState = value;
 				m_parsingState->stateStack.push_back(value);
 			}
