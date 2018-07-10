@@ -15,7 +15,7 @@ namespace syntacticanalyzer {
 	Grammar::Grammar()
 		: m_startSym(NULL), m_eofSym(NULL), m_initialPro(NULL)
 	{
-		//m_eofSym is created here because it is going to be mapped at index 0
+		//m_eofSym is created here because it is going to be mapped to index 0
 		m_eofSym = addTerminal("$eof");
 	}
 
