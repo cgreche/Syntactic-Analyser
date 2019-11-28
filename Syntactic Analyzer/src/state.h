@@ -78,7 +78,6 @@ namespace syntacticanalyzer {
 		State(unsigned int number, Symbol *acessingSymbol, Itemset &itemset);
 
 	public:
-		friend class LR0;
 		friend class GrammarAnalyzer;
 
 		unsigned int number() const { return m_number; }
