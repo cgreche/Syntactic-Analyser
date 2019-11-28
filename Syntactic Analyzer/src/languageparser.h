@@ -6,9 +6,10 @@
 #define __SYNTACTIC_ANALYZER_LANGUAGE_PARSER__
 
 #include <vector>
-#include "grammar.h"
+#include "language/language.h"
+#include "language/grammar.h"
 #include "grammaranalyzer.h"
-#include "language.h"
+
 
 namespace syntacticanalyzer {
 

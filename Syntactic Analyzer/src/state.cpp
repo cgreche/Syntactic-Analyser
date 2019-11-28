@@ -26,7 +26,7 @@ namespace syntacticanalyzer {
 					}
 
 					if(!isAdded) {
-						newItemset.push_back(LRItem(**it, 0));
+						newItemset.add(LRItem(**it, 0));
 					}
 				}
 			}
@@ -45,7 +45,7 @@ namespace syntacticanalyzer {
 			LRItem& item = itemset[i];
 			Symbol *_sym = item.production()->rhs(item.markIndex());
 			if(sym == _sym) {
-				newItemset.push_back(LRItem(*item.production(), item.markIndex() + 1));
+				newItemset.add(LRItem(*item.production(), item.markIndex() + 1));
 			}
 		}
 

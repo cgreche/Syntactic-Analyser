@@ -1,6 +1,6 @@
 
 #include "../src/grammaranalyzer.h"
-#include "../src/grammar.h"
+#include "../src/language/grammar.h"
 
 #include "c_actions_decl.h"
 

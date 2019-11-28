@@ -7,7 +7,7 @@
 #include <sstream>
 #include <set>
 #include <cstdlib> //abs
-#include "language.h"
+#include "language/language.h"
 
 namespace syntacticanalyzer {
 	//
@@ -241,9 +241,9 @@ namespace syntacticanalyzer {
 
 		NonterminalSymbol *startSym = (NonterminalSymbol*)m_grammar->findSymbol("$start");
 		if(!startSym)
-			return;
+			return; 
 
-		itemset.push_back(LRItem(*startSym->proList()[0],0));
+		itemset.add(LRItem(*startSym->proList()[0],0));
 		newItemset = itemset.closure();
 		State *initialState = addState(NULL,newItemset);
 
@@ -597,12 +597,6 @@ namespace syntacticanalyzer {
 		}
 
 		m_parsingTable = table;
-	}
-
-	Language *GrammarAnalyzer::generateLanguage() {
-		if(!m_parsingTable)
-			return NULL;
-		return new Language(m_grammar, m_parsingTable);
 	}
 
 	inline int center(int a, int b) {

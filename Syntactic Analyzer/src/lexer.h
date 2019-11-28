@@ -35,7 +35,7 @@ namespace syntacticanalyzer {
 		}
 	};
 
-	typedef int(*TokenCallback)(Token*);
+	typedef int(*TokenFunction)(Token*);
 
 	class Lexer
 	{
@@ -44,7 +44,7 @@ namespace syntacticanalyzer {
 		int m_pos;
 	public:
 		Lexer() : m_input(0), m_pos(0) { }
-		virtual bool addToken(const char *regex, int tokenValue, TokenCallback callback = 0) = 0;
+		virtual bool addToken(const char *regex, int tokenValue, TokenFunction callback = 0) = 0;
 		virtual void setInput(const char *input) { m_input = input; }
 		virtual void setPos(int pos) { m_pos = pos; }
 		virtual const char *input() { return m_input; }

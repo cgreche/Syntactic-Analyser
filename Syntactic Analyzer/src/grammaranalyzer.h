@@ -4,7 +4,7 @@
 #ifndef __GRAMMARANALYZER_H__
 #define __GRAMMARANALYZER_H__
 
-#include "grammar.h"
+#include "language/grammar.h"
 #include "state.h"
 #include "defaultlexer.h"
 
@@ -87,6 +87,8 @@ namespace syntacticanalyzer {
 		unsigned int stateCount() const { return m_states.size(); }
 		State *state(unsigned int number) const { return m_states[number]; }
 
+		int **parsingTable() const { return m_parsingTable; }
+
 		void dumpGrammar(std::ostream &stream);
 		void dumpSymbols(std::ostream &stream);
 		void dumpPros(std::ostream &stream);
@@ -94,8 +96,6 @@ namespace syntacticanalyzer {
 		void dumpStateInfo(State &state, std::ostream &stream);
 		void dumpFirstFollowNullable(std::ostream& stream);
 		void dumpParsingTable(std::ostream &stream);
-
-		Language *generateLanguage();
 	};
 
 }
