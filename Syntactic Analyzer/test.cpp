@@ -378,7 +378,7 @@ bool GrammarsManager::selectGrammar(unsigned int i)
 
 void GrammarsManager::parseInput(const char *input) {
 //	std::ofstream file;
-	LanguageParser *parser = new LanguageParser(m_grammarAnalyzer->generateLanguage());
+	LanguageParser *parser = new LanguageParser(new Language(m_grammarAnalyzer->grammar(),m_grammarAnalyzer->parsingTable()));
 
 	bool result = true;
 	if(m_usingGrammarInfo->preParsing)

@@ -1,12 +1,12 @@
 
-//Last Edit: 17/02/2018
+//Last Edit: 16/11/2019 18:24 (UTC-3)
 
 #ifndef __SYNTACTIC_ANALYZER_STATE_H__
 #define __SYNTACTIC_ANALYZER_STATE_H__
 
 #include <vector>
 
-#include "grammar.h"
+#include "language/grammar.h"
 
 namespace syntacticanalyzer {
 
@@ -32,11 +32,19 @@ namespace syntacticanalyzer {
 		SymbolList& lookAheadSet() { return m_lookAhead; }
 	};
 
-	class Itemset : public std::vector<LRItem>
+	class Itemset
 	{
+		std::vector<LRItem> m_items;
+
 	public:
 		Itemset closure();
 		Itemset goTo(Symbol *sym);
+
+		void add(LRItem item) { m_items.push_back(item); }
+
+		size_t size() const { return m_items.size(); }
+		const LRItem& operator[](int index) const { return m_items[index]; }
+		LRItem& operator[](int index) { return m_items[index]; }
 	};
 
 

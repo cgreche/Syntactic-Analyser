@@ -4,7 +4,7 @@
 
 #include "defaultlexer.h"
 
-#include "grammar.h"
+#include "language/grammar.h"
 
 namespace syntacticanalyzer {
 

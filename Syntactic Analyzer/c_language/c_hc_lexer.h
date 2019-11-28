@@ -26,7 +26,7 @@ class c_hcLexer : public Lexer {
 
 public:
 	c_hcLexer(LanguageParser& parser);
-	virtual bool addToken(const char *,int,syntacticanalyzer::TokenCallback) { return true; }
+	virtual bool addToken(const char *,int,syntacticanalyzer::TokenFunction) { return true; }
 	virtual int nextToken(Token *pToken);
 };
 
