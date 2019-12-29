@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{67925d2e-af5a-4e68-87aa-4dc371035a53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\lib">
+      <UniqueIdentifier>{1cd9b79f-844e-41cc-8155-43932d7e932b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\lib\regex-parser">
+      <UniqueIdentifier>{32cb60c0-ebda-4fc1-aaa1-5297b716540a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\language">
+      <UniqueIdentifier>{b0d07b10-435d-4127-a464-16638a2b94e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\c_language">
+      <UniqueIdentifier>{c75c4739-439e-4cba-ab8f-f73a8e93eb08}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\defaultlexer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\grammaranalyzer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\languageparser.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\state.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lib\hashtable.cpp">
+      <Filter>src\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lib\nametable.cpp">
+      <Filter>src\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lib\stack.cpp">
+      <Filter>src\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lib\string.cpp">
+      <Filter>src\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\language\grammar.cpp">
+      <Filter>src\language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\language\production.cpp">
+      <Filter>src\language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\language\symbol.cpp">
+      <Filter>src\language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lib\file.cpp">
+      <Filter>src\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lib\osd_file.cpp">
+      <Filter>src\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\c_language\c_actions.cpp">
+      <Filter>src\c_language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\c_language\c_ast.cpp">
+      <Filter>src\c_language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\c_language\c_grammar.cpp">
+      <Filter>src\c_language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\c_language\c_hc_lexer.cpp">
+      <Filter>src\c_language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\c_language\c_language.cpp">
+      <Filter>src\c_language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\c_language\c_object.cpp">
+      <Filter>src\c_language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\c_language\c_scope.cpp">
+      <Filter>src\c_language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\c_language\c_statement.cpp">
+      <Filter>src\c_language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\c_language\c_symbol.cpp">
+      <Filter>src\c_language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\c_language\c_symboltype.cpp">
+      <Filter>src\c_language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\c_language\c_value.cpp">
+      <Filter>src\c_language</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\defaultlexer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\grammaranalyzer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\languageparser.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\lexer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\state.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\lib\hashtable.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\lib\nametable.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\lib\stack.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\lib\string.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\lib\types.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\lib\regex-parser\Alphabet.h">
+      <Filter>src\lib\regex-parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\lib\regex-parser\RegexMatcher.h">
+      <Filter>src\lib\regex-parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\language\grammar.h">
+      <Filter>src\language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\language\language.h">
+      <Filter>src\language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\language\production.h">
+      <Filter>src\language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\language\symbol.h">
+      <Filter>src\language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\lib\osd_file.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\lib\file.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\c_language\c_actions_decl.h">
+      <Filter>src\c_language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\c_language\c_ast.h">
+      <Filter>src\c_language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\c_language\c_defs.h">
+      <Filter>src\c_language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\c_language\c_hc_lexer.h">
+      <Filter>src\c_language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\c_language\c_language.h">
+      <Filter>src\c_language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\c_language\c_object.h">
+      <Filter>src\c_language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\c_language\c_scope.h">
+      <Filter>src\c_language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\c_language\c_statement.h">
+      <Filter>src\c_language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\c_language\c_symbol.h">
+      <Filter>src\c_language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\c_language\c_symboltype.h">
+      <Filter>src\c_language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\c_language\c_value.h">
+      <Filter>src\c_language</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
