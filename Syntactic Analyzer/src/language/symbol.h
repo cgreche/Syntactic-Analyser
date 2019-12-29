@@ -43,7 +43,7 @@ namespace syntacticanalyzer {
 		inline bool isNonTerminal() const { return symClass() == NONTERMINAL; }
 
 		bool compareByName(const char *name) {
-			return strcmp(m_name, name) == 0;
+			return ::strcmp(m_name, name) == 0;
 		}
 	};
 

@@ -1947,7 +1947,7 @@ SEMANTIC_ACTION_C(external_declaration2, declaration)
 		type = type->next();
 	}
 
-	symbol = firstSymbol;
+	symbol = lastSymbol = firstSymbol;
 	while(symbol) {
 		Scope *curScope = C_curScope();
 		if(curScope->findSymbolWithinMainLevel(symbol->identifier()))

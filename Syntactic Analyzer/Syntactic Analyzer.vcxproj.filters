@@ -5,14 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="c_language">
       <UniqueIdentifier>{320783a0-7990-4e87-b14a-a9313a848cd1}</UniqueIdentifier>
     </Filter>
@@ -22,11 +14,11 @@
     <Filter Include="src\lib">
       <UniqueIdentifier>{4b216ce0-b011-4cd8-96bd-4c307d3d3e08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="regex_parser_engine">
-      <UniqueIdentifier>{8487e5d1-ce41-4005-99a5-8a26adc75819}</UniqueIdentifier>
+    <Filter Include="src\language">
+      <UniqueIdentifier>{cda3ad10-5dd3-4db8-aaef-362bf6d9b81f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="regex_parser_engine\util">
-      <UniqueIdentifier>{ce8765a9-0801-4363-853b-bdb3d147eb94}</UniqueIdentifier>
+    <Filter Include="src\lib\regex-parser">
+      <UniqueIdentifier>{6699a82b-c2bb-4ba3-92bf-ad6b6f5574f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -75,9 +67,6 @@
     <ClCompile Include="file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\grammar.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\state.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -87,38 +76,23 @@
     <ClCompile Include="osd_file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\symbol.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\production.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\grammaranalyzer.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\defaultlexer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\AsciiAlphabet.cpp">
-      <Filter>regex_parser_engine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\DFA.cpp">
-      <Filter>regex_parser_engine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\FSM.cpp">
-      <Filter>regex_parser_engine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\NFA.cpp">
-      <Filter>regex_parser_engine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\RegexMatcher.cpp">
-      <Filter>regex_parser_engine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\RegexParser.cpp">
-      <Filter>regex_parser_engine</Filter>
-    </ClCompile>
     <ClCompile Include="src\languageparser.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\language\grammar.cpp">
+      <Filter>src\language</Filter>
+    </ClCompile>
+    <ClCompile Include="src\language\production.cpp">
+      <Filter>src\language</Filter>
+    </ClCompile>
+    <ClCompile Include="src\language\symbol.cpp">
+      <Filter>src\language</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,20 +141,11 @@
     <ClInclude Include="src\state.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\grammar.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="file.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="osd_file.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\symbol.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\production.h">
-      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\grammaranalyzer.h">
       <Filter>src</Filter>
@@ -194,41 +159,26 @@
     <ClInclude Include="c_language\c_hc_lexer.h">
       <Filter>c_language</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\Alphabet.h">
-      <Filter>regex_parser_engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\AsciiAlphabet.h">
-      <Filter>regex_parser_engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\DFA.h">
-      <Filter>regex_parser_engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\FSM.h">
-      <Filter>regex_parser_engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\NFA.h">
-      <Filter>regex_parser_engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\RegexMatcher.h">
-      <Filter>regex_parser_engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\RegexNode.h">
-      <Filter>regex_parser_engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\RegexParser.h">
-      <Filter>regex_parser_engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\State.h">
-      <Filter>regex_parser_engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\utils\bitset.h">
-      <Filter>regex_parser_engine\util</Filter>
-    </ClInclude>
-    <ClInclude Include="src\language.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\languageparser.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\language\grammar.h">
+      <Filter>src\language</Filter>
+    </ClInclude>
+    <ClInclude Include="src\language\language.h">
+      <Filter>src\language</Filter>
+    </ClInclude>
+    <ClInclude Include="src\language\production.h">
+      <Filter>src\language</Filter>
+    </ClInclude>
+    <ClInclude Include="src\language\symbol.h">
+      <Filter>src\language</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\regex-parser\Alphabet.h">
+      <Filter>src\lib\regex-parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\regex-parser\RegexMatcher.h">
+      <Filter>src\lib\regex-parser</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

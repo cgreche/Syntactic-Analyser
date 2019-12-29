@@ -1,8 +1,10 @@
 
 //Last edit: 17/02/2018 21:59
 
+#include <cstring>
+#include <cstdarg>
+
 #include "symbol.h"
-#include <stdarg.h>
 
 namespace syntacticanalyzer {
 

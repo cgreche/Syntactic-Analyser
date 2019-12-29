@@ -11,7 +11,7 @@
 
 #include <vector>
 #include <string>
-#include <RegexMatcher.h>
+#include <regex-parser/RegexMatcher.h>
 
 namespace syntacticanalyzer {
 

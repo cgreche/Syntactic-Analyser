@@ -147,7 +147,7 @@ void HashTable::setHashFunction(HashFunction hashFunction)
 
 void *HashTable::insert(const unsigned char *key, unsigned long keyLen, void *data, bool unique)
 {
-	Bucket *bucket;
+	Bucket *bucket = 0;
 
 	HashElem *elem;
 	
@@ -160,11 +160,11 @@ void *HashTable::insert(const unsigned char *key, unsigned long keyLen, void *da
 	}
 
 	int res = rehashIfNecessary();
+	if (res == -1) //necessary memory unavailable
+		return NULL;
+
 	if(res == 1) //rehashed, find new bucket
 		findElem(key,keyLen,&bucket);
-
-	if(res == -1) //necessary memory unavailable
-		return NULL;
 
 	elem = new HashElem(key,keyLen,data);
 	if(bucket->firstElem) {

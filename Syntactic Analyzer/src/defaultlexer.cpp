@@ -25,7 +25,7 @@ namespace syntacticanalyzer {
 		TokenEntry *entry = new TokenEntry;
 		entry->regex = regex;
 		entry->id = id;
-		entry->matcher = new RegexMatcher(regex, NULL);
+		entry->matcher = createRegexMatcher(regex, NULL);
 		entry->callback = callback;
 		m_tokList.push_back(entry);
 		return true;
@@ -71,7 +71,7 @@ namespace syntacticanalyzer {
 		}
 
 		pToken->tok = tok;
-		strncpy(pToken->text, c, biggestMatchLen);
+		::strncpy(pToken->text, c, biggestMatchLen);
 		pToken->text[biggestMatchLen] = '\0';
 
 		m_pos += biggestMatchLen;

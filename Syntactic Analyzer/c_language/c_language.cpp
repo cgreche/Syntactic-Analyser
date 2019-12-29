@@ -69,7 +69,7 @@ int C_exitScope()
 void C_insertSymbolChainIntoCurrentScope(CSymbol *symbolChain)
 {
 	CSymbol *firstSymbol, *lastSymbol;
-	firstSymbol = symbolChain;
+	firstSymbol = lastSymbol = symbolChain;
 	while(symbolChain) {
 		Scope *curScope = C_curScope();
 		if(curScope->findSymbolWithinMainLevel(symbolChain->identifier())) {

@@ -19,12 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\AsciiAlphabet.cpp" />
-    <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\DFA.cpp" />
-    <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\FSM.cpp" />
-    <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\NFA.cpp" />
-    <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\RegexMatcher.cpp" />
-    <ClCompile Include="..\..\regex_parser_engine\regex_parser_engine\src\RegexParser.cpp" />
     <ClCompile Include="c_language\c_actions.cpp" />
     <ClCompile Include="c_language\c_ast.cpp" />
     <ClCompile Include="c_language\c_grammar.cpp" />
@@ -39,28 +33,18 @@
     <ClCompile Include="file.cpp" />
     <ClCompile Include="osd_file.cpp" />
     <ClCompile Include="src\defaultlexer.cpp" />
-    <ClCompile Include="src\grammar.cpp" />
     <ClCompile Include="src\grammaranalyzer.cpp" />
     <ClCompile Include="src\languageparser.cpp" />
+    <ClCompile Include="src\language\grammar.cpp" />
+    <ClCompile Include="src\language\production.cpp" />
+    <ClCompile Include="src\language\symbol.cpp" />
     <ClCompile Include="src\lib\hashtable.cpp" />
     <ClCompile Include="src\lib\nametable.cpp" />
     <ClCompile Include="src\lib\stack.cpp" />
-    <ClCompile Include="src\production.cpp" />
     <ClCompile Include="src\state.cpp" />
-    <ClCompile Include="src\symbol.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\Alphabet.h" />
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\AsciiAlphabet.h" />
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\DFA.h" />
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\FSM.h" />
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\NFA.h" />
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\RegexMatcher.h" />
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\RegexNode.h" />
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\RegexParser.h" />
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\State.h" />
-    <ClInclude Include="..\..\regex_parser_engine\regex_parser_engine\src\utils\bitset.h" />
     <ClInclude Include="c_language\c_actions_decl.h" />
     <ClInclude Include="c_language\c_ast.h" />
     <ClInclude Include="c_language\c_defs.h" />
@@ -75,49 +59,52 @@
     <ClInclude Include="file.h" />
     <ClInclude Include="osd_file.h" />
     <ClInclude Include="src\defaultlexer.h" />
-    <ClInclude Include="src\grammar.h" />
     <ClInclude Include="src\grammaranalyzer.h" />
-    <ClInclude Include="src\language.h" />
     <ClInclude Include="src\languageparser.h" />
+    <ClInclude Include="src\language\grammar.h" />
+    <ClInclude Include="src\language\language.h" />
+    <ClInclude Include="src\language\production.h" />
+    <ClInclude Include="src\language\symbol.h" />
     <ClInclude Include="src\lexer.h" />
     <ClInclude Include="src\lib\hashtable.h" />
     <ClInclude Include="src\lib\nametable.h" />
+    <ClInclude Include="src\lib\regex-parser\Alphabet.h" />
+    <ClInclude Include="src\lib\regex-parser\RegexMatcher.h" />
     <ClInclude Include="src\lib\stack.h" />
     <ClInclude Include="src\lib\types.h" />
-    <ClInclude Include="src\production.h" />
     <ClInclude Include="src\state.h" />
-    <ClInclude Include="src\symbol.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SyntacticAnalyzer</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -141,16 +128,18 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\CGR\Cpp Projects\regex_parser_engine\regex_parser_engine\src;$(IncludePath)</IncludePath>
-    <SourcePath>$(SourcePath)</SourcePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(IncludePath)src\lib</IncludePath>
+    <SourcePath>$(VC_SourcePath);</SourcePath>
+    <LibraryPath>C:\Users\Reche\Source\Repos\Syntactic-Analyser\lib;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>C:\Users\Reche\Source\Repos\Syntactic-Analyser\ext-bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\CGR\Cpp Projects\regex_parser_engine\regex_parser_engine\src;$(IncludePath)</IncludePath>
-    <SourcePath>E:\CGR\Cpp Projects\regex_parser_engine\regex_parser_engine\src;$(SourcePath)</SourcePath>
+    <IncludePath>$(ProjectDir)src\lib;$(IncludePath)</IncludePath>
+    <SourcePath>$(VC_SourcePath);</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -163,10 +152,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <CompileAsManaged>
+      </CompileAsManaged>
+      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>regex_parser.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

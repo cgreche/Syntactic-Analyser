@@ -2,10 +2,7 @@
 //Last edit: 18/02/2018 04:46
 
 #include <iostream>
-#include <string>
 #include <fstream>
-#include <limits>
-#include <cerrno>
 #include <vector>
 
 #include "file.h"
@@ -340,8 +337,10 @@ bool GrammarsManager::selectGrammar(unsigned int i)
 	
 	std::ofstream file;
 	file.open(".\\grammar.txt");
+	/*
 	if(file.fail())
 		std::cout << std::strerror(errno);
+		*/
 	m_grammarAnalyzer->dumpGrammar(file);
 	file << std::endl;
 

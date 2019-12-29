@@ -41,8 +41,7 @@ File *File::Open(const char *filename, File::openmode mode, FILEERR *err)
 		return NULL;
 	}
 
-	strncpy(f->m_Filename,filename,MAX_PATH-1);
-	f->m_Filename[MAX_PATH-1] = '\0';
+	strncpy(f->m_Filename,filename,MAX_PATH);
 
 	currerr = f->OpenInternal(mode);
 	if(currerr != FILEERR_NONE)
