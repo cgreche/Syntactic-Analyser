@@ -9,6 +9,8 @@
 #include "grammaranalyzer.h"
 #include "languageparser.h"
 
+#include "../GrammarBuilder.h"
+
 #undef min
 #undef max
 
@@ -40,17 +42,16 @@ struct GrammarTest
 
 Grammar *testGrammar_create()
 {
-	Grammar *g = new Grammar;
-	Grammar &grammar = *g;
+	GrammarBuilder* grammarBuilder = createDefaultGrammarBuilder();
 
-#define T(x) grammar.addTerminal(x)
-#define NT(x) grammar.addNonTerminal(x)
-#define P grammar.addProduction
-	Symbol *a = grammar.addTerminal("a");
-	Symbol *b = grammar.addTerminal("b");
-	Symbol *c = grammar.addTerminal("c");
-	Symbol *d = grammar.addTerminal("d");
-	Symbol *e = grammar.addTerminal("e");
+#define T(x) grammarBuilder.addTerminal(x)
+#define NT(x) grammarBuilder.addNonTerminal(x)
+#define P grammarBuilder.addProduction
+	Symbol *a = grammarBuilder->addTerminal("a");
+	Symbol *b = grammarBuilder->addTerminal("b");
+	Symbol *c = grammarBuilder->addTerminal("c");
+	Symbol *d = grammarBuilder->addTerminal("d");
+	Symbol *e = grammarBuilder->addTerminal("e");
 
 	P(NT("S"),3,a,NT("B"),c);
 	P(NT("S"),3,b,NT("C"),c);
@@ -60,13 +61,13 @@ Grammar *testGrammar_create()
 	P(NT("B"),1,e);
 	P(NT("C"),1,e);
 
-	grammar.setStartSymbol((NonterminalSymbol*)grammar.findSymbol("S"));
+	grammarBuilder->setStartSymbol((NonterminalSymbol*)grammarBuilder->symbol("S"));
 
 #undef T
 #undef NT
 #undef P
 
-	return g;
+	return grammarBuilder->build();
 }
 
 void testGrammar_destroy(Grammar *grammar)
@@ -85,17 +86,16 @@ GrammarTest testGrammar = {
 
 Grammar *mathExpr_create()
 {
-	Grammar *g = new Grammar;
-	Grammar &grammar = *g;
+	GrammarBuilder* grammarBuilder = createDefaultGrammarBuilder();
 
-#define T(x) grammar.addTerminal(x)
-#define NT(x) grammar.addNonTerminal(x)
-#define P grammar.addProduction
-	Symbol *symPlus = grammar.addTerminal("+");
-	Symbol *symMinus = grammar.addTerminal("-");
-	Symbol *symTimes = grammar.addTerminal("*");
-	Symbol *symDivide = grammar.addTerminal("/");
-	Symbol *symDigit = grammar.addTerminal("CONSTANT");
+#define T(x) grammarBuilder.addTerminal(x)
+#define NT(x) grammarBuilder.addNonTerminal(x)
+#define P grammarBuilder.addProduction
+	Symbol *symPlus = grammarBuilder->addTerminal("+");
+	Symbol *symMinus = grammarBuilder->addTerminal("-");
+	Symbol *symTimes = grammarBuilder->addTerminal("*");
+	Symbol *symDivide = grammarBuilder->addTerminal("/");
+	Symbol *symDigit = grammarBuilder->addTerminal("CONSTANT");
 
 	P(NT("expr"),1,NT("term"));
 	P(NT("term"),3,NT("term"),symPlus,NT("factor"));
@@ -110,7 +110,7 @@ Grammar *mathExpr_create()
 	P(NT("primary"),1,symDigit);
 	P(NT("primary"),3,T("("),NT("expr"),T(")"));
 
-	grammar.setStartSymbol((NonterminalSymbol*)grammar.findSymbol("expr"));
+	grammarBuilder->setStartSymbol((NonterminalSymbol*)grammarBuilder->symbol("expr"));
 
 #undef T
 #undef NT
@@ -133,8 +133,8 @@ GrammarTest mathExpr = {
 };
 
 
-#include "c_language/c_language.h"
-#include "c_language/c_hc_lexer.h"
+#include "../c_language/c_language.h"
+#include "../c_language/c_hc_lexer.h"
 namespace C_language {
 extern Grammar *C_grammar_init();
 };
@@ -157,12 +157,11 @@ GrammarTest c_grammarTest = {
 
 Grammar *xml_create()
 {
-	Grammar *g = new Grammar;
-	Grammar &grammar = *g;
+	GrammarBuilder* grammarBuilder = createDefaultGrammarBuilder();
 
-#define T(x) grammar.addTerminal(x)
-#define NT(x) grammar.addNonTerminal(x)
-#define P grammar.addProduction
+#define T(x) grammarBuilder.addTerminal(x)
+#define NT(x) grammarBuilder.addNonTerminal(x)
+#define P grammarBuilder.addProduction
 
 	P(NT("tag_name"), 1, T("IDENTIFIER"));
 	P(NT("attr_name"), 1, T("IDENTIFIER"));
@@ -230,7 +229,7 @@ Grammar *xml_create()
 	P(NT("document"), 2, NT("element"), NT("comment_or_pi_list") );
 	P(NT("document"), 1, NT("comment_or_pi_list"));
 
-	grammar.setStartSymbol(NT("document"));
+	grammarBuilder->setStartSymbol(NT("document"));
 #undef T
 #undef NT
 #undef P
@@ -246,11 +245,11 @@ void xml_destroy(Grammar *grammar)
 
 bool xml_preParsing(LanguageParser *parser) {
 	DefaultLexer *lexer = new DefaultLexer;
-	Grammar *g = parser->language()->grammar();
-	lexer->addToken("</",g->findSymbol("</")->index());
-	lexer->addToken("[_a-zA-Z][_a-zA-Z0-9]*",g->findSymbol("IDENTIFIER")->index());
-	lexer->addToken("/>",g->findSymbol("/>")->index());
-	lexer->addToken("([[:alnum:] ]|(-[[:alnum:] ]))+",g->findSymbol("STRING")->index());
+	Grammar *g = parser->grammar();
+	lexer->addToken("</",g->symbol("</")->index());
+	lexer->addToken("[_a-zA-Z][_a-zA-Z0-9]*",g->symbol("IDENTIFIER")->index());
+	lexer->addToken("/>",g->symbol("/>")->index());
+	lexer->addToken("([[:alnum:] ]|(-[[:alnum:] ]))+",g->symbol("STRING")->index());
 	lexer->makeDefaultTerminalTokens(g);
 	parser->setTokenizer(lexer);
 	return true;
@@ -430,16 +429,13 @@ void GrammarsManager::grammarOptions()
 		const char *name = "";
 
 		if(opt == 1) {
-			selectedGrammar->addTerminal(name);
 		}
 		else if(opt == 2) {
-			selectedGrammar->addNonTerminal(name);
 		}
 		else if(opt == 3) {
 
 		}
 		else if(opt == 4) {
-			selectedGrammar->removeSymbol(name);
 		}
 		else if(opt == 5) {
 			/*
@@ -473,7 +469,7 @@ void GrammarsManager::grammarOptions()
 			for(unsigned int i = 0; i < proList.size(); ++i) {
 				Production *pro = proList[i];
 				printf("%s ->", pro->lhs()->name());
-				for(unsigned int j = 0; j < pro->nrhs(); ++j)
+				for(unsigned int j = 0; j < pro->rhsCount(); ++j)
 					printf(" %s", pro->rhs(j)->name());
 				printf("\n");
 			}

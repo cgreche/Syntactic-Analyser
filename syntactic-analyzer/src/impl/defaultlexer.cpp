@@ -1,6 +1,6 @@
 
 //Created in: 26/06/2017 01:50
-//Last edit: 26/06/2017 01:50
+//Last edit: 29/12/2019 04:24
 
 #include "defaultlexer.h"
 
@@ -70,7 +70,7 @@ namespace syntacticanalyzer {
 			biggestMatchLen = 1;
 		}
 
-		pToken->tok = tok;
+		pToken->id = tok;
 		::strncpy(pToken->text, c, biggestMatchLen);
 		pToken->text[biggestMatchLen] = '\0';
 
@@ -82,7 +82,7 @@ namespace syntacticanalyzer {
 		unsigned int termCount = grammar->terminalCount();
 		SymbolList terminals = grammar->terminalSymbols();
 
-		TerminalSymbol *eofSym = (TerminalSymbol*)grammar->findSymbol("$eof");
+		TerminalSymbol *eofSym = (TerminalSymbol*)grammar->symbol("$eof");
 		for(unsigned int i = 0; i < termCount; ++i) {
 			if(terminals[i] != eofSym) {
 				std::string name = terminals[i]->name();

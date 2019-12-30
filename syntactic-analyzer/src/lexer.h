@@ -1,41 +1,16 @@
 //Created in: 26/06/2017 01:50
-//Last edit: 18/02/2018 01:09
+//Last edit: 29/12/2019 13:13
 
 #pragma once
 
-#ifndef __LEXER_H__
-#define __LEXER_H__
+#ifndef __SYNTACTIC_ANALYZER_LEXER_H__
+#define __SYNTACTIC_ANALYZER_LEXER_H__
+
+#include "Token.h"
 
 namespace syntacticanalyzer {
 
-	struct Token
-	{
-		int tok;
-		char text[256];
-
-		union {
-			char cval;
-			short sval;
-			long lval;
-			int ival;
-			char *strval;
-			unsigned char ucval;
-			unsigned short usval;
-			unsigned long ulval;
-			unsigned int uval;
-			unsigned char *bval;
-			void *pval;
-			float fval;
-			double dval;
-		}value;
-
-		Token()
-			: tok(-1) {
-			text[0] = '\0';
-		}
-	};
-
-	typedef int(*TokenFunction)(Token*);
+	class Token;
 
 	class Lexer
 	{

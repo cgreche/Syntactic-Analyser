@@ -141,7 +141,7 @@ namespace syntacticanalyzer {
 	int LanguageParser::_getNextToken()
 	{
 		//reset tok info
-		m_curToken.tok = -1;
+		m_curToken.id = -1;
 		memset(m_curToken.text,0,sizeof(m_curToken.text));
  		return m_lexer->nextToken(&m_curToken);
 	}

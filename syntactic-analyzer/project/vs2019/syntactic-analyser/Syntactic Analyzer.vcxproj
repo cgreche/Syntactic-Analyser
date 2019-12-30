@@ -30,20 +30,21 @@
     <ClCompile Include="..\..\..\src\c_language\c_symbol.cpp" />
     <ClCompile Include="..\..\..\src\c_language\c_symboltype.cpp" />
     <ClCompile Include="..\..\..\src\c_language\c_value.cpp" />
-    <ClCompile Include="..\..\..\src\defaultlexer.cpp" />
-    <ClCompile Include="..\..\..\src\grammaranalyzer.cpp" />
-    <ClCompile Include="..\..\..\src\languageparser.cpp" />
-    <ClCompile Include="..\..\..\src\language\grammar.cpp" />
-    <ClCompile Include="..\..\..\src\language\production.cpp" />
-    <ClCompile Include="..\..\..\src\language\symbol.cpp" />
+    <ClCompile Include="..\..\..\src\impl\defaultlexer.cpp" />
+    <ClCompile Include="..\..\..\src\impl\grammaranalyzer.cpp" />
+    <ClCompile Include="..\..\..\src\impl\languageparser.cpp" />
+    <ClCompile Include="..\..\..\src\impl\language\grammar.cpp" />
+    <ClCompile Include="..\..\..\src\impl\language\production.cpp" />
+    <ClCompile Include="..\..\..\src\impl\language\symbol.cpp" />
+    <ClCompile Include="..\..\..\src\impl\state.cpp" />
+    <ClCompile Include="..\..\..\src\impl\test.cpp" />
+    <ClCompile Include="..\..\..\src\impl\tools\grammarbuilder.cpp" />
     <ClCompile Include="..\..\..\src\lib\file.cpp" />
     <ClCompile Include="..\..\..\src\lib\hashtable.cpp" />
     <ClCompile Include="..\..\..\src\lib\nametable.cpp" />
     <ClCompile Include="..\..\..\src\lib\osd_file.cpp" />
     <ClCompile Include="..\..\..\src\lib\stack.cpp" />
     <ClCompile Include="..\..\..\src\lib\string.cpp" />
-    <ClCompile Include="..\..\..\src\state.cpp" />
-    <ClCompile Include="..\..\..\src\test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\c_language\c_actions_decl.h" />
@@ -57,14 +58,21 @@
     <ClInclude Include="..\..\..\src\c_language\c_symbol.h" />
     <ClInclude Include="..\..\..\src\c_language\c_symboltype.h" />
     <ClInclude Include="..\..\..\src\c_language\c_value.h" />
-    <ClInclude Include="..\..\..\src\defaultlexer.h" />
-    <ClInclude Include="..\..\..\src\grammaranalyzer.h" />
-    <ClInclude Include="..\..\..\src\languageparser.h" />
-    <ClInclude Include="..\..\..\src\language\grammar.h" />
-    <ClInclude Include="..\..\..\src\language\language.h" />
-    <ClInclude Include="..\..\..\src\language\production.h" />
-    <ClInclude Include="..\..\..\src\language\symbol.h" />
-    <ClInclude Include="..\..\..\src\lexer.h" />
+    <ClInclude Include="..\..\..\src\Grammar.h" />
+    <ClInclude Include="..\..\..\src\GrammarBuilder.h" />
+    <ClInclude Include="..\..\..\src\impl\defaultlexer.h" />
+    <ClInclude Include="..\..\..\src\impl\grammaranalyzer.h" />
+    <ClInclude Include="..\..\..\src\impl\grammarbuilder.h" />
+    <ClInclude Include="..\..\..\src\impl\languageparser.h" />
+    <ClInclude Include="..\..\..\src\impl\language\grammar.h" />
+    <ClInclude Include="..\..\..\src\impl\language\language.h" />
+    <ClInclude Include="..\..\..\src\impl\language\production.h" />
+    <ClInclude Include="..\..\..\src\impl\language\symbol.h" />
+    <ClInclude Include="..\..\..\src\impl\state.h" />
+    <ClInclude Include="..\..\..\src\impl\tokenimpl.h" />
+    <ClInclude Include="..\..\..\src\impl\tools\grammarbuilder.h" />
+    <ClInclude Include="..\..\..\src\LanguageParser.h" />
+    <ClInclude Include="..\..\..\src\Lexer.h" />
     <ClInclude Include="..\..\..\src\lib\file.h" />
     <ClInclude Include="..\..\..\src\lib\hashtable.h" />
     <ClInclude Include="..\..\..\src\lib\nametable.h" />
@@ -74,7 +82,12 @@
     <ClInclude Include="..\..\..\src\lib\stack.h" />
     <ClInclude Include="..\..\..\src\lib\string.h" />
     <ClInclude Include="..\..\..\src\lib\types.h" />
-    <ClInclude Include="..\..\..\src\state.h" />
+    <ClInclude Include="..\..\..\src\NonterminalSymbol.h" />
+    <ClInclude Include="..\..\..\src\ParsingContext.h" />
+    <ClInclude Include="..\..\..\src\Production.h" />
+    <ClInclude Include="..\..\..\src\Symbol.h" />
+    <ClInclude Include="..\..\..\src\TerminalSymbol.h" />
+    <ClInclude Include="..\..\..\src\Token.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}</ProjectGuid>

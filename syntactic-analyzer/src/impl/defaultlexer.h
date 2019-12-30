@@ -7,11 +7,11 @@
 #ifndef __DEFAULTLEXER_H__
 #define __DEFAULTLEXER_H__
 
-#include "lexer.h"
-
 #include <vector>
 #include <string>
 #include <regex-parser/RegexMatcher.h>
+
+#include "../Lexer.h"
 
 namespace syntacticanalyzer {
 

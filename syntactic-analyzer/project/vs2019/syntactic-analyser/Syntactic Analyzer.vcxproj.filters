@@ -10,29 +10,23 @@
     <Filter Include="src\lib\regex-parser">
       <UniqueIdentifier>{32cb60c0-ebda-4fc1-aaa1-5297b716540a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\language">
-      <UniqueIdentifier>{b0d07b10-435d-4127-a464-16638a2b94e2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\c_language">
       <UniqueIdentifier>{c75c4739-439e-4cba-ab8f-f73a8e93eb08}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\impl">
+      <UniqueIdentifier>{2f448287-1639-4288-9866-180fadf0d93b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\intf">
+      <UniqueIdentifier>{e162cd1e-bdfe-4df3-a432-e5f58949b2fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\impl\tools">
+      <UniqueIdentifier>{8c20c4e7-2f24-4ede-aadc-368a46ae2f3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\impl\language">
+      <UniqueIdentifier>{80932f87-a4a0-4469-ba29-48af79ac9a63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\defaultlexer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\grammaranalyzer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\languageparser.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\state.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\test.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\lib\hashtable.cpp">
       <Filter>src\lib</Filter>
     </ClCompile>
@@ -44,15 +38,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\lib\string.cpp">
       <Filter>src\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\language\grammar.cpp">
-      <Filter>src\language</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\language\production.cpp">
-      <Filter>src\language</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\language\symbol.cpp">
-      <Filter>src\language</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\lib\file.cpp">
       <Filter>src\lib</Filter>
@@ -93,23 +78,35 @@
     <ClCompile Include="..\..\..\src\c_language\c_value.cpp">
       <Filter>src\c_language</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\impl\language\grammar.cpp">
+      <Filter>src\impl\language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\impl\language\production.cpp">
+      <Filter>src\impl\language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\impl\language\symbol.cpp">
+      <Filter>src\impl\language</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\impl\defaultlexer.cpp">
+      <Filter>src\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\impl\grammaranalyzer.cpp">
+      <Filter>src\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\impl\languageparser.cpp">
+      <Filter>src\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\impl\state.cpp">
+      <Filter>src\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\impl\test.cpp">
+      <Filter>src\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\impl\tools\grammarbuilder.cpp">
+      <Filter>src\impl\tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\defaultlexer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\grammaranalyzer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\languageparser.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\lexer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\state.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\lib\hashtable.h">
       <Filter>src\lib</Filter>
     </ClInclude>
@@ -130,18 +127,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\lib\regex-parser\RegexMatcher.h">
       <Filter>src\lib\regex-parser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\language\grammar.h">
-      <Filter>src\language</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\language\language.h">
-      <Filter>src\language</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\language\production.h">
-      <Filter>src\language</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\language\symbol.h">
-      <Filter>src\language</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\lib\osd_file.h">
       <Filter>src\lib</Filter>
@@ -181,6 +166,69 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\c_language\c_value.h">
       <Filter>src\c_language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Grammar.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GrammarBuilder.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\NonterminalSymbol.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Production.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Symbol.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\TerminalSymbol.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Token.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Lexer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ParsingContext.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\impl\language\grammar.h">
+      <Filter>src\impl\language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\impl\language\language.h">
+      <Filter>src\impl\language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\impl\language\production.h">
+      <Filter>src\impl\language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\impl\language\symbol.h">
+      <Filter>src\impl\language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\impl\defaultlexer.h">
+      <Filter>src\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\impl\grammaranalyzer.h">
+      <Filter>src\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\impl\languageparser.h">
+      <Filter>src\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\impl\state.h">
+      <Filter>src\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\impl\tokenimpl.h">
+      <Filter>src\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LanguageParser.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\impl\grammarbuilder.h">
+      <Filter>src\impl\language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\impl\tools\grammarbuilder.h">
+      <Filter>src\impl\tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
