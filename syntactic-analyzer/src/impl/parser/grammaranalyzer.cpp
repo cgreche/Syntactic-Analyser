@@ -7,14 +7,13 @@
 #include <sstream>
 #include <set>
 #include <cstdlib> //abs
-#include "language/language.h"
 
 namespace syntacticanalyzer {
 	//
 	// Grammar Analyzer
 	//
 
-	GrammarAnalyzer::GrammarAnalyzer(Grammar &grammar)
+	GrammarAnalyzer::GrammarAnalyzer(GrammarImpl &grammar)
 	{
 		m_grammar = &grammar;
 		m_parsingTable = NULL;
@@ -83,9 +82,9 @@ namespace syntacticanalyzer {
 		m_nullable.resize(m_grammar->symbolCount());
 		m_beingProcessed.resize(m_grammar->symbolCount());
 
-		SymbolList &symList = m_grammar->symbolList();
-		m_nullable.resize(symList.count());
-		for(unsigned int i = 0; i < symList.count(); ++i) {
+		SymbolList<SymbolImpl*> &symList = m_grammar->symbolList();
+		m_nullable.resize(symList.size());
+		for(unsigned int i = 0; i < symList.size(); ++i) {
 			m_nullable[i] = _isnullable(symList[i]);
 		}
 	}
@@ -103,7 +102,7 @@ namespace syntacticanalyzer {
 		//if sym is TERMINAL, FIRST(sym) = sym
 		for(unsigned int i = 0; i < m_grammar->terminalCount(); ++i) {
 			Symbol *sym = m_grammar->m_termSymList[i];
-			m_firstSets[sym->index()].append(sym);
+			m_firstSets[sym->index()].push_back(sym);
 		}
 
 		for(unsigned int i = 0; i < m_grammar->nonTerminalCount(); ++i) {
@@ -154,24 +153,24 @@ namespace syntacticanalyzer {
 		if(m_firstSets.size() == 0)
 			return;
 
-		SymbolList &symList = m_grammar->symbolList();
-		m_followSets.resize(symList.count());
-		m_followSets[m_grammar->startSymbol()->index()].append(m_grammar->symbol("$eof"));
+		SymbolList &symList = m_grammar->symbols();
+		m_followSets.resize(symList.size());
+		m_followSets[m_grammar->startSymbol()->index()].push_back(m_grammar->symbol("$eof"));
 
 		int changes;
 		do {
 			changes = 0;
 
 			unsigned int i;
-			for(i = 0; i < m_grammar->m_nontermSymList.count(); ++i) {
+			for(i = 0; i < m_grammar->m_nontermSymList.size(); ++i) {
 				NonterminalSymbol *lhs = (NonterminalSymbol*)m_grammar->m_nontermSymList[i];
 
 				unsigned int j;
 				for(j = 0; j < lhs->proList().size(); ++j) {
 					Production *pro = lhs->proList()[j];
 					int k;
-					if(pro->nrhs() > 0) {
-						for(k = 0; k < (int)(pro->nrhs() - 1); ++k) {
+					if(pro->rhsCount() > 0) {
+						for(k = 0; k < (int)(pro->rhsCount() - 1); ++k) {
 							Symbol *rhs = pro->rhs(k);
 							Symbol *next = pro->rhs(k + 1);
 							if(!rhs->isNonTerminal())
@@ -180,7 +179,7 @@ namespace syntacticanalyzer {
 							if(m_followSets[rhs->index()].merge(m_firstSets[next->index()]) > 0)
 								++changes;
 
-							if(k+1 == (pro->nrhs()-1)) {
+							if(k+1 == (pro->rhsCount()-1)) {
 								if(m_nullable[next->index()]) {
 									if(m_followSets[rhs->index()].merge(m_followSets[lhs->index()]) > 0)
 										++changes;
@@ -260,7 +259,7 @@ namespace syntacticanalyzer {
 			//Save reductions
 			for(unsigned int k = 0 ; k < itemset.size(); ++k) {
 				LRItem &item = itemset[k];
-				if(item.production()->nrhs() == item.markIndex()) {
+				if(item.production()->rhsCount() == item.markIndex()) {
 					DEBUG_PRINT(*stream, "State: ");
 					DEBUG_PRINT(*stream, st);
 					DEBUG_PRINT(*stream, ", ");
@@ -657,7 +656,7 @@ namespace syntacticanalyzer {
 			colCaptionWidth[m_grammar->m_termSymList[j]->index()] = colWidth;
 			sumActionCol += colWidth;
 		}
-		for(j = 0; j < m_grammar->m_nontermSymList.count(); ++j) {
+		for(j = 0; j < m_grammar->m_nontermSymList.size(); ++j) {
 			const char *symName = m_grammar->m_nontermSymList[j]->name();
 			int len = ::strlen(symName);
 			int colWidth = len;
@@ -667,8 +666,8 @@ namespace syntacticanalyzer {
 			sumGoToCol += colWidth;
 		}
 
-		sumActionCol += (m_grammar->m_termSymList.count()-1)*::strlen(colSeparator);
-		sumGoToCol += (m_grammar->m_nontermSymList.count()-1)*::strlen(colSeparator);
+		sumActionCol += (m_grammar->m_termSymList.size()-1)*::strlen(colSeparator);
+		sumGoToCol += (m_grammar->m_nontermSymList.size()-1)*::strlen(colSeparator);
 
 		printCenter(firstColWidth,colCaptionState,stream);
 		stream << colSeparator;
@@ -677,12 +676,12 @@ namespace syntacticanalyzer {
 		printCenter(sumGoToCol,colCaptionGoto,stream);
 		stream << "\n";
 		printCenter(firstColWidth,"",stream);
-		for(j = 0; j < m_grammar->m_termSymList.count(); ++j) {
+		for(j = 0; j < m_grammar->m_termSymList.size(); ++j) {
 			Symbol *sym = m_grammar->m_termSymList[j];
 			stream << colSeparator;
 			printCenter(colCaptionWidth[sym->index()], sym->name(), stream);
 		}
-		for(j = 0; j < m_grammar->m_nontermSymList.count(); ++j) {
+		for(j = 0; j < m_grammar->m_nontermSymList.size(); ++j) {
 			Symbol *sym = m_grammar->m_nontermSymList[j];
 			stream << colSeparator;
 			printCenter(colCaptionWidth[sym->index()], sym->name(), stream);
@@ -694,7 +693,7 @@ namespace syntacticanalyzer {
 			std::ostringstream ostr;
 			ostr << i;
 			printCenter(firstColWidth, ostr.str().c_str(), stream);
-			for(j = 0; j < m_grammar->m_termSymList.count(); ++j) {
+			for(j = 0; j < m_grammar->m_termSymList.size(); ++j) {
 				int symIndex = m_grammar->m_termSymList[j]->index();
 				int action = table[i][symIndex] >> 0x10;
 				int value = table[i][symIndex] & 0xffff;
@@ -758,11 +757,11 @@ namespace syntacticanalyzer {
 
 	void GrammarAnalyzer::dumpPros(std::ostream &stream)
 	{
-		Grammar *grammar = m_grammar;
+		GrammarImpl *grammar = m_grammar;
 
 		stream << "Grammar Productions rules:" << std::endl;
 
-		ProductionList &proList = grammar->productionList();
+		ProductionList &proList = grammar->productions();
 		for(ProductionList::iterator it = proList.begin(); it != proList.end();	++it)
 		{
 			Production &pro = **it;

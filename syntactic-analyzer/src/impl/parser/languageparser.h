@@ -1,16 +1,15 @@
 
 //Created in: 18/02/2018 03:17
-//Last edit: 18/02/2018 04:02
+//Last edit: 31/12/2019 20:22
 
-#ifndef __SYNTACTIC_ANALYZER_LANGUAGE_PARSER__
-#define __SYNTACTIC_ANALYZER_LANGUAGE_PARSER__
+#ifndef __SYNTACTIC_ANALYZER_LANGUAGE_PARSER_IMPL_H__
+#define __SYNTACTIC_ANALYZER_LANGUAGE_PARSER_IMPL_H__
 
 #include <vector>
-#include "language/language.h"
-#include "language/grammar.h"
-#include "grammaranalyzer.h"
 #include "../LanguageParser.h"
-
+#include "../lexer/token.h" //TODO: adjust
+#include "../language/grammar.h"
+#include "grammaranalyzer.h"
 
 namespace syntacticanalyzer {
 
@@ -62,19 +61,19 @@ namespace syntacticanalyzer {
 	};
 
 	class LanguageParserImpl : public LanguageParser {
-		Language *m_language;
+		Grammar *m_grammar;
 		Lexer *m_lexer;
 
 		ParsingState *m_parsingState;
-		Token m_curToken;
 
 		//
 		bool _parse(std::ostream *stream);
-		int _getNextToken();
+		Token* _getNextToken();
 
 	public:
-		LanguageParser();
-		void setTokenizer(Lexer *lexer);
+		LanguageParserImpl();
+
+		void setLexer(Lexer *lexer);
 		bool parse(const char *input, std::ostream *stream); //parse an input file
 
 		Lexer *lexer() const { return m_lexer; }

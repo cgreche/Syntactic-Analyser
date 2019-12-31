@@ -16,7 +16,7 @@ namespace syntacticanalyzer {
 	class LanguageParser {
 
 	public:
-		virtual void setTokenizer(Lexer* lexer) = 0;
+		virtual void setLexer(Lexer* lexer) = 0;
 		virtual bool parse(const char* input) = 0;
 
 		virtual Grammar* grammar() const = 0;

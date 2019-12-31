@@ -1,12 +1,12 @@
 
-//Last edit: 18/02/2018 02:07
+//Last edit: 31/12/2019 20:19
 
-#ifndef __GRAMMARANALYZER_H__
-#define __GRAMMARANALYZER_H__
+#ifndef __SYNATCTIC_ANALYZER_GRAMMAR_ANALYZER_H__
+#define __SYNTACTIC_ANALYZER_GRAMMAR_ANALYZER_H__
 
-#include "language/grammar.h"
+#include "../language/grammar.h"
 #include "state.h"
-#include "defaultlexer.h"
+#include "../lexer/defaultlexer.h"
 
 namespace syntacticanalyzer {
 
@@ -43,7 +43,7 @@ namespace syntacticanalyzer {
 
 	class GrammarAnalyzer
 	{
-		Grammar *m_grammar;
+		GrammarImpl *m_grammar;
 
 		std::vector<SymbolList> m_firstSets; //all grammar symbols first set
 		std::vector<SymbolList> m_followSets; //all grammar symbols follow set
@@ -67,7 +67,7 @@ namespace syntacticanalyzer {
 		void _fillFirst(Symbol *sym);
 
 	public:
-		GrammarAnalyzer(Grammar &grammar);
+		GrammarAnalyzer(GrammarImpl &grammar);
 		~GrammarAnalyzer();
 
 		Grammar *grammar() const { return m_grammar; }

@@ -31,6 +31,9 @@ unsigned int getTime() {
 
 using namespace syntacticanalyzer;
 
+
+#if 0
+
 struct GrammarTest
 {
 	const char *grammarName;
@@ -44,28 +47,39 @@ Grammar *testGrammar_create()
 {
 	GrammarBuilder* grammarBuilder = createDefaultGrammarBuilder();
 
-#define T(x) grammarBuilder.addTerminal(x)
-#define NT(x) grammarBuilder.addNonTerminal(x)
-#define P grammarBuilder.addProduction
+#define P(x) { NonterminalSymbol* __X = grammarBuilder->addNonTerminal(x);
+#define D grammarBuilder->newProduction(__X);
+#define T(x) grammarBuilder->addRHS(grammarBuilder->addTerminal(x)->index());
+#define N(x) grammarBuilder->addRHS(grammarBuilder->addNonTerminal(x)->index());
+#define S(x) grammarBuilder->setSemanticAction(x);
+#define E grammarBuilder->addProduction(); }
+#define O grammarBuilder->addProduction(); grammarBuilder->newProduction(__X);
+
 	Symbol *a = grammarBuilder->addTerminal("a");
 	Symbol *b = grammarBuilder->addTerminal("b");
 	Symbol *c = grammarBuilder->addTerminal("c");
 	Symbol *d = grammarBuilder->addTerminal("d");
 	Symbol *e = grammarBuilder->addTerminal("e");
 
-	P(NT("S"),3,a,NT("B"),c);
-	P(NT("S"),3,b,NT("C"),c);
-	P(NT("S"),3,a,NT("C"),d);
-	P(NT("S"),3,b,NT("B"),d);
+	P("S")
+	D T("a") N("B") T("c")
+	O T("b") N("C") T("c")
+	O T("a") N("C") T("d")
+	O T("b") N("B") T("d")
+	E
 
-	P(NT("B"),1,e);
-	P(NT("C"),1,e);
+	P("B") D T("e") E
+	P("C") D T("e") E
 
 	grammarBuilder->setStartSymbol((NonterminalSymbol*)grammarBuilder->symbol("S"));
 
-#undef T
-#undef NT
 #undef P
+#undef D
+#undef T
+#undef N
+#undef S
+#undef E
+#undef O
 
 	return grammarBuilder->build();
 }
@@ -88,35 +102,51 @@ Grammar *mathExpr_create()
 {
 	GrammarBuilder* grammarBuilder = createDefaultGrammarBuilder();
 
-#define T(x) grammarBuilder.addTerminal(x)
-#define NT(x) grammarBuilder.addNonTerminal(x)
-#define P grammarBuilder.addProduction
+#define P(x) { NonterminalSymbol* __X = grammarBuilder->addNonTerminal(x);
+#define D grammarBuilder->newProduction(__X);
+#define T(x) grammarBuilder->addRHS(grammarBuilder->addTerminal(x)->index());
+#define N(x) grammarBuilder->addRHS(grammarBuilder->addNonTerminal(x)->index());
+#define S(x) grammarBuilder->addRHS(x);
+#define E grammarBuilder->addProduction(); }
+#define O grammarBuilder->addProduction(); grammarBuilder->newProduction(__X);
+
 	Symbol *symPlus = grammarBuilder->addTerminal("+");
 	Symbol *symMinus = grammarBuilder->addTerminal("-");
 	Symbol *symTimes = grammarBuilder->addTerminal("*");
 	Symbol *symDivide = grammarBuilder->addTerminal("/");
 	Symbol *symDigit = grammarBuilder->addTerminal("CONSTANT");
 
-	P(NT("expr"),1,NT("term"));
-	P(NT("term"),3,NT("term"),symPlus,NT("factor"));
-	P(NT("term"),3,NT("term"),symMinus,NT("factor"));
-	P(NT("term"),1,NT("factor"));
-	P(NT("term"),1,NT("primary"));
+	P("expr") D N("term") E
 
-	P(NT("factor"),3,NT("factor"),symTimes,NT("primary"));
-	P(NT("factor"),3,NT("factor"),symDivide,NT("primary"));
-	P(NT("factor"),1,NT("primary"));
+	P("term")
+		D N("term") T("+") N("factor")
+		O N("term") T("-") N("factor")
+		O N("factor")
+		O N("primary")
+		E
 
-	P(NT("primary"),1,symDigit);
-	P(NT("primary"),3,T("("),NT("expr"),T(")"));
+	P("factor")
+		D N("factor") T("*") N("primary")
+		O N("factor") T("/") N("primary")
+		O N("primary")
+		E
+
+	P("primary")
+		D T("CONSTANT")
+		O T("(") N("expr") T(")")
+		E
 
 	grammarBuilder->setStartSymbol((NonterminalSymbol*)grammarBuilder->symbol("expr"));
 
-#undef T
-#undef NT
 #undef P
+#undef D
+#undef T
+#undef N
+#undef S
+#undef E
+#undef O
 
-	return g;
+	return grammarBuilder->build();
 }
 
 void mathExpr_destroy(Grammar *grammar)
@@ -159,82 +189,121 @@ Grammar *xml_create()
 {
 	GrammarBuilder* grammarBuilder = createDefaultGrammarBuilder();
 
-#define T(x) grammarBuilder.addTerminal(x)
-#define NT(x) grammarBuilder.addNonTerminal(x)
-#define P grammarBuilder.addProduction
+#define P(x) { NonterminalSymbol* __X = grammarBuilder->addNonTerminal(x);
+#define D grammarBuilder->newProduction(__X);
+#define T(x) grammarBuilder->addRHS(grammarBuilder->addTerminal(x)->index());
+#define N(x) grammarBuilder->addRHS(grammarBuilder->addNonTerminal(x)->index());
+#define S(x) grammarBuilder->addRHS(x);
+#define E grammarBuilder->addProduction(); }
+#define O grammarBuilder->addProduction(); grammarBuilder->newProduction(__X);
 
-	P(NT("tag_name"), 1, T("IDENTIFIER"));
-	P(NT("attr_name"), 1, T("IDENTIFIER"));
-	P(NT("target"), 1, T("IDENTIFIER"));
+	P("tag_name") D T("IDENTIFIER") E
+	P("attr_name") D T("IDENTIFIER") E
+	P("target") D T("IDENTIFIER") E
 
-	P(NT("text"), 1, T("IDENTIFIER"));
+	P("text") D T("IDENTIFIER") E
 
-	P(NT("attr_value"),1,T("IDENTIFIER"));
-	P(NT("attr_value"),1,T("SINGLE_QUOTED_STRING"));
-	P(NT("attr_value"),1,T("DOUBLE_QUOTED_STRING"));
+	P("attr_value")
+		D T("IDENTIFIER")
+		O T("SINGLE_QUOTED_STRING")
+		O T("DOUBLE_QUOTED_STRING")
+		E
 
-	P(NT("attr"), 1, NT("attr_name"));
-	P(NT("attr"), 3, NT("attr_name"), T("="), NT("attr_value"));
+	P("attr")
+		D N("attr_name")
+		O N("attr_name") T("=") N("attr_value")
+		E
 
-	P(NT("attr_list"),1,NT("attr"));
-	P(NT("attr_list"),2,NT("attr_list"),NT("attr"));
+	P("attr_list")
+		D N("attr")
+		O N("attr_list") N("attr")
+		E
 
-	P(NT("start_tag"), 3, T("<"), NT("tag_name"), T(">"));
-	P(NT("start_tag"), 4, T("<"), NT("tag_name"), NT("attr_list"), T(">"));
+	P("start_tag")
+		D T("<") N("tag_name") T(">")
+		O T("<") N("tag_name") N("attr_list") T(">")
+		E
 
-	P(NT("end_tag"), 3, T("</"), NT("tag_name"), T(">"));
+	P("end_tag") D T("</") N("tag_name") T(">") E
 
-	P(NT("self_closing_tag"), 3, T("<"), NT("tag_name"), T("/>"));
-	P(NT("self_closing_tag"), 4, T("<"), NT("tag_name"), NT("attr_list"), T("/>"));
+	P("self_closing_tag")
+		D T("<") N("tag_name") T("/>")
+		O T("<") N("tag_name") N("attr_list") T("/>")
+		E
 
-	P(NT("element_list"), 1, NT("element"));
-	P(NT("element_list"), 2, NT("element_list"), NT("element"));
+	P("element_list")
+		D N("element")
+		O N("element_list") N("element")
+		E
 
-	P(NT("content_elem"), 1, NT("element"));
-	P(NT("content_elem"), 1, NT("processing_instruction"));
-	P(NT("content_elem"), 1, NT("comment"));
-	P(NT("content_elem"), 1, NT("text"));
+	P("content_elem")
+		D N("element")
+		O N("processing_instruction")
+		O N("comment")
+		O N("text")
+		E
 
-	P(NT("content"), 1, NT("content_elem"));
-	P(NT("content"), 2, NT("content"), NT("content_elem"));
+	P("content")
+		D N("content_elem")
+		O N("content") N("content_elem")
+		E
 
-	P(NT("comment"), 2, T("<!--"), T("-->"));
-	P(NT("comment"), 3, T("<!--"), T("STRING"), T("-->"));
+	P("comment")
+		D T("<!--") T("-->")
+		O T("<!--") T("STRING") T("-->")
+		E
 
-	P(NT("processing_instruction"), 3, T("<?"), NT("target"), T("?>"));
-	P(NT("processing_instruction"), 4, T("<?"), NT("target"), T("STRING"), T("?>"));
+	P("processing_instruction")
+		D T("<?") N("target") T("?>")
+		O T("<?") N("target") T("STRING") T("?>")
+		E
 
-	P(NT("doctype"), 4, T("<!"), NT("DOCTYPE"), NT("STRING"), T(">"));
+	P("doctype") D T("<!") N("DOCTYPE") N("STRING") T(">") E
 
-	P(NT("comment_or_pi"), 1, NT("comment"));
-	P(NT("comment_or_pi"), 1, NT("processing_instruction"));
+	P("comment_or_pi")
+		D N("comment")
+		O N("processing_instruction")
+		E
 
-	P(NT("comment_or_pi_list"), 1, NT("comment_or_pi"));
-	P(NT("comment_or_pi_list"), 2, NT("comment_or_pi_list"), NT("comment_or_pi"));
+	P("comment_or_pi_list")
+		D N("comment_or_pi")
+		O N("comment_or_pi_list") N("comment_or_pi")
+		E
 
-	P(NT("element"), 1, NT("self_closing_tag"));
-	//P(NT("element"), 1, NT("start_tag"));
-	P(NT("element"), 2, NT("start_tag"), NT("end_tag"));
-	P(NT("element"), 3, NT("start_tag"), NT("content"), NT("end_tag"));
+	P("element")
+		D N("self_closing_tag")
+		//O N("start_tag")
+		O N("start_tag") N("end_tag")
+		O N("start_tag") N("content") N("end_tag")
+		E
 
-	P(NT("prolog"), 1, NT("doctype"));
-	P(NT("prolog"), 2, NT("comment_or_pi_list"), NT("doctype"));
-	P(NT("prolog"), 2, NT("doctype"), NT("comment_or_pi_list"));
-	P(NT("prolog"), 3, NT("comment_or_pi_list"), NT("doctype"), NT("comment_or_pi_list"));
+	P("prolog")
+		D N("doctype")
+		O N("comment_or_pi_list") N("doctype")
+		O N("doctype") N("comment_or_pi_list")
+		O N("comment_or_pi_list") N("doctype") N("comment_or_pi_list")
+		E
 
-	P(NT("document"), 1, NT("prolog"));
-	P(NT("document"), 2, NT("prolog"), NT("root_element"));
-	P(NT("document"), 3, NT("prolog"), NT("root_element"), NT("comment_or_pi_list") );
-	P(NT("document"), 1, NT("element"));
-	P(NT("document"), 2, NT("element"), NT("comment_or_pi_list") );
-	P(NT("document"), 1, NT("comment_or_pi_list"));
+	P("document")
+		D N("prolog")
+		O N("prolog") N("root_element")
+		O N("prolog") N("root_element") N("comment_or_pi_list")
+		O N("element")
+		O N("element") N("comment_or_pi_list")
+		O N("comment_or_pi_list")
+		E
 
-	grammarBuilder->setStartSymbol(NT("document"));
-#undef T
-#undef NT
+	grammarBuilder->setStartSymbol((NonterminalSymbol*)grammarBuilder->symbol("document"));
+
 #undef P
+#undef D
+#undef T
+#undef N
+#undef S
+#undef E
+#undef O
 
-	return g;
+	return grammarBuilder->build();
 }
 
 void xml_destroy(Grammar *grammar)
@@ -285,6 +354,89 @@ public:
 	GrammarTest *selectedGrammarInfo() const { return m_usingGrammarInfo; }
 
 	void grammarOptions();
+};
+
+class ParsingManager {
+	LanguageParser* currentParser;
+
+	Lexer* m_selectedLexer;
+	Grammar* m_selectedGrammar;
+
+	void setLexer();
+	void setGrammar();
+
+	void parseInputText(const char* input) {
+		currentParser->parse(input);
+	}
+
+	void parseInputFile(const char* filePath) {
+		File* inputFile = File::Open(filePath, File::read, NULL);
+		if (inputFile) {
+			parseInputText(inputFile->Buffer());
+			inputFile->Close();
+		}
+
+	}
+
+	void showLexerOptions() {
+	}
+
+	void showGrammarOptions() {
+	}
+
+	void promptInputToParse() {
+		std::string input;
+		std::cout << "Input: ";
+		std::getline(std::cin, input);
+		parseInputText(input.c_str());
+	}
+
+	void promptFileToParse() {
+		std::string inputFilePath;
+		std::cout << "Input file: ";
+		std::getline(std::cin, inputFilePath);
+		parseInputFile(inputFilePath.c_str());
+	}
+
+public:
+	ParsingManager();
+	~ParsingManager();
+
+	void promptOptions() {
+		int opt;
+		for(;;) {
+			printf("Option:\n"
+				"[0] <-- Back\n"
+				"[1] Select Lexer\n"
+				"[2] Select Grammar\n"
+				"[3] Parse input text\n"
+				"[4] Parse input file\n"
+			);
+
+			std::cin >> opt;
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+			switch (opt) {
+			case 0:
+				return;
+			case 1:
+				promptLexerOptions();
+				break;
+			case 2:
+				promptGrammarOptions();
+				break;
+			case 3:
+				promptInputToParse();
+				break;
+			case 4:
+				promptFileToParse();
+				break;
+			}
+		}
+	}
+
+
 };
 
 
@@ -458,13 +610,16 @@ void GrammarsManager::grammarOptions()
 			*/
 		}
 		else if(opt == 6) {
+			/*
 			SymbolList symbolList = selectedGrammar->symbolList();
 			for(unsigned int i = 0; i < symbolList.count(); ++i) {
 				Symbol *sym = symbolList[i];
 				printf("%d - %-2s - %s\n", sym->index(), sym->isTerminal() ? "T" : "NT", sym->name());
 			}
+			*/
 		}
 		else if(opt == 7) {
+			/*
 			ProductionList proList = selectedGrammar->productionList();
 			for(unsigned int i = 0; i < proList.size(); ++i) {
 				Production *pro = proList[i];
@@ -473,6 +628,7 @@ void GrammarsManager::grammarOptions()
 					printf(" %s", pro->rhs(j)->name());
 				printf("\n");
 			}
+			*/
 		}
 		else if(opt == 8) {
 			std::string input;
@@ -547,10 +703,11 @@ int main(int argc, char *argv[])
 		printf(
 			"Option:\n"
 			"[0] Exit\n"
-			"[1] Insert Grammar\n"
-			"[2] Remove Grammar\n"
-			"[3] Select Grammar\n"
-			"[4] Show Grammar List\n"
+			"[1] Select Lexer\n"
+			//"[2] Insert Grammar\n"
+			//"[3] Remove Grammar\n"
+			"[2] Select Grammar\n"
+			"[3] Show Grammar List\n"
 		);
 		
 		std::cin >> opt;
@@ -812,5 +969,12 @@ void C_postParsing(LanguageParser *parser, bool result)
 	}
 
 	C_processCompoundStatement(body);
+}
+
+#endif
+
+
+int main(int argc, char *argv) {
+	return 0;
 }
 

@@ -23,10 +23,9 @@ namespace syntacticanalyzer {
 		virtual TerminalSymbol* addTerminal(const char* name) = 0;
 		virtual NonterminalSymbol* addNonTerminal(const char* name) = 0;
 
-		virtual Production *addProduction(NonterminalSymbol* lhs, unsigned int nrhs, ...) = 0;
-
 		virtual void newProduction(NonterminalSymbol* lhs) = 0;
-		virtual void addRHS(Symbol *rhs) = 0;
+		virtual void addRHS(const char* name) = 0;
+		virtual void addRHS(unsigned int index) = 0;
 		virtual void setSemanticAction(SemanticAction action) = 0;
 		virtual Production* addProduction() = 0;
 		virtual Production* addProduction(const char* bnf) = 0;

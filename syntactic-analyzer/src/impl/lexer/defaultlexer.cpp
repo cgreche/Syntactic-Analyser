@@ -8,7 +8,8 @@
 
 namespace syntacticanalyzer {
 
-	DefaultLexer::DefaultLexer() {
+	DefaultLexer::DefaultLexer()
+	: m_input(NULL), m_pos(0) {
 	}
 
 	DefaultLexer::~DefaultLexer() {
@@ -79,6 +80,7 @@ namespace syntacticanalyzer {
 	}
 
 	void DefaultLexer::makeDefaultTerminalTokens(Grammar *grammar) {
+		/*
 		unsigned int termCount = grammar->terminalCount();
 		SymbolList terminals = grammar->terminalSymbols();
 
@@ -100,5 +102,6 @@ namespace syntacticanalyzer {
 				addToken(name.c_str(), terminals[i]->index());
 			}
 		}
+		*/
 	}
 }

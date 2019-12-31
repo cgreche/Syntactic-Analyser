@@ -30,13 +30,13 @@
     <ClCompile Include="..\..\..\src\c_language\c_symbol.cpp" />
     <ClCompile Include="..\..\..\src\c_language\c_symboltype.cpp" />
     <ClCompile Include="..\..\..\src\c_language\c_value.cpp" />
-    <ClCompile Include="..\..\..\src\impl\defaultlexer.cpp" />
-    <ClCompile Include="..\..\..\src\impl\grammaranalyzer.cpp" />
-    <ClCompile Include="..\..\..\src\impl\languageparser.cpp" />
     <ClCompile Include="..\..\..\src\impl\language\grammar.cpp" />
     <ClCompile Include="..\..\..\src\impl\language\production.cpp" />
     <ClCompile Include="..\..\..\src\impl\language\symbol.cpp" />
-    <ClCompile Include="..\..\..\src\impl\state.cpp" />
+    <ClCompile Include="..\..\..\src\impl\lexer\defaultlexer.cpp" />
+    <ClCompile Include="..\..\..\src\impl\parser\grammaranalyzer.cpp" />
+    <ClCompile Include="..\..\..\src\impl\parser\languageparser.cpp" />
+    <ClCompile Include="..\..\..\src\impl\parser\state.cpp" />
     <ClCompile Include="..\..\..\src\impl\test.cpp" />
     <ClCompile Include="..\..\..\src\impl\tools\grammarbuilder.cpp" />
     <ClCompile Include="..\..\..\src\lib\file.cpp" />
@@ -60,19 +60,18 @@
     <ClInclude Include="..\..\..\src\c_language\c_value.h" />
     <ClInclude Include="..\..\..\src\Grammar.h" />
     <ClInclude Include="..\..\..\src\GrammarBuilder.h" />
-    <ClInclude Include="..\..\..\src\impl\defaultlexer.h" />
-    <ClInclude Include="..\..\..\src\impl\grammaranalyzer.h" />
-    <ClInclude Include="..\..\..\src\impl\grammarbuilder.h" />
-    <ClInclude Include="..\..\..\src\impl\languageparser.h" />
     <ClInclude Include="..\..\..\src\impl\language\grammar.h" />
-    <ClInclude Include="..\..\..\src\impl\language\language.h" />
     <ClInclude Include="..\..\..\src\impl\language\production.h" />
     <ClInclude Include="..\..\..\src\impl\language\symbol.h" />
-    <ClInclude Include="..\..\..\src\impl\state.h" />
-    <ClInclude Include="..\..\..\src\impl\tokenimpl.h" />
+    <ClInclude Include="..\..\..\src\impl\lexer\defaultlexer.h" />
+    <ClInclude Include="..\..\..\src\impl\lexer\token.h" />
+    <ClInclude Include="..\..\..\src\impl\parser\grammaranalyzer.h" />
+    <ClInclude Include="..\..\..\src\impl\parser\languageparser.h" />
+    <ClInclude Include="..\..\..\src\impl\parser\state.h" />
     <ClInclude Include="..\..\..\src\impl\tools\grammarbuilder.h" />
     <ClInclude Include="..\..\..\src\LanguageParser.h" />
-    <ClInclude Include="..\..\..\src\Lexer.h" />
+    <ClInclude Include="..\..\..\src\lexer\Lexer.h" />
+    <ClInclude Include="..\..\..\src\lexer\Token.h" />
     <ClInclude Include="..\..\..\src\lib\file.h" />
     <ClInclude Include="..\..\..\src\lib\hashtable.h" />
     <ClInclude Include="..\..\..\src\lib\nametable.h" />
@@ -87,7 +86,6 @@
     <ClInclude Include="..\..\..\src\Production.h" />
     <ClInclude Include="..\..\..\src\Symbol.h" />
     <ClInclude Include="..\..\..\src\TerminalSymbol.h" />
-    <ClInclude Include="..\..\..\src\Token.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}</ProjectGuid>

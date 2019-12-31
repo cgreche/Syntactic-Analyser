@@ -4,7 +4,7 @@
 #ifndef __SYNTACTIC_ANALYZER_TOKEN_IMPL_H__
 #define __SYNTACTIC_ANALYZER_TOKEN_IMPL_H__
 
-#include "../Token.h"
+#include "../lexer/Token.h" //TODO: adjust
 
 namespace syntacticanalyzer {
 

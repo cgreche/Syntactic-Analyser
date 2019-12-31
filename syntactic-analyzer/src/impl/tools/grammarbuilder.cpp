@@ -1,7 +1,7 @@
 
 #include "GrammarBuilder.h"
-#include "impl/language/symbol.h"
-#include "impl/language/grammar.h"
+#include "../language/symbol.h"
+#include "../language/grammar.h"
 
 #include <cstdarg>
 
@@ -19,7 +19,7 @@ namespace syntacticanalyzer {
 		return terminalSymbol;
 	}
 
-	NonterminalSymbol* GrammarBuilderImpl::addNonTerminal(const char* name) {
+	NonterminalSymbol* GrammarBuilderImpl::addNonterminal(const char* name) {
 		NonterminalSymbol* terminalSymbol = new NonterminalSymbolImpl(name, m_symList.size() + 1); //id 0 is reserved
 		m_symHT.insert((const unsigned char*)name, strlen(name), terminalSymbol);
 		m_symList.push_back(terminalSymbol);
@@ -34,7 +34,15 @@ namespace syntacticanalyzer {
 		m_proSemanticAction = 0;
 	}
 
-	void GrammarBuilderImpl::addRHS(Symbol* rhs) {
+	void GrammarBuilderImpl::addRHS(const char* name) {
+		Symbol* rhs = this->symbol(name);
+		//TODO: check for null
+		m_proRHS.push_back(rhs);
+	}
+
+	void GrammarBuilderImpl::addRHS(unsigned int index) {
+		Symbol* rhs = this->m_symList[index];
+		//TODO: check for valid index
 		m_proRHS.push_back(rhs);
 	}
 

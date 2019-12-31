@@ -1,8 +1,8 @@
 
-//Last edit: 29/12/2019 04:20
+//Last edit: 31/12/2019 20:41
 
-#ifndef __GRAMMAR_IMPL_H__
-#define __GRAMMAR_IMPL_H__
+#ifndef __SYNTACTIC_ANALYZER_GRAMMAR_IMPL_H__
+#define __SYNTACTIC_ANALYZER_GRAMMAR_IMPL_H__
 
 #include <vector>
 
@@ -49,10 +49,10 @@ namespace syntacticanalyzer {
 		virtual Symbol *symbol(const char *name) const;
 		virtual Symbol *symbol(unsigned int index) const;
 
-		virtual SymbolList& symbolList() { return m_symList; }
+		virtual SymbolList& symbols() { return m_symList; }
 		virtual SymbolList& terminalSymbols() { return m_termSymList; }
 		virtual SymbolList& nonterminalSymbols() { return m_nontermSymList; }
-		ProductionList& productionList() { return m_proList; }
+		ProductionList& productions() { return m_proList; }
 
 		Production* production(unsigned int number) const;
 

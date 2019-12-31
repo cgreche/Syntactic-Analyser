@@ -1,6 +1,5 @@
 #include <iostream>
 #include "languageparser.h"
-#include "lexer.h"
 
 #ifdef _DEBUG
 	#define DEBUG_PRINT(s,t) (s << t)
@@ -10,7 +9,7 @@
 
 namespace syntacticanalyzer {
 
-	bool LanguageParser::_parse(std::ostream *stream)
+	bool LanguageParserImpl::_parse(std::ostream *stream)
 	{
 		int curState;
 
@@ -25,7 +24,8 @@ namespace syntacticanalyzer {
 
 		m_parsingState->currentState = curState = 0;
 		m_parsingState->stateStack.push_back(0);
-		int **parsingTable = m_language->parsingTable();
+		int** parsingTable = m_parsingTable;
+
 
 		int tok;
 		tok = _getNextToken();
@@ -94,8 +94,8 @@ namespace syntacticanalyzer {
 				//[/Debug]
 
 				//do semantic action
-				Token retToken;
-				m_parsingState->semanticArgsIndex = m_parsingState->semanticStack.size()-pro->nrhs();
+				TokenImpl retToken;
+				m_parsingState->semanticArgsIndex = m_parsingState->semanticStack.size()-pro->rhsCount();
 				retToken.value = m_parsingState->semanticStack[m_parsingState->semanticArgsIndex].value; // defaults to first semantic arg
 				memset(retToken.text,0,sizeof(retToken.text));
 
@@ -103,7 +103,7 @@ namespace syntacticanalyzer {
 					pro->semanticAction()(this->m_parsingState,retToken);
 				}
 
-				for(unsigned int j = 0; j < pro->nrhs(); ++j) {
+				for(unsigned int j = 0; j < pro->rhsCount(); ++j) {
 					m_parsingState->stateStack.pop_back();
 					m_parsingState->semanticStack.pop_back();
 				}
@@ -138,23 +138,20 @@ namespace syntacticanalyzer {
 		return false;
 	}
 
-	int LanguageParser::_getNextToken()
+	Token LanguageParserImpl::_getNextToken()
 	{
 		//reset tok info
-		m_curToken.id = -1;
-		memset(m_curToken.text,0,sizeof(m_curToken.text));
- 		return m_lexer->nextToken(&m_curToken);
+ 		return m_lexer->nextToken();
 	}
 
-	LanguageParser::LanguageParser(Language *language) {
-		m_language = language;
+	LanguageParserImpl::LanguageParserImpl() {
 	}
 
-	void LanguageParser::setTokenizer(Lexer *lexer) {
+	void LanguageParserImpl::setLexer(Lexer *lexer) {
 		m_lexer = lexer;
 	}
 
-	bool LanguageParser::parse(const char *input, std::ostream *stream)
+	bool LanguageParserImpl::parse(const char *input, std::ostream *stream)
 	{
 		if(!m_lexer)
 			return false;

@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef __SYNTACTIC_ANALYZER_GRAMMAR_BUILDER_H__
+#define __SYNTACTIC_ANALYZER_GRAMMAR_BUILDER_H__
+
 #include <vector>
 #include "../GrammarBuilder.h"
 
@@ -27,10 +30,11 @@ namespace syntacticanalyzer {
 
 	public:
 		virtual TerminalSymbol* addTerminal(const char* name);
-		virtual NonterminalSymbol* addNonTerminal(const char* name);
+		virtual NonterminalSymbol* addNonterminal(const char* name);
 
 		virtual void newProduction(NonterminalSymbol* lhs);
-		virtual void addRHS(Symbol* rhs);
+		virtual void addRHS(const char* name);
+		virtual void addRHS(unsigned int index);
 		virtual void setSemanticAction(SemanticAction action);
 		virtual Production* addProduction();
 		virtual Production* addProduction(const char *bnf);
@@ -61,3 +65,5 @@ namespace syntacticanalyzer {
 	};
 
 }
+
+#endif
