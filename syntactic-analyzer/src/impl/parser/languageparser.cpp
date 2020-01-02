@@ -85,7 +85,7 @@ namespace syntacticanalyzer {
 	#ifdef _DEBUG
 				for(u32 nsym = 0; nsym < pro->nrhs(); ++nsym) {
 					DEBUG_PRINT(*stream, pro->rhs(nsym)->name());
-					if(nsym < pro->nrhs()-1)
+					if(nsym < pro->rhsCount()-1)
 						DEBUG_PRINT(*stream, " ");
 				}
 	#endif
@@ -93,11 +93,13 @@ namespace syntacticanalyzer {
 				DEBUG_PRINT(*stream, std::endl);
 				//[/Debug]
 
+				/*TODO: change TokenImpl to SemanticActionImpl
 				//do semantic action
 				TokenImpl retToken;
 				m_parsingState->semanticArgsIndex = m_parsingState->semanticStack.size()-pro->rhsCount();
 				retToken.value = m_parsingState->semanticStack[m_parsingState->semanticArgsIndex].value; // defaults to first semantic arg
 				memset(retToken.text,0,sizeof(retToken.text));
+				*/
 
 				if(pro->semanticAction()) {
 					pro->semanticAction()(this->m_parsingState,retToken);
@@ -138,9 +140,8 @@ namespace syntacticanalyzer {
 		return false;
 	}
 
-	Token LanguageParserImpl::_getNextToken()
+	Token* LanguageParserImpl::_getNextToken()
 	{
-		//reset tok info
  		return m_lexer->nextToken();
 	}
 

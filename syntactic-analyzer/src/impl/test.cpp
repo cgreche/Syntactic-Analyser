@@ -6,8 +6,7 @@
 #include <vector>
 
 #include "file.h"
-#include "grammaranalyzer.h"
-#include "languageparser.h"
+#include "parser/languageparser.h"
 
 #include "../GrammarBuilder.h"
 
@@ -354,89 +353,6 @@ public:
 	GrammarTest *selectedGrammarInfo() const { return m_usingGrammarInfo; }
 
 	void grammarOptions();
-};
-
-class ParsingManager {
-	LanguageParser* currentParser;
-
-	Lexer* m_selectedLexer;
-	Grammar* m_selectedGrammar;
-
-	void setLexer();
-	void setGrammar();
-
-	void parseInputText(const char* input) {
-		currentParser->parse(input);
-	}
-
-	void parseInputFile(const char* filePath) {
-		File* inputFile = File::Open(filePath, File::read, NULL);
-		if (inputFile) {
-			parseInputText(inputFile->Buffer());
-			inputFile->Close();
-		}
-
-	}
-
-	void showLexerOptions() {
-	}
-
-	void showGrammarOptions() {
-	}
-
-	void promptInputToParse() {
-		std::string input;
-		std::cout << "Input: ";
-		std::getline(std::cin, input);
-		parseInputText(input.c_str());
-	}
-
-	void promptFileToParse() {
-		std::string inputFilePath;
-		std::cout << "Input file: ";
-		std::getline(std::cin, inputFilePath);
-		parseInputFile(inputFilePath.c_str());
-	}
-
-public:
-	ParsingManager();
-	~ParsingManager();
-
-	void promptOptions() {
-		int opt;
-		for(;;) {
-			printf("Option:\n"
-				"[0] <-- Back\n"
-				"[1] Select Lexer\n"
-				"[2] Select Grammar\n"
-				"[3] Parse input text\n"
-				"[4] Parse input file\n"
-			);
-
-			std::cin >> opt;
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-			switch (opt) {
-			case 0:
-				return;
-			case 1:
-				promptLexerOptions();
-				break;
-			case 2:
-				promptGrammarOptions();
-				break;
-			case 3:
-				promptInputToParse();
-				break;
-			case 4:
-				promptFileToParse();
-				break;
-			}
-		}
-	}
-
-
 };
 
 
@@ -974,7 +890,100 @@ void C_postParsing(LanguageParser *parser, bool result)
 #endif
 
 
+
+
+
+class ParsingManager {
+	LanguageParser* currentParser;
+
+	Lexer* m_selectedLexer;
+	Grammar* m_selectedGrammar;
+
+	void setLexer();
+	void setGrammar();
+
+	void parseInputText(const char* input) {
+		currentParser->parse(input);
+	}
+
+	void parseInputFile(const char* filePath) {
+		File* inputFile = File::Open(filePath, File::read, NULL);
+		if (inputFile) {
+			parseInputText(inputFile->Buffer());
+			inputFile->Close();
+		}
+
+	}
+
+	void promptLexerOptions() {
+	}
+
+	void promptGrammarOptions() {
+	}
+
+	void promptInputToParse() {
+		std::string input;
+		std::cout << "Input: ";
+		std::getline(std::cin, input);
+		parseInputText(input.c_str());
+	}
+
+	void promptFileToParse() {
+		std::string inputFilePath;
+		std::cout << "Input file: ";
+		std::getline(std::cin, inputFilePath);
+		parseInputFile(inputFilePath.c_str());
+	}
+
+public:
+	ParsingManager() {
+
+	}
+	~ParsingManager() {
+
+	}
+
+	void promptOptions() {
+		int opt;
+		for (;;) {
+			printf("Option:\n"
+				"[0] <-- Back\n"
+				"[1] Select Lexer\n"
+				"[2] Select Grammar\n"
+				"[3] Parse input text\n"
+				"[4] Parse input file\n"
+			);
+
+			std::cin >> opt;
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+			switch (opt) {
+			case 0:
+				return;
+			case 1:
+				promptLexerOptions();
+				break;
+			case 2:
+				promptGrammarOptions();
+				break;
+			case 3:
+				promptInputToParse();
+				break;
+			case 4:
+				promptFileToParse();
+				break;
+			}
+		}
+	}
+
+};
+
+ParsingManager parsingManager;
+
+
 int main(int argc, char *argv) {
+	parsingManager.promptOptions();
 	return 0;
 }
 

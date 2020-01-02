@@ -82,7 +82,7 @@ namespace syntacticanalyzer {
 		m_nullable.resize(m_grammar->symbolCount());
 		m_beingProcessed.resize(m_grammar->symbolCount());
 
-		SymbolList<SymbolImpl*> &symList = m_grammar->symbolList();
+		SymbolList &symList = m_grammar->symbols();
 		m_nullable.resize(symList.size());
 		for(unsigned int i = 0; i < symList.size(); ++i) {
 			m_nullable[i] = _isnullable(symList[i]);
