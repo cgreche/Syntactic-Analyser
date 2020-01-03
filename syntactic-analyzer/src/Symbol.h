@@ -16,6 +16,14 @@ namespace syntacticanalyzer {
 		virtual bool isNonTerminal() const = 0;
 	};
 
+	class TerminalSymbol : public Symbol {
+	};
+
+	class NonterminalSymbol : public Symbol {
+	public:
+		virtual Production** associatedProductions() const = 0;
+		virtual unsigned int associatedProductionCount() const = 0;
+	};
 }
 
 #endif

@@ -5,7 +5,6 @@
 #define __PRODUCTION_H__
 
 #include "Symbol.h"
-#include "NonterminalSymbol.h"
 
 namespace syntacticanalyzer {
 
