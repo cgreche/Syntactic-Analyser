@@ -6,8 +6,7 @@
 
 #include <vector>
 
-#include "../../TerminalSymbol.h"
-#include "../../NonterminalSymbol.h"
+#include "../../Symbol.h"
 
 namespace syntacticanalyzer {
 

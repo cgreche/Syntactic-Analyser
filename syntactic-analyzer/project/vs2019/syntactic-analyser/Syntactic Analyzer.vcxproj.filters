@@ -113,16 +113,10 @@
     <ClInclude Include="..\..\..\src\GrammarBuilder.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\NonterminalSymbol.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\Production.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\Symbol.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\TerminalSymbol.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\ParsingContext.h">

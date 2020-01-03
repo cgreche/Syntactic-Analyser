@@ -19,7 +19,6 @@ namespace syntacticanalyzer {
 	class Grammar
 	{
 	public:
-
 		virtual Symbol** symbols() = 0;
 		virtual TerminalSymbol** terminalSymbols() = 0;
 		virtual NonterminalSymbol** nonterminalSymbols() = 0;

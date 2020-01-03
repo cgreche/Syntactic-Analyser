@@ -59,11 +59,9 @@
     <ClInclude Include="..\..\..\src\lib\stack.h" />
     <ClInclude Include="..\..\..\src\lib\string.h" />
     <ClInclude Include="..\..\..\src\lib\types.h" />
-    <ClInclude Include="..\..\..\src\NonterminalSymbol.h" />
     <ClInclude Include="..\..\..\src\ParsingContext.h" />
     <ClInclude Include="..\..\..\src\Production.h" />
     <ClInclude Include="..\..\..\src\Symbol.h" />
-    <ClInclude Include="..\..\..\src\TerminalSymbol.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}</ProjectGuid>
