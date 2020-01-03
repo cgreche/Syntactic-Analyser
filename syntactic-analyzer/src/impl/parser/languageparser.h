@@ -59,7 +59,7 @@ namespace syntacticanalyzer {
 		unsigned int m_semanticArgsIndex;
 
 		ParsingState(LanguageParser& parser)
-			: m_parser(parser), m_currentState(0) {
+			: m_parser(parser), m_currentState(0), m_semanticArgsIndex(0) {
 		}
 
 	public:
@@ -72,8 +72,8 @@ namespace syntacticanalyzer {
 		Grammar *m_grammar;
 		Lexer *m_lexer;
 
-		ParsingState *m_parsingState;
-		int** m_parsingTable;
+		GrammarAnalyzer *m_grammarAnalyzer;
+		ParsingState m_parsingState;
 
 		//
 		bool _parse(std::ostream *stream);
@@ -81,11 +81,11 @@ namespace syntacticanalyzer {
 
 	public:
 		LanguageParserImpl();
+		~LanguageParserImpl();
 
 		virtual void setLexer(Lexer *lexer);
 		virtual void setGrammar(Grammar *grammar);
 		virtual bool parse(const char *input);
-
 		bool parse(const char *input, std::ostream *stream); //parse an input file
 
 		virtual Lexer *lexer() const { return m_lexer; }

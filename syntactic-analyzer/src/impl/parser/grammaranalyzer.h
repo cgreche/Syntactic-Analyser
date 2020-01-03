@@ -13,8 +13,6 @@ namespace syntacticanalyzer {
 	class Symbol;
 	class Production;
 
-	class Language;
-
 #define ACTION_ERROR 0
 #define ACTION_SHIFT 1
 #define ACTION_REDUCE 2
@@ -34,8 +32,18 @@ namespace syntacticanalyzer {
 
 	class GrammarAnalyzer
 	{
-		GrammarImpl *m_grammar;
+		Grammar *m_grammar;
 
+		Symbol** m_symbols;
+		TerminalSymbol** m_terminals;
+		NonterminalSymbol** m_nonterminals;
+		Production** m_productions;
+		unsigned int m_symbolCount;
+		unsigned int m_terminalCount;
+		unsigned int m_nonterminalCount;
+		unsigned int m_productionCount;
+
+		//
 		std::vector<std::vector<Symbol*>> m_firstSets; //all grammar symbols first set
 		std::vector<std::vector<Symbol*>> m_followSets; //all grammar symbols follow set
 		std::vector<bool> m_nullable; //all grammar symbols, nullable?
@@ -44,9 +52,6 @@ namespace syntacticanalyzer {
 		//LR states
 		std::vector<State*> m_states;
 		int **m_parsingTable;
-
-		int m_analysisState; //0: nothing, 1: lr applied, 2: parsing
-		int m_analysisMethod;
 
 		void _clean(); //reset parsing info (useful if we want to change the Grammar to be parsed)
 
@@ -58,7 +63,7 @@ namespace syntacticanalyzer {
 		void _fillFirst(Symbol *sym);
 
 	public:
-		GrammarAnalyzer(GrammarImpl &grammar);
+		GrammarAnalyzer(Grammar &grammar);
 		~GrammarAnalyzer();
 
 		Grammar *grammar() const { return m_grammar; }

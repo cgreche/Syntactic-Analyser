@@ -21,8 +21,8 @@ namespace syntacticanalyzer {
 	public:
 
 		virtual Symbol** symbols() = 0;
-		virtual TerminalSymbol** terminalSymbols() = 0;
-		virtual NonterminalSymbol** nonterminalSymbols() = 0;
+		virtual TerminalSymbol** terminals() = 0;
+		virtual NonterminalSymbol** nonterminals() = 0;
 		virtual Production** productions() = 0;
 
 		virtual Symbol* symbol(const char* name) const = 0;
@@ -34,7 +34,7 @@ namespace syntacticanalyzer {
 
 		virtual unsigned int symbolCount() const = 0;
 		virtual unsigned int terminalCount() const = 0;
-		virtual unsigned int nonTerminalCount() const = 0;
+		virtual unsigned int nonterminalCount() const = 0;
 		virtual unsigned int productionCount() const = 0;
 	};
 

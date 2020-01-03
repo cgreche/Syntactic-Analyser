@@ -47,8 +47,8 @@ namespace syntacticanalyzer {
 		virtual Symbol *symbol(unsigned int index) const;
 
 		virtual Symbol** symbols() { return &m_symList[0]; }
-		virtual TerminalSymbol** terminalSymbols() { return &m_termSymList[0]; }
-		virtual NonterminalSymbol** nonterminalSymbols() { return &m_nontermSymList[0]; }
+		virtual TerminalSymbol** terminals() { return &m_termSymList[0]; }
+		virtual NonterminalSymbol** nonterminals() { return &m_nontermSymList[0]; }
 		virtual Production** productions() { return &m_proList[0]; }
 
 		virtual Production* production(unsigned int number) const;
@@ -58,7 +58,7 @@ namespace syntacticanalyzer {
 
 		virtual unsigned int symbolCount() const { return m_symList.size(); }
 		virtual unsigned int terminalCount() const { return m_termSymList.size(); }
-		virtual unsigned int nonTerminalCount() const { return m_nontermSymList.size(); }
+		virtual unsigned int nonterminalCount() const { return m_nontermSymList.size(); }
 		virtual unsigned int productionCount() const { return m_proList.size(); }
 	};
 

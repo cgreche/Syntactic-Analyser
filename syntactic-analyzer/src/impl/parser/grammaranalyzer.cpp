@@ -36,9 +36,18 @@ namespace syntacticanalyzer {
 	// Grammar Analyzer
 	//
 
-	GrammarAnalyzer::GrammarAnalyzer(GrammarImpl &grammar)
+	GrammarAnalyzer::GrammarAnalyzer(Grammar &grammar)
 	{
 		m_grammar = &grammar;
+		m_symbols = grammar.symbols();
+		m_terminals = grammar.terminals();
+		m_nonterminals = grammar.nonterminals();
+		m_productions = grammar.productions();
+		m_symbolCount = grammar.symbolCount();
+		m_terminalCount = grammar.terminalCount();
+		m_nonterminalCount = grammar.nonterminalCount();
+		m_productionCount = grammar.productionCount();
+
 		m_parsingTable = NULL;
 	}
 
@@ -124,12 +133,12 @@ namespace syntacticanalyzer {
 	
 		//if sym is TERMINAL, FIRST(sym) = sym
 		for(unsigned int i = 0; i < m_grammar->terminalCount(); ++i) {
-			Symbol *sym = m_grammar->m_termSymList[i];
+			Symbol *sym = m_terminals[i];
 			m_firstSets[sym->index()].push_back(sym);
 		}
 
-		for(unsigned int i = 0; i < m_grammar->nonTerminalCount(); ++i) {
-			_fillFirst(m_grammar->m_nontermSymList[i]);
+		for(unsigned int i = 0; i < m_grammar->nonterminalCount(); ++i) {
+			_fillFirst(m_nonterminals[i]);
 		}
 
 	#if 0
@@ -185,8 +194,8 @@ namespace syntacticanalyzer {
 			changes = 0;
 
 			unsigned int i;
-			for(i = 0; i < m_grammar->m_nontermSymList.size(); ++i) {
-				NonterminalSymbol *lhs = (NonterminalSymbol*)m_grammar->m_nontermSymList[i];
+			for(i = 0; i < m_grammar->nonterminalCount(); ++i) {
+				NonterminalSymbol *lhs = (NonterminalSymbol*)m_nonterminals[i];
 
 				unsigned int j;
 				for(j = 0; j < lhs->associatedProductionCount(); ++j) {
@@ -671,26 +680,26 @@ namespace syntacticanalyzer {
 		int sumActionCol = 0;
 		int sumGoToCol = 0;
 		for(j = 0; j < m_grammar->terminalCount(); ++j) {
-			const char *symName = m_grammar->m_termSymList[j]->name();
+			const char *symName = m_terminals[j]->name();
 			int len = ::strlen(symName);
 			int colWidth = len;
 			if(colWidth < actionWidth) //action identifier + state number
 				colWidth = actionWidth;
-			colCaptionWidth[m_grammar->m_termSymList[j]->index()] = colWidth;
+			colCaptionWidth[m_terminals[j]->index()] = colWidth;
 			sumActionCol += colWidth;
 		}
-		for(j = 0; j < m_grammar->m_nontermSymList.size(); ++j) {
-			const char *symName = m_grammar->m_nontermSymList[j]->name();
+		for(j = 0; j < m_grammar->nonterminalCount(); ++j) {
+			const char *symName = m_nonterminals[j]->name();
 			int len = ::strlen(symName);
 			int colWidth = len;
 			if(colWidth < actionWidth) //action identifier + state number
 				colWidth = actionWidth;
-			colCaptionWidth[m_grammar->m_nontermSymList[j]->index()] = colWidth;
+			colCaptionWidth[m_nonterminals[j]->index()] = colWidth;
 			sumGoToCol += colWidth;
 		}
 
-		sumActionCol += (m_grammar->m_termSymList.size()-1)*::strlen(colSeparator);
-		sumGoToCol += (m_grammar->m_nontermSymList.size()-1)*::strlen(colSeparator);
+		sumActionCol += (m_grammar->terminalCount()-1)*::strlen(colSeparator);
+		sumGoToCol += (m_grammar->nonterminalCount()-1)*::strlen(colSeparator);
 
 		printCenter(firstColWidth,colCaptionState,stream);
 		stream << colSeparator;
@@ -699,13 +708,13 @@ namespace syntacticanalyzer {
 		printCenter(sumGoToCol,colCaptionGoto,stream);
 		stream << "\n";
 		printCenter(firstColWidth,"",stream);
-		for(j = 0; j < m_grammar->m_termSymList.size(); ++j) {
-			Symbol *sym = m_grammar->m_termSymList[j];
+		for(j = 0; j < m_grammar->terminalCount(); ++j) {
+			Symbol *sym = m_terminals[j];
 			stream << colSeparator;
 			printCenter(colCaptionWidth[sym->index()], sym->name(), stream);
 		}
-		for(j = 0; j < m_grammar->m_nontermSymList.size(); ++j) {
-			Symbol *sym = m_grammar->m_nontermSymList[j];
+		for(j = 0; j < m_grammar->nonterminalCount(); ++j) {
+			Symbol *sym = m_nonterminals[j];
 			stream << colSeparator;
 			printCenter(colCaptionWidth[sym->index()], sym->name(), stream);
 		}
@@ -716,8 +725,8 @@ namespace syntacticanalyzer {
 			std::ostringstream ostr;
 			ostr << i;
 			printCenter(firstColWidth, ostr.str().c_str(), stream);
-			for(j = 0; j < m_grammar->m_termSymList.size(); ++j) {
-				int symIndex = m_grammar->m_termSymList[j]->index();
+			for(j = 0; j < m_grammar->terminalCount(); ++j) {
+				int symIndex = m_terminals[j]->index();
 				int action = table[i][symIndex] >> 0x10;
 				int value = table[i][symIndex] & 0xffff;
 				std::ostringstream actionStr;
@@ -738,8 +747,8 @@ namespace syntacticanalyzer {
 			}
 
 			//Non-terminals are always "go to"
-			for(unsigned int j = 0; j < m_grammar->nonTerminalCount(); ++j) {
-				int symIndex = m_grammar->m_nontermSymList[j]->index();
+			for(unsigned int j = 0; j < m_grammar->nonterminalCount(); ++j) {
+				int symIndex = m_nonterminals[j]->index();
 				int action = table[i][symIndex] >> 0x10;
 				int value = table[i][symIndex] & 0xffff;
 				stream << colSeparator;
@@ -778,12 +787,10 @@ namespace syntacticanalyzer {
 
 	void GrammarAnalyzer::dumpPros(std::ostream &stream)
 	{
-		Grammar *grammar = m_grammar;
-
 		stream << "Grammar Productions rules:" << std::endl;
 
-		Production** pros = grammar->productions();
-		for(unsigned int i = 0; i < grammar->productionCount(); ++i)
+		Production** pros = m_productions;
+		for(unsigned int i = 0; i < m_productionCount; ++i)
 		{
 			stream << pros[i]->number() << ". " << pros[i]->lhs()->name() << " -> ";
 			for(unsigned int j = 0; j < pros[i]->rhsCount(); ++j)

@@ -13,8 +13,6 @@ namespace syntacticanalyzer {
 	{
 		int curState;
 
-		m_parsingState = new ParsingState(*this);
-
 		if(!stream)
 			stream = &std::cout;
 
@@ -22,9 +20,9 @@ namespace syntacticanalyzer {
 		DEBUG_PRINT(*stream, "Start parsing.\n");
 		//[/Debug]
 
-		m_parsingState->m_currentState = curState = 0;
-		m_parsingState->m_stateStack.push_back(0);
-		int** parsingTable = m_parsingTable;
+		m_parsingState.m_currentState = curState = 0;
+		m_parsingState.m_stateStack.push_back(0);
+		int** parsingTable = m_grammarAnalyzer->parsingTable();
 
 
 		Token* curToken = _getNextToken();
@@ -68,8 +66,8 @@ namespace syntacticanalyzer {
 				DEBUG_PRINT(*stream, std::endl);
 				//[/DEBUG]
 
-				m_parsingState->m_currentState = curState = value;
-				m_parsingState->m_stateStack.push_back(value);
+				m_parsingState.m_currentState = curState = value;
+				m_parsingState.m_stateStack.push_back(value);
 				//TODO m_parsingState->semanticStack.push_back(m_curToken);
 
  				curToken = _getNextToken();
@@ -106,18 +104,18 @@ namespace syntacticanalyzer {
 				*/
 
 				for(unsigned int j = 0; j < pro->rhsCount(); ++j) {
-					m_parsingState->m_stateStack.pop_back();
-					//m_parsingState->semanticStack.pop_back();
+					m_parsingState.m_stateStack.pop_back();
+					//m_parsingState.semanticStack.pop_back();
 				}
-				m_parsingState->m_currentState = curState = m_parsingState->m_stateStack.back();
+				m_parsingState.m_currentState = curState = m_parsingState.m_stateStack.back();
 
 
 				//m_parsingState->semanticStack.push_back(retToken);
 
 				//do the goto
 				value = GET_VALUE(parsingTable[curState][pro->lhs()->index()]);
-				m_parsingState->m_currentState = curState = value;
-				m_parsingState->m_stateStack.push_back(value);
+				m_parsingState.m_currentState = curState = value;
+				m_parsingState.m_stateStack.push_back(value);
 			}
 			else if(action == ACTION_ACCEPT) {
 				//[DEBUG]
@@ -137,8 +135,6 @@ namespace syntacticanalyzer {
 			DEBUG_PRINT(*stream, std::endl);
 		}
 
-		if(m_parsingState)
-			delete m_parsingState;
 		return false;
 	}
 
@@ -147,7 +143,13 @@ namespace syntacticanalyzer {
  		return m_lexer->nextToken();
 	}
 
-	LanguageParserImpl::LanguageParserImpl() {
+	LanguageParserImpl::LanguageParserImpl()
+		: m_parsingState(*this), m_lexer(NULL), m_grammar(NULL), m_grammarAnalyzer(NULL) {
+	}
+
+	LanguageParserImpl::~LanguageParserImpl() {
+		if (m_grammarAnalyzer)
+			delete m_grammarAnalyzer;
 	}
 
 	void LanguageParserImpl::setLexer(Lexer* lexer) {
@@ -156,6 +158,7 @@ namespace syntacticanalyzer {
 
 	void LanguageParserImpl::setGrammar(Grammar* grammar) {
 		m_grammar = grammar;
+		m_grammarAnalyzer = new GrammarAnalyzer(*grammar);
 	}
 
 	bool LanguageParserImpl::parse(const char* input, std::ostream* stream)

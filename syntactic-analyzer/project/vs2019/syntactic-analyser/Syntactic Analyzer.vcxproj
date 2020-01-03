@@ -121,7 +121,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)..\..\src\lib</IncludePath>
     <SourcePath>$(VC_SourcePath);</SourcePath>
-    <LibraryPath>C:\Users\Reche\Source\Repos\Syntactic-Analyser\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\..\..\lib;$(LibraryPath)</LibraryPath>
     <ExecutablePath>C:\Users\Reche\Source\Repos\Syntactic-Analyser\ext-bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
