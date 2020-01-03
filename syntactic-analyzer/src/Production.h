@@ -1,17 +1,34 @@
 
-//Last edit: 29/12/2019 02:00
+//Last edit: 03/01/2020 18:31
 
-#ifndef __PRODUCTION_H__
-#define __PRODUCTION_H__
+#ifndef __SYNTACTIC_ANALYZER_PRODUCTION_H__
+#define __SYNTACTIC_ANALYZER_PRODUCTION_H__
 
 #include "Symbol.h"
 
 namespace syntacticanalyzer {
 
 	class ParsingState;
-	class Token;
 
-	typedef void(*SemanticAction)(ParsingState* state, Token& ret);
+	typedef struct {
+		union {
+			char cval;
+			short sval;
+			long lval;
+			int ival;
+			char* strval;
+			unsigned char ucval;
+			unsigned short usval;
+			unsigned long ulval;
+			unsigned int uival;
+			bool bval;
+			float fval;
+			double dval;
+			void* pval;
+		};
+	} SemanticValue;
+
+	typedef void(*SemanticAction)(ParsingState* state, SemanticValue& ret);
 #define SEMANTIC_ACTION(x) void x(ParsingState *state, Token &ret)
 #define SEMANTIC_ACTION_C(x,y) SEMANTIC_ACTION(x) //commented
 

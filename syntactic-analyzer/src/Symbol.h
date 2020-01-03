@@ -8,6 +8,8 @@
 
 namespace syntacticanalyzer {
 
+	class Production;
+
 	class Symbol {
 	public:
 		virtual const char* name() const = 0;

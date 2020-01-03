@@ -1,8 +1,8 @@
 
-//Last edit: 26/06/2017 02:04
+//Last edit: 03/01/2020 18:33
 
-#ifndef __PRODUCTION_IMPL_H__
-#define __PRODUCTION_IMPL_H__
+#ifndef __SYNTACTIC_ANALYZER_PRODUCTION_IMPL_H__
+#define __SYNTACTIC_ANALYZER_PRODUCTION_IMPL_H__
 
 #include <vector>
 #include "symbol.h"
@@ -11,10 +11,6 @@
 namespace syntacticanalyzer {
 
 	class ParsingState;
-	class Token;
-	typedef void(*SemanticAction)(ParsingState *state, Token &ret);
-#define SEMANTIC_ACTION(x) void x(ParsingState *state, Token &ret)
-#define SEMANTIC_ACTION_C(x,y) SEMANTIC_ACTION(x) //commented
 
 	class ProductionImpl : public Production
 	{
