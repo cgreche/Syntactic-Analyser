@@ -1,8 +1,8 @@
 
-//Last edit: 17/02/2018 21:59
+//Last edit: 02/01/2020 19:16
 
-#ifndef __SYMBOL_H__
-#define __SYMBOL_H__
+#ifndef __SYNTACTIC_ANALYZER_SYMBOL_H__
+#define __SYNTACTIC_ANALYZER_SYMBOL_H__
 
 #include <vector>
 

@@ -1,5 +1,5 @@
 
-//Last edit: 29/12/2019 04:18
+//Last edit: 02/01/2020 20:58
 
 #include "grammar.h"
 #include <stdarg.h>
@@ -49,15 +49,15 @@ namespace syntacticanalyzer {
 				//new element
 				m_symList.push_back(sym);
 				if (sym->isTerminal())
-					m_termSymList.push_back(sym);
+					m_termSymList.push_back((TerminalSymbol*)sym);
 				else
-					m_nontermSymList.push_back(sym);
+					m_nontermSymList.push_back((NonterminalSymbol*)sym);
 			}
 		}
 
 		m_proList = productionList;
 		m_startSym = startSymbol;
-		m_initialPro = startSymbol->proList[0];
+		m_initialPro = startSymbol->associatedProductions()[0];
 		m_privateStartSym = addNonterminal("$start");
 		std::vector<Symbol*> rhs = { m_startSym, m_eofSym };
 		addProduction(m_privateStartSym, rhs, 0);

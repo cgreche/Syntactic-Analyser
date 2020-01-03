@@ -10,16 +10,7 @@
 
 namespace syntacticanalyzer {
 
-	typedef signed char s8;
-	typedef unsigned char u8;
-	typedef signed short s16;
-	typedef unsigned short u16;
-	typedef signed long s32;
-	typedef unsigned long u32;
-	typedef unsigned int uint;
-
 	class Symbol;
-	class SymbolList;
 	class Production;
 
 	class Language;
@@ -45,8 +36,8 @@ namespace syntacticanalyzer {
 	{
 		GrammarImpl *m_grammar;
 
-		std::vector<SymbolList> m_firstSets; //all grammar symbols first set
-		std::vector<SymbolList> m_followSets; //all grammar symbols follow set
+		std::vector<std::vector<Symbol*>> m_firstSets; //all grammar symbols first set
+		std::vector<std::vector<Symbol*>> m_followSets; //all grammar symbols follow set
 		std::vector<bool> m_nullable; //all grammar symbols, nullable?
 		std::vector<bool> m_beingProcessed;
 
@@ -54,8 +45,8 @@ namespace syntacticanalyzer {
 		std::vector<State*> m_states;
 		int **m_parsingTable;
 
-		u32 m_analysisState; //0: nothing, 1: lr applied, 2: parsing
-		u32 m_analysisMethod;
+		int m_analysisState; //0: nothing, 1: lr applied, 2: parsing
+		int m_analysisMethod;
 
 		void _clean(); //reset parsing info (useful if we want to change the Grammar to be parsed)
 
@@ -75,9 +66,9 @@ namespace syntacticanalyzer {
 		void computeNullable();
 		void computeFirst();
 		void computeFollow();
-		SymbolList& first(u32 symbolIndex) { return m_firstSets[symbolIndex]; }
-		SymbolList& follow(u32 symbolIndex) { return m_followSets[symbolIndex]; }
-		bool isNullable(u32 symbolIndex) { return m_nullable[symbolIndex]; }
+		std::vector<Symbol*>& first(unsigned int symbolIndex) { return m_firstSets[symbolIndex]; }
+		std::vector<Symbol*>& follow(unsigned int symbolIndex) { return m_followSets[symbolIndex]; }
+		bool isNullable(unsigned int symbolIndex) { return m_nullable[symbolIndex]; }
 
 		void lr0(std::ostream *stream);
 		void lalr(std::ostream *stream);

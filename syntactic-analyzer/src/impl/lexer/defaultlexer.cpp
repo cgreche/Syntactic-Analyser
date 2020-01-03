@@ -1,10 +1,9 @@
 
 //Created in: 26/06/2017 01:50
-//Last edit: 29/12/2019 04:24
+//Last edit: 02/01/2020 20:54
 
 #include "defaultlexer.h"
-
-#include "language/grammar.h"
+#include "token.h"
 
 namespace syntacticanalyzer {
 
@@ -32,7 +31,7 @@ namespace syntacticanalyzer {
 		return true;
 	}
 
-	int DefaultLexer::nextToken(Token *pToken) {
+	Token* DefaultLexer::nextToken() {
 		bool res = false;
 		int biggestMatchLen = 0;
 		int biggestMatchEntryIndex = -1;
@@ -44,6 +43,8 @@ namespace syntacticanalyzer {
 		if(*c == '\0')
 			return 0;
 
+		biggestMatchLen = 1;
+
 		for(unsigned int i = 0; i < m_tokList.size(); ++i) {
 			RegexMatcher *matcher = m_tokList[i]->matcher;
 			if(res |= matcher->matchPartially(c, &matchLen)) {
@@ -54,29 +55,28 @@ namespace syntacticanalyzer {
 			}
 		}
 
+		std::string text;
+		text.assign(c,biggestMatchLen);
+		TokenImpl *token = new TokenImpl(tok, text.c_str());
+
 		if(res) {
 			TokenEntry *entry = m_tokList[biggestMatchEntryIndex];
 			tok = entry->id;
 
 			if(entry->callback) {
-				res = (*entry->callback)(pToken);
+				res = (*entry->callback)(token);
 			}
 		}
 
-		//matching function may change res value
+		//Can't be in else, matching function may change res value
 		if(!res) {
 			//todo:
 			//if(m_defaultErrorFunction)
 			//	(*m_defaultErrorFunction)(0, input, curPos);
-			biggestMatchLen = 1;
 		}
 
-		pToken->id = tok;
-		::strncpy(pToken->text, c, biggestMatchLen);
-		pToken->text[biggestMatchLen] = '\0';
-
 		m_pos += biggestMatchLen;
-		return tok;
+		return token;
 	}
 
 	void DefaultLexer::makeDefaultTerminalTokens(Grammar *grammar) {

@@ -8,13 +8,11 @@
 
 namespace syntacticanalyzer {
 
-	typedef int(*TokenFunction)(Token*);
-
 	class Token
 	{
 	public:
 		virtual int id() const = 0;
-		virtual const char* text() const = 0;
+		virtual const char* rawValue() const = 0;
 
 		virtual char asChar() = 0;
 		virtual short asShort() = 0;
@@ -23,7 +21,7 @@ namespace syntacticanalyzer {
 		virtual const char* asString() = 0;
 		virtual unsigned char asUChar() = 0;
 		virtual unsigned short asUShort() = 0;
-		virtual unsigned long asULongt() = 0;
+		virtual unsigned long asULong() = 0;
 		virtual unsigned int asUInt() = 0;
 		virtual bool asBool() = 0;
 		virtual float asFloat() = 0;
@@ -31,6 +29,7 @@ namespace syntacticanalyzer {
 		virtual void* asPointer() = 0;
 	};
 
+	typedef int(*TokenFunction)(Token*);
 }
 
 #endif

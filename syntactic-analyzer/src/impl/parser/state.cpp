@@ -1,4 +1,4 @@
-//Last Edit: 31/05/2017 17:53
+//Last Edit: 02/01/2020 21:52
 #include "state.h"
 
 namespace syntacticanalyzer {
@@ -15,18 +15,20 @@ namespace syntacticanalyzer {
 
 			if(sym && sym->isNonTerminal()) {
 				NonterminalSymbol *lhs = (NonterminalSymbol*)sym;
-				for(ProductionList::iterator it = lhs->proList().begin(); it != lhs->proList().end(); ++it) {
+				Production** pros = lhs->associatedProductions();
+				unsigned int proCount = lhs->associatedProductionCount();
+				for (unsigned int i = 0; i < proCount; ++i) {
 					bool isAdded = false;
 
 					for(j = 0; j < newItemset.size(); ++j) {
-						if(newItemset[j].production() == *it && newItemset[j].markIndex() == 0) {
+						if(newItemset[j].production() == pros[i] && newItemset[j].markIndex() == 0) {
 							isAdded = true;
 							break;
 						}
 					}
 
 					if(!isAdded) {
-						newItemset.add(LRItem(**it, 0));
+						newItemset.add(LRItem(*pros[i], 0));
 					}
 				}
 			}
@@ -71,13 +73,10 @@ namespace syntacticanalyzer {
 
 	void State::addShiftAction(Symbol *acessingSymbol, State &state)
 	{
-		if(acessingSymbol->symClass() == TERMINAL)
+		if(acessingSymbol->isTerminal())
 			shifts.push_back(ShiftAction(acessingSymbol, state));
-		else if(acessingSymbol->symClass() == NONTERMINAL)
+		else
 			gotos.push_back(ShiftAction(acessingSymbol, state));
-		else {
-			//special symbol
-		}
 	}
 
 	void State::addReduceAction(Production &pro)

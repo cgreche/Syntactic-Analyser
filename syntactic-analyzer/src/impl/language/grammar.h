@@ -9,21 +9,20 @@
 #include "../lib/hashtable.h"
 #include "symbol.h"
 #include "production.h"
-#include "../Grammar.h"
+#include "../../Grammar.h"
 
 namespace syntacticanalyzer {
 
-	typedef std::vector<Symbol*> SymbolList;
-	typedef std::vector<Production*> ProductionList;
-
 	class GrammarImpl : public Grammar
 	{
-		SymbolList m_symList;
+		friend class GrammarAnalyzer;
+
+		std::vector<Symbol*> m_symList;
 		ProductionList m_proList;
 
 		//
-		SymbolList m_termSymList;
-		SymbolList m_nontermSymList;
+		std::vector<TerminalSymbol*> m_termSymList;
+		std::vector<NonterminalSymbol*> m_nontermSymList;
 		mutable HashTable m_symHT;
 
 		//
@@ -41,20 +40,18 @@ namespace syntacticanalyzer {
 	public:
 	//	static Symbol epsilon; //empty string symbol
 
-		friend class GrammarAnalyzer;
-
 		GrammarImpl(std::vector<Symbol *> symbolList, std::vector<Production *> productionList, NonterminalSymbol *startSymbol);
 		~GrammarImpl();
 
 		virtual Symbol *symbol(const char *name) const;
 		virtual Symbol *symbol(unsigned int index) const;
 
-		virtual SymbolList& symbols() { return m_symList; }
-		virtual SymbolList& terminalSymbols() { return m_termSymList; }
-		virtual SymbolList& nonterminalSymbols() { return m_nontermSymList; }
-		ProductionList& productions() { return m_proList; }
+		virtual Symbol** symbols() { return &m_symList[0]; }
+		virtual TerminalSymbol** terminalSymbols() { return &m_termSymList[0]; }
+		virtual NonterminalSymbol** nonterminalSymbols() { return &m_nontermSymList[0]; }
+		virtual Production** productions() { return &m_proList[0]; }
 
-		Production* production(unsigned int number) const;
+		virtual Production* production(unsigned int number) const;
 
 		virtual NonterminalSymbol* startSymbol() const { return m_startSym; }
 		virtual Production* initialProduction() const { return m_initialPro; }
@@ -62,6 +59,7 @@ namespace syntacticanalyzer {
 		virtual unsigned int symbolCount() const { return m_symList.size(); }
 		virtual unsigned int terminalCount() const { return m_termSymList.size(); }
 		virtual unsigned int nonTerminalCount() const { return m_nontermSymList.size(); }
+		virtual unsigned int productionCount() const { return m_proList.size(); }
 	};
 
 }

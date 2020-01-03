@@ -4,13 +4,14 @@
 #ifndef __SYNTACTIC_ANALYZER_TOKEN_IMPL_H__
 #define __SYNTACTIC_ANALYZER_TOKEN_IMPL_H__
 
+#include <string>
 #include "../lexer/Token.h" //TODO: adjust
 
 namespace syntacticanalyzer {
 
 	class TokenImpl : public Token {
 		int m_id;
-		char m_text[256];
+		std::string m_rawValue;
 
 		union {
 			char cval;
@@ -29,58 +30,27 @@ namespace syntacticanalyzer {
 		} m_value;
 
 	public:
-		TokenImpl()
-			: m_id(-1) {
-			m_text[0] = '\0';
+		TokenImpl(int id, const char *value)
+			: m_id(id) {
+			m_rawValue = value;
 		}
 
-		virtual char asChar() {
-			return m_value.cval;
-		}
+		virtual int id() const { return m_id; }
+		virtual const char* rawValue() const { return m_rawValue.c_str(); }
 
-		virtual short asShort() {
-			return m_value.sval;
-		}
-
-		virtual long asLong() {
-			return m_value.lval;
-		}
-
-		virtual int asInt() {
-			return m_value.ival;
-		}
-
-		virtual const char* asString() {
-			return m_value.strval;
-		}
-
-		virtual unsigned char asUChar() {
-			return m_value.ucval;
-		}
-
-		virtual unsigned short asUShort() {
-			return m_value.usval;
-		}
-
-		virtual unsigned long asULong() {
-			return m_value.ulval;
-		}
-
-		virtual unsigned int asUInt() {
-			return m_value.uival;
-		}
-
-		virtual bool asBool() {
-			return m_value.bval;
-		}
-
-		virtual float asFloat() {
-			return m_value.fval;
-		}
-
-		virtual double asDouble() {
-			return m_value.dval;
-		}
+		virtual char asChar() { return m_value.cval; }
+		virtual short asShort() { return m_value.sval; }
+		virtual long asLong() { return m_value.lval; }
+		virtual int asInt() { return m_value.ival; }
+		virtual const char* asString() { return m_value.strval; }
+		virtual unsigned char asUChar() { return m_value.ucval; }
+		virtual unsigned short asUShort() { return m_value.usval; }
+		virtual unsigned long asULong() { return m_value.ulval; }
+		virtual unsigned int asUInt() { return m_value.uival; }
+		virtual bool asBool() { return m_value.bval; }
+		virtual float asFloat() { return m_value.fval; }
+		virtual double asDouble() { return m_value.dval; }
+		virtual void* asPointer() { return m_value.pval; }
 	};
 
 }

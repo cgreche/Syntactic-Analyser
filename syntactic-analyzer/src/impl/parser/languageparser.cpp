@@ -22,31 +22,31 @@ namespace syntacticanalyzer {
 		DEBUG_PRINT(*stream, "Start parsing.\n");
 		//[/Debug]
 
-		m_parsingState->currentState = curState = 0;
-		m_parsingState->stateStack.push_back(0);
+		m_parsingState->m_currentState = curState = 0;
+		m_parsingState->m_stateStack.push_back(0);
 		int** parsingTable = m_parsingTable;
 
 
-		int tok;
-		tok = _getNextToken();
+		Token* curToken = _getNextToken();
 		for(;;) {
-			char *text = m_curToken.text;
+			int tokId = curToken->id();
+			const char* text = curToken->rawValue();
 
 			DEBUG_PRINT(*stream, "Current State: ");
 			DEBUG_PRINT(*stream, curState);
 			DEBUG_PRINT(*stream, std::endl);
 		
 			DEBUG_PRINT(*stream, "Current Token: ");
-			DEBUG_PRINT(*stream, (tok == -1 ? "Undefined" : m_language->grammar()->symbolList()[tok]->name()));
+			DEBUG_PRINT(*stream, (tokId == -1 ? "Undefined" : m_grammar->symbol(tokId)->name()));
 			DEBUG_PRINT(*stream, " (\"");
 			DEBUG_PRINT(*stream, text);
 			DEBUG_PRINT(*stream, "\")");
 			DEBUG_PRINT(*stream, std::endl);
 
-			if(tok == -1) {
+			if(tokId == -1) {
 				//undefined token
 				//todo: error
-				tok = _getNextToken();
+				curToken = _getNextToken();
 				continue;
 			}
 
@@ -55,27 +55,27 @@ namespace syntacticanalyzer {
 	#if 1
 			
 			int value;
-			action = GET_ACTION(parsingTable[curState][tok]);
-			value = GET_VALUE(parsingTable[curState][tok]);
+			action = GET_ACTION(parsingTable[curState][tokId]);
+			value = GET_VALUE(parsingTable[curState][tokId]);
 			if(action == ACTION_SHIFT) {
 
 				//[DEBUG]
 				DEBUG_PRINT(*stream, "Action: shift ");
 				DEBUG_PRINT(*stream, value);
 				DEBUG_PRINT(*stream, " (");
-				DEBUG_PRINT(*stream, m_language->grammar()->symbol(tok)->name());
+				DEBUG_PRINT(*stream, m_grammar->symbol(tokId)->name());
 				DEBUG_PRINT(*stream, ')');
 				DEBUG_PRINT(*stream, std::endl);
 				//[/DEBUG]
 
-				m_parsingState->currentState = curState = value;
-				m_parsingState->stateStack.push_back(value);
-				m_parsingState->semanticStack.push_back(m_curToken);
+				m_parsingState->m_currentState = curState = value;
+				m_parsingState->m_stateStack.push_back(value);
+				//TODO m_parsingState->semanticStack.push_back(m_curToken);
 
- 				tok = _getNextToken();
+ 				curToken = _getNextToken();
 			}
 			else if(action == ACTION_REDUCE) {
-				Production *pro = m_language->grammar()->production(value);
+				Production *pro = m_grammar->production(value);
 				//[Debug]
 				DEBUG_PRINT(*stream, "Action: reduce ");
 				DEBUG_PRINT(*stream, value);
@@ -83,7 +83,7 @@ namespace syntacticanalyzer {
 				DEBUG_PRINT(*stream, pro->lhs()->name());
 				DEBUG_PRINT(*stream, " -> ");
 	#ifdef _DEBUG
-				for(u32 nsym = 0; nsym < pro->nrhs(); ++nsym) {
+				for(unsigned int nsym = 0; nsym < pro->rhsCount(); ++nsym) {
 					DEBUG_PRINT(*stream, pro->rhs(nsym)->name());
 					if(nsym < pro->rhsCount()-1)
 						DEBUG_PRINT(*stream, " ");
@@ -99,23 +99,25 @@ namespace syntacticanalyzer {
 				m_parsingState->semanticArgsIndex = m_parsingState->semanticStack.size()-pro->rhsCount();
 				retToken.value = m_parsingState->semanticStack[m_parsingState->semanticArgsIndex].value; // defaults to first semantic arg
 				memset(retToken.text,0,sizeof(retToken.text));
-				*/
 
 				if(pro->semanticAction()) {
 					pro->semanticAction()(this->m_parsingState,retToken);
 				}
+				*/
 
 				for(unsigned int j = 0; j < pro->rhsCount(); ++j) {
-					m_parsingState->stateStack.pop_back();
-					m_parsingState->semanticStack.pop_back();
+					m_parsingState->m_stateStack.pop_back();
+					//m_parsingState->semanticStack.pop_back();
 				}
-				m_parsingState->currentState = curState = m_parsingState->stateStack.back();
-				m_parsingState->semanticStack.push_back(retToken);
+				m_parsingState->m_currentState = curState = m_parsingState->m_stateStack.back();
+
+
+				//m_parsingState->semanticStack.push_back(retToken);
 
 				//do the goto
 				value = GET_VALUE(parsingTable[curState][pro->lhs()->index()]);
-				m_parsingState->currentState = curState = value;
-				m_parsingState->stateStack.push_back(value);
+				m_parsingState->m_currentState = curState = value;
+				m_parsingState->m_stateStack.push_back(value);
 			}
 			else if(action == ACTION_ACCEPT) {
 				//[DEBUG]
@@ -148,17 +150,26 @@ namespace syntacticanalyzer {
 	LanguageParserImpl::LanguageParserImpl() {
 	}
 
-	void LanguageParserImpl::setLexer(Lexer *lexer) {
+	void LanguageParserImpl::setLexer(Lexer* lexer) {
 		m_lexer = lexer;
 	}
 
-	bool LanguageParserImpl::parse(const char *input, std::ostream *stream)
+	void LanguageParserImpl::setGrammar(Grammar* grammar) {
+		m_grammar = grammar;
+	}
+
+	bool LanguageParserImpl::parse(const char* input, std::ostream* stream)
 	{
-		if(!m_lexer)
+		if (!m_lexer)
 			return false;
 		m_lexer->setInput(input);
 		m_lexer->setPos(0);
 		return _parse(stream);
+	}
+
+	bool LanguageParserImpl::parse(const char* input)
+	{
+		return parse(input, NULL);
 	}
 
 }

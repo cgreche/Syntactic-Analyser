@@ -12,7 +12,7 @@ namespace syntacticanalyzer {
 	{
 		virtual LanguageParser* parser() = 0;
 		virtual Token* arg(int n) = 0;
-		virtual unsigned int argCount(int n) = 0;
+		virtual unsigned int argCount() = 0;
 	};
 
 }

@@ -1,10 +1,10 @@
 #pragma once
 
-#ifndef __SYNTACTIC_ANALYZER_GRAMMAR_BUILDER_H__
-#define __SYNTACTIC_ANALYZER_GRAMMAR_BUILDER_H__
+#ifndef __SYNTACTIC_ANALYZER_GRAMMAR_BUILDER_IMPL_H__
+#define __SYNTACTIC_ANALYZER_GRAMMAR_BUILDER_IMPL_H__
 
 #include <vector>
-#include "../GrammarBuilder.h"
+#include "../../GrammarBuilder.h"
 
 namespace syntacticanalyzer {
 
@@ -50,10 +50,10 @@ namespace syntacticanalyzer {
 		virtual Symbol* symbol(const char* name) const;
 		virtual Symbol* symbol(unsigned int index) const;
 
-		virtual List* symbols();
-		virtual List* terminalSymbols();
-		virtual List* nonterminalSymbols();
-		virtual List* productions();
+		virtual Symbol** symbols();
+		virtual TerminalSymbol** terminalSymbols();
+		virtual NonterminalSymbol** nonterminalSymbols();
+		virtual Production** productions();
 
 		virtual NonterminalSymbol* startSymbol() const;
 

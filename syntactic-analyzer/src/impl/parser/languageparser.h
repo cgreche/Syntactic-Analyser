@@ -6,8 +6,9 @@
 #define __SYNTACTIC_ANALYZER_LANGUAGE_PARSER_IMPL_H__
 
 #include <vector>
-#include "../LanguageParser.h"
-#include "../lexer/token.h" //TODO: adjust
+#include "../../LanguageParser.h"
+#include "../ParsingContext.h"
+#include "../../lexer/token.h" //TODO: adjust
 #include "../language/grammar.h"
 #include "grammaranalyzer.h"
 
@@ -43,21 +44,28 @@ namespace syntacticanalyzer {
 #define SRET_DVAL(x) (ret.value.dval = x)
 
 	typedef std::vector<unsigned int> StateStack;
-	typedef std::vector<Token> SemanticStack;
+	typedef std::vector<Token*> SemanticStack;
 
 	class LanguageParser;
 
-	struct ParsingState
+	class ParsingState : public ParsingContext
 	{
-		LanguageParser &parser;
-		int currentState;
-		StateStack stateStack;
-		SemanticStack semanticStack;
-		unsigned int semanticArgsIndex;
+		friend class LanguageParserImpl;
 
-		ParsingState(LanguageParser &parser)
-			: parser(parser), currentState(NULL) {
+		LanguageParser &m_parser;
+		int m_currentState;
+		StateStack m_stateStack;
+		SemanticStack m_semanticStack;
+		unsigned int m_semanticArgsIndex;
+
+		ParsingState(LanguageParser& parser)
+			: m_parser(parser), m_currentState(0) {
 		}
+
+	public:
+		virtual LanguageParser* parser() { return &m_parser; }
+		virtual Token* arg(int n) { return m_semanticStack[m_semanticArgsIndex + n]; }
+		virtual unsigned int argCount() { return m_semanticStack.size() - m_semanticArgsIndex; }
 	};
 
 	class LanguageParserImpl : public LanguageParser {
@@ -65,6 +73,7 @@ namespace syntacticanalyzer {
 		Lexer *m_lexer;
 
 		ParsingState *m_parsingState;
+		int** m_parsingTable;
 
 		//
 		bool _parse(std::ostream *stream);
@@ -73,10 +82,14 @@ namespace syntacticanalyzer {
 	public:
 		LanguageParserImpl();
 
-		void setLexer(Lexer *lexer);
+		virtual void setLexer(Lexer *lexer);
+		virtual void setGrammar(Grammar *grammar);
+		virtual bool parse(const char *input);
+
 		bool parse(const char *input, std::ostream *stream); //parse an input file
 
-		Lexer *lexer() const { return m_lexer; }
+		virtual Lexer *lexer() const { return m_lexer; }
+		virtual Grammar* grammar() const { return m_grammar; }
 	};
 
 }

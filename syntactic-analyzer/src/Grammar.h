@@ -1,6 +1,6 @@
 
 //Created in: 29/12/2019 03:19
-//Last edit: 29/12/2019 03:19
+//Last edit: 02/01/2020 19:13
 
 #ifndef __SYNTACTIC_ANALYZER_GRAMMAR_H___
 #define __SYNTACTIC_ANALYZER_GRAMMAR_H___
@@ -20,15 +20,14 @@ namespace syntacticanalyzer {
 	{
 	public:
 
-		/*
-		virtual List* symbols() = 0;
-		virtual List* terminalSymbols() = 0;
-		virtual List* nonterminalSymbols() = 0;
-		virtual List* productions() = 0;
-		*/
+		virtual Symbol** symbols() = 0;
+		virtual TerminalSymbol** terminalSymbols() = 0;
+		virtual NonterminalSymbol** nonterminalSymbols() = 0;
+		virtual Production** productions() = 0;
 
 		virtual Symbol* symbol(const char* name) const = 0;
 		virtual Symbol* symbol(unsigned int index) const = 0;
+		virtual Production* production(unsigned int number) const = 0;
 
 		virtual NonterminalSymbol* startSymbol() const = 0;
 		virtual Production* initialProduction() const = 0;
@@ -36,6 +35,7 @@ namespace syntacticanalyzer {
 		virtual unsigned int symbolCount() const = 0;
 		virtual unsigned int terminalCount() const = 0;
 		virtual unsigned int nonTerminalCount() const = 0;
+		virtual unsigned int productionCount() const = 0;
 	};
 
 }

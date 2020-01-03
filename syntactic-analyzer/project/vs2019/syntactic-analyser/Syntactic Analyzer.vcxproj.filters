@@ -10,17 +10,11 @@
     <Filter Include="src\lib\regex-parser">
       <UniqueIdentifier>{32cb60c0-ebda-4fc1-aaa1-5297b716540a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\c_language">
-      <UniqueIdentifier>{c75c4739-439e-4cba-ab8f-f73a8e93eb08}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\impl">
       <UniqueIdentifier>{2f448287-1639-4288-9866-180fadf0d93b}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\intf">
       <UniqueIdentifier>{e162cd1e-bdfe-4df3-a432-e5f58949b2fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\impl\tools">
-      <UniqueIdentifier>{8c20c4e7-2f24-4ede-aadc-368a46ae2f3c}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\impl\language">
       <UniqueIdentifier>{80932f87-a4a0-4469-ba29-48af79ac9a63}</UniqueIdentifier>
@@ -33,6 +27,9 @@
     </Filter>
     <Filter Include="src\impl\lexer">
       <UniqueIdentifier>{62112719-9e91-4624-b21f-d22ace23c39d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\impl\tools">
+      <UniqueIdentifier>{8c20c4e7-2f24-4ede-aadc-368a46ae2f3c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -53,39 +50,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\lib\osd_file.cpp">
       <Filter>src\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\c_language\c_actions.cpp">
-      <Filter>src\c_language</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\c_language\c_ast.cpp">
-      <Filter>src\c_language</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\c_language\c_grammar.cpp">
-      <Filter>src\c_language</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\c_language\c_hc_lexer.cpp">
-      <Filter>src\c_language</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\c_language\c_language.cpp">
-      <Filter>src\c_language</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\c_language\c_object.cpp">
-      <Filter>src\c_language</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\c_language\c_scope.cpp">
-      <Filter>src\c_language</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\c_language\c_statement.cpp">
-      <Filter>src\c_language</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\c_language\c_symbol.cpp">
-      <Filter>src\c_language</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\c_language\c_symboltype.cpp">
-      <Filter>src\c_language</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\c_language\c_value.cpp">
-      <Filter>src\c_language</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\impl\language\grammar.cpp">
       <Filter>src\impl\language</Filter>
@@ -142,39 +106,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\lib\file.h">
       <Filter>src\lib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\c_language\c_actions_decl.h">
-      <Filter>src\c_language</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\c_language\c_ast.h">
-      <Filter>src\c_language</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\c_language\c_defs.h">
-      <Filter>src\c_language</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\c_language\c_hc_lexer.h">
-      <Filter>src\c_language</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\c_language\c_language.h">
-      <Filter>src\c_language</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\c_language\c_object.h">
-      <Filter>src\c_language</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\c_language\c_scope.h">
-      <Filter>src\c_language</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\c_language\c_statement.h">
-      <Filter>src\c_language</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\c_language\c_symbol.h">
-      <Filter>src\c_language</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\c_language\c_symboltype.h">
-      <Filter>src\c_language</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\c_language\c_value.h">
-      <Filter>src\c_language</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\Grammar.h">
       <Filter>src</Filter>

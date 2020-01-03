@@ -19,17 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\c_language\c_actions.cpp" />
-    <ClCompile Include="..\..\..\src\c_language\c_ast.cpp" />
-    <ClCompile Include="..\..\..\src\c_language\c_grammar.cpp" />
-    <ClCompile Include="..\..\..\src\c_language\c_hc_lexer.cpp" />
-    <ClCompile Include="..\..\..\src\c_language\c_language.cpp" />
-    <ClCompile Include="..\..\..\src\c_language\c_object.cpp" />
-    <ClCompile Include="..\..\..\src\c_language\c_scope.cpp" />
-    <ClCompile Include="..\..\..\src\c_language\c_statement.cpp" />
-    <ClCompile Include="..\..\..\src\c_language\c_symbol.cpp" />
-    <ClCompile Include="..\..\..\src\c_language\c_symboltype.cpp" />
-    <ClCompile Include="..\..\..\src\c_language\c_value.cpp" />
     <ClCompile Include="..\..\..\src\impl\language\grammar.cpp" />
     <ClCompile Include="..\..\..\src\impl\language\production.cpp" />
     <ClCompile Include="..\..\..\src\impl\language\symbol.cpp" />
@@ -47,17 +36,6 @@
     <ClCompile Include="..\..\..\src\lib\string.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\c_language\c_actions_decl.h" />
-    <ClInclude Include="..\..\..\src\c_language\c_ast.h" />
-    <ClInclude Include="..\..\..\src\c_language\c_defs.h" />
-    <ClInclude Include="..\..\..\src\c_language\c_hc_lexer.h" />
-    <ClInclude Include="..\..\..\src\c_language\c_language.h" />
-    <ClInclude Include="..\..\..\src\c_language\c_object.h" />
-    <ClInclude Include="..\..\..\src\c_language\c_scope.h" />
-    <ClInclude Include="..\..\..\src\c_language\c_statement.h" />
-    <ClInclude Include="..\..\..\src\c_language\c_symbol.h" />
-    <ClInclude Include="..\..\..\src\c_language\c_symboltype.h" />
-    <ClInclude Include="..\..\..\src\c_language\c_value.h" />
     <ClInclude Include="..\..\..\src\Grammar.h" />
     <ClInclude Include="..\..\..\src\GrammarBuilder.h" />
     <ClInclude Include="..\..\..\src\impl\language\grammar.h" />

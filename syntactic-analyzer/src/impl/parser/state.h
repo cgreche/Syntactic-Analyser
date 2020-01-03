@@ -1,12 +1,12 @@
 
-//Last Edit: 16/11/2019 18:24 (UTC-3)
+//Last Edit: 02/01/2020 22:15 (UTC-3)
 
 #ifndef __SYNTACTIC_ANALYZER_STATE_H__
 #define __SYNTACTIC_ANALYZER_STATE_H__
 
 #include <vector>
 
-#include "language/grammar.h"
+#include "../language/grammar.h"
 
 namespace syntacticanalyzer {
 
@@ -17,7 +17,7 @@ namespace syntacticanalyzer {
 		Production *m_production;
 		unsigned int m_markIndex;
 
-		SymbolList m_lookAhead;
+		std::vector<Symbol*> m_lookAhead;
 
 	public:
 		LRItem(Production &pro, unsigned int markIndex)
@@ -28,8 +28,8 @@ namespace syntacticanalyzer {
 		unsigned int markIndex() const { return m_markIndex; }
 
 		Symbol *readyToSee() const { return m_production->rhs(m_markIndex); }
-		void appendLookAhead(Symbol *sym) { m_lookAhead.append(sym); }
-		SymbolList& lookAheadSet() { return m_lookAhead; }
+		void appendLookAhead(Symbol *sym) { m_lookAhead.push_back(sym); }
+		std::vector<Symbol*>& lookAheadSet() { return m_lookAhead; }
 	};
 
 	class Itemset
@@ -62,7 +62,7 @@ namespace syntacticanalyzer {
 	struct ReductionAction
 	{
 		Production *pro;
-		SymbolList lookAhead;
+		std::vector<Symbol*> lookAhead;
 
 		ReductionAction(Production& pro)
 			: pro(&pro)

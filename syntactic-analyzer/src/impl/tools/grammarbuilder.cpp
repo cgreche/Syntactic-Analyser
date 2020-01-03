@@ -1,7 +1,7 @@
 
-#include "GrammarBuilder.h"
-#include "../language/symbol.h"
 #include "../language/grammar.h"
+#include "../language/symbol.h"
+#include "grammarbuilder.h"
 
 #include <cstdarg>
 
@@ -108,19 +108,19 @@ namespace syntacticanalyzer {
 		return m_symList[index];
 	}
 
-	List* GrammarBuilderImpl::symbols() {
+	Symbol** GrammarBuilderImpl::symbols() {
 		return 0;
 	}
 
-	List* GrammarBuilderImpl::terminalSymbols() {
+	TerminalSymbol** GrammarBuilderImpl::terminalSymbols() {
 		return 0;
 	}
 
-	List* GrammarBuilderImpl::nonterminalSymbols() {
+	NonterminalSymbol** GrammarBuilderImpl::nonterminalSymbols() {
 		return 0;
 	}
 
-	List* GrammarBuilderImpl::productions() {
+	Production** GrammarBuilderImpl::productions() {
 		return 0;
 	}
 
