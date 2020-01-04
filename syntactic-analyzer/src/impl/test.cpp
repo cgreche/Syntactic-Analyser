@@ -5,7 +5,7 @@
 #include <fstream>
 #include <vector>
 
-#include "file.h"
+#include "../lib/file.h"
 #include "parser/languageparser.h"
 
 #include "../GrammarBuilder.h"
@@ -30,9 +30,6 @@ unsigned int getTime() {
 
 using namespace syntacticanalyzer;
 
-
-#if 0
-
 struct GrammarTest
 {
 	const char *grammarName;
@@ -42,35 +39,38 @@ struct GrammarTest
 	void (*postParsing)(LanguageParser *parser, bool result);
 };
 
-Grammar *testGrammar_create()
+SEMANTIC_ACTION_C(test1, first test) {
+}
+
+Grammar* testGrammar_create()
 {
 	GrammarBuilder* grammarBuilder = createDefaultGrammarBuilder();
 
-#define P(x) { NonterminalSymbol* __X = grammarBuilder->addNonTerminal(x);
+#define P(x) { NonterminalSymbol* __X = grammarBuilder->addNonterminal(x);
 #define D grammarBuilder->newProduction(__X);
 #define T(x) grammarBuilder->addRHS(grammarBuilder->addTerminal(x)->index());
-#define N(x) grammarBuilder->addRHS(grammarBuilder->addNonTerminal(x)->index());
+#define N(x) grammarBuilder->addRHS(grammarBuilder->addNonterminal(x)->index());
 #define S(x) grammarBuilder->setSemanticAction(x);
 #define E grammarBuilder->addProduction(); }
 #define O grammarBuilder->addProduction(); grammarBuilder->newProduction(__X);
 
-	Symbol *a = grammarBuilder->addTerminal("a");
-	Symbol *b = grammarBuilder->addTerminal("b");
-	Symbol *c = grammarBuilder->addTerminal("c");
-	Symbol *d = grammarBuilder->addTerminal("d");
-	Symbol *e = grammarBuilder->addTerminal("e");
+	Symbol* a = grammarBuilder->addTerminal("a");
+	Symbol* b = grammarBuilder->addTerminal("b");
+	Symbol* c = grammarBuilder->addTerminal("c");
+	Symbol* d = grammarBuilder->addTerminal("d");
+	Symbol* e = grammarBuilder->addTerminal("e");
 
 	P("S")
-	D T("a") N("B") T("c")
-	O T("b") N("C") T("c")
-	O T("a") N("C") T("d")
-	O T("b") N("B") T("d")
-	E
+		D T("a") N("B") T("c") S(test1)
+		O T("b") N("C") T("c")
+		O T("a") N("C") T("d")
+		O T("b") N("B") T("d")
+		E
 
-	P("B") D T("e") E
-	P("C") D T("e") E
+		P("B") D T("e") E
+		P("C") D T("e") E
 
-	grammarBuilder->setStartSymbol((NonterminalSymbol*)grammarBuilder->symbol("S"));
+		grammarBuilder->setStartSymbol((NonterminalSymbol*)grammarBuilder->symbol("S"));
 
 #undef P
 #undef D
@@ -83,6 +83,7 @@ Grammar *testGrammar_create()
 	return grammarBuilder->build();
 }
 
+#if 0
 void testGrammar_destroy(Grammar *grammar)
 {
 	if(grammar)
@@ -101,10 +102,10 @@ Grammar *mathExpr_create()
 {
 	GrammarBuilder* grammarBuilder = createDefaultGrammarBuilder();
 
-#define P(x) { NonterminalSymbol* __X = grammarBuilder->addNonTerminal(x);
+#define P(x) { NonterminalSymbol* __X = grammarBuilder->addNonterminal(x);
 #define D grammarBuilder->newProduction(__X);
 #define T(x) grammarBuilder->addRHS(grammarBuilder->addTerminal(x)->index());
-#define N(x) grammarBuilder->addRHS(grammarBuilder->addNonTerminal(x)->index());
+#define N(x) grammarBuilder->addRHS(grammarBuilder->addNonterminal(x)->index());
 #define S(x) grammarBuilder->addRHS(x);
 #define E grammarBuilder->addProduction(); }
 #define O grammarBuilder->addProduction(); grammarBuilder->newProduction(__X);
@@ -188,10 +189,10 @@ Grammar *xml_create()
 {
 	GrammarBuilder* grammarBuilder = createDefaultGrammarBuilder();
 
-#define P(x) { NonterminalSymbol* __X = grammarBuilder->addNonTerminal(x);
+#define P(x) { NonterminalSymbol* __X = grammarBuilder->addNonterminal(x);
 #define D grammarBuilder->newProduction(__X);
 #define T(x) grammarBuilder->addRHS(grammarBuilder->addTerminal(x)->index());
-#define N(x) grammarBuilder->addRHS(grammarBuilder->addNonTerminal(x)->index());
+#define N(x) grammarBuilder->addRHS(grammarBuilder->addNonterminal(x)->index());
 #define S(x) grammarBuilder->addRHS(x);
 #define E grammarBuilder->addProduction(); }
 #define O grammarBuilder->addProduction(); grammarBuilder->newProduction(__X);
@@ -894,7 +895,7 @@ void C_postParsing(LanguageParser *parser, bool result)
 
 
 class ParsingManager {
-	LanguageParser* currentParser;
+	LanguageParser* m_currentParser;
 
 	Lexer* m_selectedLexer;
 	Grammar* m_selectedGrammar;
@@ -903,7 +904,7 @@ class ParsingManager {
 	void setGrammar();
 
 	void parseInputText(const char* input) {
-		currentParser->parse(input);
+		m_currentParser->parse(input);
 	}
 
 	void parseInputFile(const char* filePath) {
@@ -936,9 +937,13 @@ class ParsingManager {
 	}
 
 public:
-	ParsingManager() {
+	ParsingManager()
+		: m_currentParser(NULL)
+		, m_selectedLexer(NULL)
+		, m_selectedGrammar(NULL) {
 
 	}
+
 	~ParsingManager() {
 
 	}
@@ -981,9 +986,9 @@ public:
 
 ParsingManager parsingManager;
 
-
 int main(int argc, char *argv) {
-	parsingManager.promptOptions();
+	//parsingManager.promptOptions();
+	Grammar* grammar = testGrammar_create();
 	return 0;
 }
 

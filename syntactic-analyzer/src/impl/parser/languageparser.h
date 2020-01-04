@@ -7,7 +7,7 @@
 
 #include <vector>
 #include "../../LanguageParser.h"
-#include "../ParsingContext.h"
+#include "../../ParsingContext.h"
 #include "../../lexer/token.h" //TODO: adjust
 #include "../language/grammar.h"
 #include "grammaranalyzer.h"
@@ -44,7 +44,7 @@ namespace syntacticanalyzer {
 #define SRET_DVAL(x) (ret.value.dval = x)
 
 	typedef std::vector<unsigned int> StateStack;
-	typedef std::vector<Token*> SemanticStack;
+	typedef std::vector<SemanticValue*> SemanticStack;
 
 	class LanguageParser;
 
@@ -64,7 +64,7 @@ namespace syntacticanalyzer {
 
 	public:
 		virtual LanguageParser* parser() { return &m_parser; }
-		virtual Token* arg(int n) { return m_semanticStack[m_semanticArgsIndex + n]; }
+		virtual SemanticValue* arg(int n) { return m_semanticStack[m_semanticArgsIndex + n]; }
 		virtual unsigned int argCount() { return m_semanticStack.size() - m_semanticArgsIndex; }
 	};
 

@@ -50,10 +50,10 @@ namespace syntacticanalyzer {
 		virtual Symbol* symbol(const char* name) const;
 		virtual Symbol* symbol(unsigned int index) const;
 
-		virtual Symbol** symbols();
-		virtual TerminalSymbol** terminalSymbols();
-		virtual NonterminalSymbol** nonterminalSymbols();
-		virtual Production** productions();
+		virtual Symbol** symbols() const;
+		virtual TerminalSymbol** terminalSymbols() const;
+		virtual NonterminalSymbol** nonterminalSymbols() const;
+		virtual Production** productions() const;
 
 		virtual NonterminalSymbol* startSymbol() const;
 

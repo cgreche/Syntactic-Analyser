@@ -14,15 +14,11 @@ namespace syntacticanalyzer {
 	class Production;
 	class Grammar;
 
-	class ParsingState;
-	class Token;
-	typedef void(*SemanticAction)(ParsingState* state, Token& ret);
-
 	class GrammarBuilder
 	{
 	public:
 		virtual TerminalSymbol* addTerminal(const char* name) = 0;
-		virtual NonterminalSymbol* addNonTerminal(const char* name) = 0;
+		virtual NonterminalSymbol* addNonterminal(const char* name) = 0;
 
 		virtual void newProduction(NonterminalSymbol* lhs) = 0;
 		virtual void addRHS(const char* name) = 0;
@@ -39,22 +35,21 @@ namespace syntacticanalyzer {
 		virtual bool removeSymbol(Symbol* symbol) = 0;
 		virtual bool removeProduction(Production* pro) = 0;
 
-		virtual Symbol* symbol(const char* name) = 0;
+		virtual Symbol* symbol(const char* name) const = 0;
 		virtual Symbol* symbol(unsigned int index) const = 0;
 
-		virtual Symbol** symbols() = 0;
-		virtual TerminalSymbol** terminalSymbols() = 0;
-		virtual NonterminalSymbol** nonterminalSymbols() = 0;
-		virtual Production** productions() = 0;
+		virtual Symbol** symbols() const = 0;
+		virtual TerminalSymbol** terminalSymbols() const = 0;
+		virtual NonterminalSymbol** nonterminalSymbols() const = 0;
+		virtual Production** productions() const = 0;
 
 		virtual NonterminalSymbol* startSymbol() const = 0;
-		virtual Production* initialProduction() const = 0;
 
 		virtual unsigned int symbolCount() const = 0;
 		virtual unsigned int terminalCount() const = 0;
 		virtual unsigned int nonTerminalCount() const = 0;
 
-		virtual Grammar* build() const = 0;
+		virtual Grammar* build() = 0;
 	};
 
 	GrammarBuilder* createDefaultGrammarBuilder();

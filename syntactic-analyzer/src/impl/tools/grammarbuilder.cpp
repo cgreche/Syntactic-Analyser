@@ -46,11 +46,21 @@ namespace syntacticanalyzer {
 		m_proRHS.push_back(rhs);
 	}
 
+	void GrammarBuilderImpl::setSemanticAction(SemanticAction semanticAction) {
+		m_proSemanticAction = semanticAction;
+	}
+
 	Production* GrammarBuilderImpl::addProduction() {
-		ProductionImpl* pro = new ProductionImpl(m_proLHS,m_proRHS,0);
+		ProductionImpl* pro = new ProductionImpl(m_proLHS,m_proRHS,m_proSemanticAction);
 		pro->m_number = m_proList.size();
 		return pro;
 	}
+
+	Production* GrammarBuilderImpl::addProduction(const char* bnf) {
+		//TODO:
+		return NULL;
+	}
+
 
 	void GrammarBuilderImpl::setStartSymbol(NonterminalSymbol* sym) {
 		m_startSym = sym;
@@ -108,19 +118,19 @@ namespace syntacticanalyzer {
 		return m_symList[index];
 	}
 
-	Symbol** GrammarBuilderImpl::symbols() {
+	Symbol** GrammarBuilderImpl::symbols() const {
 		return 0;
 	}
 
-	TerminalSymbol** GrammarBuilderImpl::terminalSymbols() {
+	TerminalSymbol** GrammarBuilderImpl::terminalSymbols() const {
 		return 0;
 	}
 
-	NonterminalSymbol** GrammarBuilderImpl::nonterminalSymbols() {
+	NonterminalSymbol** GrammarBuilderImpl::nonterminalSymbols() const {
 		return 0;
 	}
 
-	Production** GrammarBuilderImpl::productions() {
+	Production** GrammarBuilderImpl::productions() const {
 		return 0;
 	}
 
@@ -144,4 +154,7 @@ namespace syntacticanalyzer {
 		return new GrammarImpl(m_symList,m_proList,m_startSym);
 	}
 
+	GrammarBuilder* createDefaultGrammarBuilder() {
+		return new GrammarBuilderImpl;
+	}
 }

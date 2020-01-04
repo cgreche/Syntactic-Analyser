@@ -13,9 +13,6 @@
     <Filter Include="src\impl">
       <UniqueIdentifier>{2f448287-1639-4288-9866-180fadf0d93b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\intf">
-      <UniqueIdentifier>{e162cd1e-bdfe-4df3-a432-e5f58949b2fc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\impl\language">
       <UniqueIdentifier>{80932f87-a4a0-4469-ba29-48af79ac9a63}</UniqueIdentifier>
     </Filter>

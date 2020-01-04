@@ -8,10 +8,12 @@
 
 namespace syntacticanalyzer {
 
+	class Token;
 	class ParsingState;
 
-	typedef struct {
-		union {
+	class SemanticValue {
+	public:
+		typedef union {
 			char cval;
 			short sval;
 			long lval;
@@ -25,11 +27,16 @@ namespace syntacticanalyzer {
 			float fval;
 			double dval;
 			void* pval;
-		};
-	} SemanticValue;
+		} Value;
 
-	typedef void(*SemanticAction)(ParsingState* state, SemanticValue& ret);
-#define SEMANTIC_ACTION(x) void x(ParsingState *state, Token &ret)
+		virtual Token* token() const = 0;
+		virtual Value value() const = 0;
+		virtual void setValue(Value value) = 0;
+
+	};
+
+	typedef void(*SemanticAction)(ParsingState& state, SemanticValue& ret);
+#define SEMANTIC_ACTION(x) void x(ParsingState& state, SemanticValue& ret)
 #define SEMANTIC_ACTION_C(x,y) SEMANTIC_ACTION(x) //commented
 
 	class Production

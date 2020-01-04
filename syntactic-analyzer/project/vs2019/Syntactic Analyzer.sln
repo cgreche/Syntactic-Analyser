@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Syntactic Analyzer", "syntactic-analyser\Syntactic Analyzer.vcxproj", "{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CParser", "CParser\CParser.vcxproj", "{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.Release|x64.Build.0 = Release|x64
 		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.Release|x86.ActiveCfg = Release|Win32
 		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.Release|x86.Build.0 = Release|Win32
+		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Debug|x64.ActiveCfg = Debug|x64
+		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Debug|x64.Build.0 = Debug|x64
+		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Debug|x86.ActiveCfg = Debug|Win32
+		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Debug|x86.Build.0 = Debug|Win32
+		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Release|x64.ActiveCfg = Release|x64
+		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Release|x64.Build.0 = Release|x64
+		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Release|x86.ActiveCfg = Release|Win32
+		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,7 +6,7 @@
 
 #include <vector>
 
-#include "../lib/hashtable.h"
+#include "../../lib/hashtable.h"
 #include "symbol.h"
 #include "production.h"
 #include "../../Grammar.h"

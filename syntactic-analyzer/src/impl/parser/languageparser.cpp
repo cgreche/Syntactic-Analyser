@@ -68,7 +68,7 @@ namespace syntacticanalyzer {
 
 				m_parsingState.m_currentState = curState = value;
 				m_parsingState.m_stateStack.push_back(value);
-				//TODO m_parsingState->semanticStack.push_back(m_curToken);
+				m_parsingState.m_semanticStack.push_back(new SemanticValueImpl(curToken));
 
  				curToken = _getNextToken();
 			}
@@ -91,26 +91,22 @@ namespace syntacticanalyzer {
 				DEBUG_PRINT(*stream, std::endl);
 				//[/Debug]
 
-				/*TODO: change TokenImpl to SemanticActionImpl
 				//do semantic action
-				TokenImpl retToken;
-				m_parsingState->semanticArgsIndex = m_parsingState->semanticStack.size()-pro->rhsCount();
-				retToken.value = m_parsingState->semanticStack[m_parsingState->semanticArgsIndex].value; // defaults to first semantic arg
-				memset(retToken.text,0,sizeof(retToken.text));
+				SemanticValueImpl *retValue = new SemanticValueImpl;
+				m_parsingState.m_semanticArgsIndex = m_parsingState.m_semanticStack.size() - pro->rhsCount();
+				retValue->setValue(m_parsingState.m_semanticStack[m_parsingState.m_semanticArgsIndex]->value()); // defaults to first semantic arg
 
 				if(pro->semanticAction()) {
-					pro->semanticAction()(this->m_parsingState,retToken);
+					pro->semanticAction()(m_parsingState,*retValue);
 				}
-				*/
 
 				for(unsigned int j = 0; j < pro->rhsCount(); ++j) {
 					m_parsingState.m_stateStack.pop_back();
-					//m_parsingState.semanticStack.pop_back();
+					m_parsingState.m_semanticStack.pop_back();
 				}
 				m_parsingState.m_currentState = curState = m_parsingState.m_stateStack.back();
 
-
-				//m_parsingState->semanticStack.push_back(retToken);
+				m_parsingState.m_semanticStack.push_back(retValue);
 
 				//do the goto
 				value = GET_VALUE(parsingTable[curState][pro->lhs()->index()]);

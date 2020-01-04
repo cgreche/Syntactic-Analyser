@@ -6,11 +6,39 @@
 
 #include <vector>
 #include "symbol.h"
-#include "../Production.h"
+#include "../../Production.h"
 
 namespace syntacticanalyzer {
 
 	class ParsingState;
+
+	class SemanticValueImpl : public SemanticValue {
+		Token* m_token;
+		SemanticValue::Value m_value;
+
+	public:
+		SemanticValueImpl(Token* token) {
+			m_token = token;
+			m_value.pval = NULL;
+		}
+
+		SemanticValueImpl() {
+			m_token = NULL;
+			m_value.pval = NULL;
+		}
+
+		virtual Token* token() const {
+			return m_token;
+		}
+
+		virtual SemanticValue::Value value() const {
+			return m_value;
+		}
+
+		virtual void setValue(SemanticValue::Value value) {
+			m_value = value;
+		}
+	};
 
 	class ProductionImpl : public Production
 	{
