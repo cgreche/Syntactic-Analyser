@@ -48,5 +48,7 @@ namespace syntacticanalyzer {
 
 	};
 
+	Lexer *createDefaultLexer();
+
 }
 #endif

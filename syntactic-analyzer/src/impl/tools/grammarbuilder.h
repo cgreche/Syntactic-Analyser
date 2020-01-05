@@ -26,7 +26,7 @@ namespace syntacticanalyzer {
 		SemanticAction m_proSemanticAction;
 
 		//
-		void linkSymblToPro(NonterminalSymbol* symbol, Production* pro);
+		void linkSymbolToPro(NonterminalSymbol* symbol, Production* pro);
 
 	public:
 		virtual TerminalSymbol* addTerminal(const char* name);

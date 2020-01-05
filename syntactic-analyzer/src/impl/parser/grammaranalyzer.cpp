@@ -205,7 +205,7 @@ namespace syntacticanalyzer {
 						for(k = 0; k < (int)(pro->rhsCount() - 1); ++k) {
 							Symbol *rhs = pro->rhs(k);
 							Symbol *next = pro->rhs(k + 1);
-							if(!rhs->isNonTerminal())
+							if(!rhs->isNonterminal())
 								continue;
 
 							if(symListMerge(m_followSets[rhs->index()],m_firstSets[next->index()]) > 0)
@@ -219,7 +219,7 @@ namespace syntacticanalyzer {
 							}
 						}
 
-						if(pro->rhs(k)->isNonTerminal()) {
+						if(pro->rhs(k)->isNonterminal()) {
 							if(symListMerge(m_followSets[pro->rhs(k)->index()],m_followSets[lhs->index()]) > 0)
 								++changes;
 						}

@@ -40,6 +40,7 @@ struct GrammarTest
 };
 
 SEMANTIC_ACTION_C(test1, first test) {
+	std::cout << "aec";
 }
 
 Grammar* testGrammar_create()
@@ -48,8 +49,8 @@ Grammar* testGrammar_create()
 
 #define P(x) { NonterminalSymbol* __X = grammarBuilder->addNonterminal(x);
 #define D grammarBuilder->newProduction(__X);
-#define T(x) grammarBuilder->addRHS(grammarBuilder->addTerminal(x)->index());
-#define N(x) grammarBuilder->addRHS(grammarBuilder->addNonterminal(x)->index());
+#define T(x) grammarBuilder->addRHS(grammarBuilder->addTerminal(x)->name());
+#define N(x) grammarBuilder->addRHS(grammarBuilder->addNonterminal(x)->name());
 #define S(x) grammarBuilder->setSemanticAction(x);
 #define E grammarBuilder->addProduction(); }
 #define O grammarBuilder->addProduction(); grammarBuilder->newProduction(__X);
@@ -62,15 +63,15 @@ Grammar* testGrammar_create()
 
 	P("S")
 		D T("a") N("B") T("c") S(test1)
-		O T("b") N("C") T("c")
-		O T("a") N("C") T("d")
+		//O T("b") N("C") T("c")
+		//O T("a") N("C") T("d")
 		O T("b") N("B") T("d")
 		E
 
 		P("B") D T("e") E
-		P("C") D T("e") E
+		//P("C") D T("e") E
 
-		grammarBuilder->setStartSymbol((NonterminalSymbol*)grammarBuilder->symbol("S"));
+	grammarBuilder->setStartSymbol((NonterminalSymbol*)grammarBuilder->symbol("S"));
 
 #undef P
 #undef D
@@ -989,6 +990,14 @@ ParsingManager parsingManager;
 int main(int argc, char *argv) {
 	//parsingManager.promptOptions();
 	Grammar* grammar = testGrammar_create();
+	Lexer* lexer = createDefaultLexer();
+	lexer->addToken("a", grammar->symbol("a")->index(), 0);
+	lexer->addToken("b", grammar->symbol("b")->index(), 0);
+	lexer->addToken("c", grammar->symbol("c")->index(), 0);
+	lexer->addToken("d", grammar->symbol("d")->index(), 0);
+	lexer->addToken("e", grammar->symbol("e")->index(), 0);
+	LanguageParser* parser = createDefaultParser(grammar, lexer);
+	parser->parse("a e c");
 	return 0;
 }
 

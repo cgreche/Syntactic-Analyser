@@ -15,7 +15,7 @@ namespace syntacticanalyzer {
 		virtual const char* name() const = 0;
 		virtual unsigned int index() const = 0;
 		virtual bool isTerminal() const = 0;
-		virtual bool isNonTerminal() const = 0;
+		virtual bool isNonterminal() const = 0;
 	};
 
 	class TerminalSymbol : public Symbol {

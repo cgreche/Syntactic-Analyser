@@ -32,7 +32,7 @@ namespace syntacticanalyzer {
 		virtual const char *name() const { return m_name; }
 		virtual unsigned int index() const { return m_index; }
 		virtual bool isTerminal() const { return false; }
-		virtual bool isNonTerminal() const { return false; }
+		virtual bool isNonterminal() const { return false; }
 
 	};
 
@@ -48,7 +48,7 @@ namespace syntacticanalyzer {
 		virtual const char* name() const { return SymbolImpl::name(); }
 		virtual unsigned int index() const { return SymbolImpl::index(); }
 		virtual bool isTerminal() const { return true; }
-		virtual bool isNonTerminal() const { return false; }
+		virtual bool isNonterminal() const { return false; }
 	};
 
 	class NonterminalSymbolImpl : public NonterminalSymbol, public SymbolImpl {
@@ -84,7 +84,7 @@ namespace syntacticanalyzer {
 		virtual const char* name() const { return SymbolImpl::name(); }
 		virtual unsigned int index() const { return SymbolImpl::index(); }
 		virtual bool isTerminal() const { return false; }
-		virtual bool isNonTerminal() const { return true; }
+		virtual bool isNonterminal() const { return true; }
 		virtual Production** associatedProductions() const { return (Production **)&m_proList[0]; }
 		virtual unsigned int associatedProductionCount() const { return m_proList.size(); }
 	};

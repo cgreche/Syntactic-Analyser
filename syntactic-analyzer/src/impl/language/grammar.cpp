@@ -57,10 +57,12 @@ namespace syntacticanalyzer {
 
 		m_proList = productionList;
 		m_startSym = startSymbol;
-		m_initialPro = startSymbol->associatedProductions()[0];
 		m_privateStartSym = addNonterminal("$start");
 		std::vector<Symbol*> rhs = { m_startSym, m_eofSym };
-		addProduction(m_privateStartSym, rhs, 0);
+		Production *startPro = addProduction(m_privateStartSym, rhs, 0);
+		m_startSym = m_privateStartSym;
+		m_initialPro = startPro;
+		((NonterminalSymbolImpl*)m_privateStartSym)->m_proList.push_back(startPro);
 	}
 
 	GrammarImpl::~GrammarImpl()

@@ -23,6 +23,7 @@ namespace syntacticanalyzer {
 		virtual Lexer* lexer() const = 0;
 	};
 
+	/*
 	enum ParsingMethod {
 		LALR,
 		SLR,
@@ -37,6 +38,9 @@ namespace syntacticanalyzer {
 	inline LanguageParser* createDefaultParser(Grammar* grammar, Lexer* lexer) {
 		return createLanguageParser(grammar, lexer, LALR);
 	}
+	*/
+
+	LanguageParser* createDefaultParser(Grammar* grammar, Lexer* lexer);
 
 }
 

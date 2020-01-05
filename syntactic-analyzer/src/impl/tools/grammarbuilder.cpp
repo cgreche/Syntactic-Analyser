@@ -7,11 +7,21 @@
 
 namespace syntacticanalyzer {
 
-	void GrammarBuilderImpl::linkSymblToPro(NonterminalSymbol* symbol, Production* pro) {
+	void GrammarBuilderImpl::linkSymbolToPro(NonterminalSymbol* symbol, Production* pro) {
 		((NonterminalSymbolImpl*)symbol)->addPro(*pro);
 	}
 
 	TerminalSymbol* GrammarBuilderImpl::addTerminal(const char* name) {
+		Symbol* sym = symbol(name);
+		if (sym) {
+			if (sym->isTerminal())
+				return (TerminalSymbol*)sym;
+			else {
+				//TODO: Error: trying to add a terminal symbol added previously as nonterminal
+				return NULL;
+			}
+		}
+
 		TerminalSymbol* terminalSymbol = new TerminalSymbolImpl(name,m_symList.size()+1); //id 0 is reserved
 		m_symHT.insert((const unsigned char*)name, strlen(name), terminalSymbol);
 		m_symList.push_back(terminalSymbol);
@@ -20,6 +30,16 @@ namespace syntacticanalyzer {
 	}
 
 	NonterminalSymbol* GrammarBuilderImpl::addNonterminal(const char* name) {
+		Symbol* sym = symbol(name);
+		if (sym) {
+			if (sym->isNonterminal())
+				return (NonterminalSymbol*)sym;
+			else {
+				//TODO: Error: trying to add a nont0erminal symbol added previously as terminal
+				return NULL;
+			}
+		}
+
 		NonterminalSymbol* terminalSymbol = new NonterminalSymbolImpl(name, m_symList.size() + 1); //id 0 is reserved
 		m_symHT.insert((const unsigned char*)name, strlen(name), terminalSymbol);
 		m_symList.push_back(terminalSymbol);
@@ -52,6 +72,7 @@ namespace syntacticanalyzer {
 
 	Production* GrammarBuilderImpl::addProduction() {
 		ProductionImpl* pro = new ProductionImpl(m_proLHS,m_proRHS,m_proSemanticAction);
+		linkSymbolToPro(m_proLHS,pro);
 		pro->m_number = m_proList.size();
 		return pro;
 	}
@@ -80,7 +101,7 @@ namespace syntacticanalyzer {
 		//TODO: remove from lists
 		if (symbol != NULL) {
 			if (m_symHT.remove((unsigned char*)symbol->name(), strlen(symbol->name())) != NULL) {
-				if (symbol->isNonTerminal()) {
+				if (symbol->isNonterminal()) {
 					//todo: remove productions
 				}
 				delete symbol;

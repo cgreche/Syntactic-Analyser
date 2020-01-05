@@ -13,7 +13,7 @@ namespace syntacticanalyzer {
 			LRItem &item = newItemset[i];
 			Symbol *sym = item.production()->rhs(item.markIndex());
 
-			if(sym && sym->isNonTerminal()) {
+			if(sym && sym->isNonterminal()) {
 				NonterminalSymbol *lhs = (NonterminalSymbol*)sym;
 				Production** pros = lhs->associatedProductions();
 				unsigned int proCount = lhs->associatedProductionCount();

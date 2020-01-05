@@ -24,7 +24,6 @@ namespace syntacticanalyzer {
 		m_parsingState.m_stateStack.push_back(0);
 		int** parsingTable = m_grammarAnalyzer->parsingTable();
 
-
 		Token* curToken = _getNextToken();
 		for(;;) {
 			int tokId = curToken->id();
@@ -155,6 +154,12 @@ namespace syntacticanalyzer {
 	void LanguageParserImpl::setGrammar(Grammar* grammar) {
 		m_grammar = grammar;
 		m_grammarAnalyzer = new GrammarAnalyzer(*grammar);
+		m_grammarAnalyzer->lr0(NULL);
+		m_grammarAnalyzer->computeNullable();
+		m_grammarAnalyzer->computeFirst();
+		m_grammarAnalyzer->computeFollow();
+		m_grammarAnalyzer->lalr(NULL);
+		m_grammarAnalyzer->generateParsingTable();
 	}
 
 	bool LanguageParserImpl::parse(const char* input, std::ostream* stream)
@@ -169,6 +174,13 @@ namespace syntacticanalyzer {
 	bool LanguageParserImpl::parse(const char* input)
 	{
 		return parse(input, NULL);
+	}
+
+	LanguageParser* createDefaultParser(Grammar* grammar, Lexer* lexer) {
+		LanguageParserImpl* parser = new LanguageParserImpl;
+		parser->setGrammar(grammar);
+		parser->setLexer(lexer);
+		return parser;
 	}
 
 }

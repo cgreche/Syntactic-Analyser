@@ -43,8 +43,6 @@ namespace syntacticanalyzer {
 		if(*c == '\0')
 			return 0;
 
-		biggestMatchLen = 1;
-
 		for(unsigned int i = 0; i < m_tokList.size(); ++i) {
 			RegexMatcher *matcher = m_tokList[i]->matcher;
 			if(res |= matcher->matchPartially(c, &matchLen)) {
@@ -57,11 +55,12 @@ namespace syntacticanalyzer {
 
 		std::string text;
 		text.assign(c,biggestMatchLen);
-		TokenImpl *token = new TokenImpl(tok, text.c_str());
+		TokenImpl* token;
 
 		if(res) {
 			TokenEntry *entry = m_tokList[biggestMatchEntryIndex];
 			tok = entry->id;
+			token = new TokenImpl(tok, text.c_str());
 
 			if(entry->callback) {
 				res = (*entry->callback)(token);
@@ -70,9 +69,11 @@ namespace syntacticanalyzer {
 
 		//Can't be in else, matching function may change res value
 		if(!res) {
+			token = new TokenImpl(tok, text.c_str());
 			//todo:
 			//if(m_defaultErrorFunction)
 			//	(*m_defaultErrorFunction)(0, input, curPos);
+			biggestMatchLen = 1;
 		}
 
 		m_pos += biggestMatchLen;
@@ -103,5 +104,9 @@ namespace syntacticanalyzer {
 			}
 		}
 		*/
+	}
+
+	Lexer* createDefaultLexer() {
+		return new DefaultLexer;
 	}
 }
