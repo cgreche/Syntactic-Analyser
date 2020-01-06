@@ -15,7 +15,6 @@
 
 namespace syntacticanalyzer {
 
-	typedef int(*__tokenCallback)(Token*);
 	class Grammar;
 
 	class DefaultLexer : public Lexer
@@ -24,28 +23,35 @@ namespace syntacticanalyzer {
 			std::string regex;
 			int id;
 			RegexMatcher *matcher;
-			__tokenCallback callback;
+			TokenCallbackFunction callback;
 		};
 
 		const char* m_input;
 		int m_pos;
 		std::vector<TokenEntry*> m_tokList;
 
+		TokenInterceptor m_tokenInterceptor;
+		TokenCallbackFunction m_defaultCallbackFunction;
+		TokenErrorFunction m_defaultErrorFunction;
+
 	public:
 		DefaultLexer();
 		~DefaultLexer();
 
-		virtual bool addToken(const char* regex, int id, __tokenCallback callback = 0);
+		virtual bool addToken(const char* regex, int id, TokenCallbackFunction callback = 0);
 
 		virtual void setInput(const char* input) { m_input = input; }
 		virtual void setPos(int pos) { m_pos = pos; }
 		virtual const char* input() { return m_input; }
 		virtual int pos() { return m_pos; }
+
+		virtual void setTokenInterceptor(TokenInterceptor tokenInterceptor) { m_tokenInterceptor = tokenInterceptor; }
+		virtual void setTokenDefaultCallback(TokenCallbackFunction callbackFunction) { m_defaultCallbackFunction = callbackFunction; }
+		virtual void setTokenDefaultErrorFunction(TokenErrorFunction errorFunction) { m_defaultErrorFunction = errorFunction; }
+
 		virtual Token* nextToken();
 
-
 		void makeDefaultTerminalTokens(Grammar *grammar);
-
 	};
 
 	Lexer *createDefaultLexer();

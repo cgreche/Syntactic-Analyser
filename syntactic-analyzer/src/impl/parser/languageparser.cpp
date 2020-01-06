@@ -24,20 +24,33 @@ namespace syntacticanalyzer {
 		m_parsingState.m_stateStack.push_back(0);
 		int** parsingTable = m_grammarAnalyzer->parsingTable();
 
+		int tokId;
+
+
 		Token* curToken = _getNextToken();
 		for(;;) {
-			int tokId = curToken->id();
-			const char* text = curToken->rawValue();
-
 			DEBUG_PRINT(*stream, "Current State: ");
 			DEBUG_PRINT(*stream, curState);
 			DEBUG_PRINT(*stream, std::endl);
-		
+
+			int tokId;
+			const char* text;
+			if (curToken) {
+				tokId = curToken->id();
+				text = curToken->rawValue();
+			}
+			else {
+				tokId = m_grammar->symbol("$eof")->index();
+				text = NULL;
+			}
+
 			DEBUG_PRINT(*stream, "Current Token: ");
 			DEBUG_PRINT(*stream, (tokId == -1 ? "Undefined" : m_grammar->symbol(tokId)->name()));
-			DEBUG_PRINT(*stream, " (\"");
-			DEBUG_PRINT(*stream, text);
-			DEBUG_PRINT(*stream, "\")");
+			if (text) {
+				DEBUG_PRINT(*stream, " (\"");
+				DEBUG_PRINT(*stream, text);
+				DEBUG_PRINT(*stream, "\")");
+			}
 			DEBUG_PRINT(*stream, std::endl);
 
 			if(tokId == -1) {

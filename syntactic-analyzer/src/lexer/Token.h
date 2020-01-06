@@ -29,7 +29,6 @@ namespace syntacticanalyzer {
 		virtual void* asPointer() = 0;
 	};
 
-	typedef int(*TokenFunction)(Token*);
 }
 
 #endif

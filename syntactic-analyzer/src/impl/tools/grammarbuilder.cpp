@@ -74,6 +74,7 @@ namespace syntacticanalyzer {
 		ProductionImpl* pro = new ProductionImpl(m_proLHS,m_proRHS,m_proSemanticAction);
 		linkSymbolToPro(m_proLHS,pro);
 		pro->m_number = m_proList.size();
+		m_proList.push_back(pro);
 		return pro;
 	}
 

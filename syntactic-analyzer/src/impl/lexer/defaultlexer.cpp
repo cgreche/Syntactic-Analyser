@@ -14,7 +14,7 @@ namespace syntacticanalyzer {
 	DefaultLexer::~DefaultLexer() {
 	}
 
-	bool DefaultLexer::addToken(const char *regex, int id, __tokenCallback callback) {
+	bool DefaultLexer::addToken(const char *regex, int id, TokenCallbackFunction callback) {
 
 		for(unsigned int i = 0; i < m_tokList.size(); ++i) {
 			if(m_tokList[i]->regex == regex) {
@@ -53,6 +53,8 @@ namespace syntacticanalyzer {
 			}
 		}
 
+		m_pos += biggestMatchLen;
+
 		std::string text;
 		text.assign(c,biggestMatchLen);
 		TokenImpl* token;
@@ -62,21 +64,24 @@ namespace syntacticanalyzer {
 			tok = entry->id;
 			token = new TokenImpl(tok, text.c_str());
 
-			if(entry->callback) {
-				res = (*entry->callback)(token);
+			if (m_tokenInterceptor) {
+				tok = m_tokenInterceptor(token, this);
+				token->id = tok;
+			}
+
+			if(tok != -1 && entry->callback) {
+				(*entry->callback)(token, this);
 			}
 		}
 
 		//Can't be in else, matching function may change res value
-		if(!res) {
+		if(tok == -1) {
 			token = new TokenImpl(tok, text.c_str());
-			//todo:
-			//if(m_defaultErrorFunction)
-			//	(*m_defaultErrorFunction)(0, input, curPos);
+			if (m_defaultErrorFunction)
+				m_defaultErrorFunction(token, this);
 			biggestMatchLen = 1;
 		}
 
-		m_pos += biggestMatchLen;
 		return token;
 	}
 
