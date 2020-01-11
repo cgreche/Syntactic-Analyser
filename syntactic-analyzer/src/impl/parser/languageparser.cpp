@@ -24,9 +24,6 @@ namespace syntacticanalyzer {
 		m_parsingState.m_stateStack.push_back(0);
 		int** parsingTable = m_grammarAnalyzer->parsingTable();
 
-		int tokId;
-
-
 		Token* curToken = _getNextToken();
 		for(;;) {
 			DEBUG_PRINT(*stream, "Current State: ");
@@ -44,8 +41,10 @@ namespace syntacticanalyzer {
 				text = NULL;
 			}
 
+			Symbol* sym = m_grammar->symbol(tokId);
+
 			DEBUG_PRINT(*stream, "Current Token: ");
-			DEBUG_PRINT(*stream, (tokId == -1 ? "Undefined" : m_grammar->symbol(tokId)->name()));
+			DEBUG_PRINT(*stream, (sym == NULL ? "Undefined" : sym->name()));
 			if (text) {
 				DEBUG_PRINT(*stream, " (\"");
 				DEBUG_PRINT(*stream, text);
@@ -73,7 +72,7 @@ namespace syntacticanalyzer {
 				DEBUG_PRINT(*stream, "Action: shift ");
 				DEBUG_PRINT(*stream, value);
 				DEBUG_PRINT(*stream, " (");
-				DEBUG_PRINT(*stream, m_grammar->symbol(tokId)->name());
+				DEBUG_PRINT(*stream, sym->name());
 				DEBUG_PRINT(*stream, ')');
 				DEBUG_PRINT(*stream, std::endl);
 				//[/DEBUG]
@@ -134,7 +133,6 @@ namespace syntacticanalyzer {
 				return true;
 			}
 			else {
-				int a = 1;
 				//error
 				break;
 			}

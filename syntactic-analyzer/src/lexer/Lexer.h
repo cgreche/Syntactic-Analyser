@@ -11,23 +11,40 @@
 namespace syntacticanalyzer {
 
 	class Token;
+	class Lexer;
 
-	typedef int(*TokenInterceptor)(Token*, Lexer*);
-	typedef void(*TokenCallbackFunction)(Token*, Lexer*);
-	typedef int(*TokenErrorFunction)(Token*, Lexer*);
+	class TokenizationContext {
+	public:
+		virtual Lexer* lexer() const = 0;
+		virtual unsigned int pos() const = 0;
+		virtual unsigned int len() const = 0;
+		virtual const char* tokenValue() const = 0;
+
+		virtual void accept(int tokId) = 0;
+		virtual void error() = 0;
+		virtual void ignore() = 0;
+	};
+
+	enum TokenAction {
+		Accept,
+		Error,
+		Ignore
+	};
+
+	typedef void(*TokenCallbackFunction)(Token*, TokenizationContext*);
+	typedef int(*TokenErrorFunction)(TokenizationContext*);
 
 	class Lexer
 	{
 	public:
-		virtual bool addToken(const char *regex, int tokenId, TokenCallbackFunction callback = 0) = 0;
+		virtual bool addToken(const char* regex, int tokenId, TokenCallbackFunction callback = 0, TokenAction defaultAction = Accept) = 0;
 		virtual void setInput(const char* input) = 0;
 		virtual void setPos(int pos) = 0;
 		virtual const char* input() = 0;
 		virtual int pos() = 0;
 
-		virtual void setTokenInterceptor(TokenInterceptor interceptor) = 0;
-		virtual void setTokenDefaultCallback(TokenCallbackFunction tokenFunction) = 0;
-		virtual void setTokenDefaultErrorFunction(TokenErrorFunction tokenFunction) = 0;
+		virtual void setDefaultTokenCallback(TokenCallbackFunction tokenFunction) = 0;
+		virtual void setTokenErrorFunction(TokenErrorFunction tokenFunction) = 0;
 
 		virtual Token* nextToken() = 0;
 	};

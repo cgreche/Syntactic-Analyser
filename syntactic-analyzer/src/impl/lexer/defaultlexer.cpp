@@ -1,6 +1,6 @@
 
 //Created in: 26/06/2017 01:50
-//Last edit: 02/01/2020 20:54
+//Last edit: 08/01/2020 00:09
 
 #include "defaultlexer.h"
 #include "token.h"
@@ -9,13 +9,17 @@ namespace syntacticanalyzer {
 
 	DefaultLexer::DefaultLexer()
 	: m_input(NULL), m_pos(0) {
+		m_context = new TokenizationContextImpl(*this);
+		m_defaultCallbackFunction = NULL;
+		m_errorFunction = NULL;
 	}
 
 	DefaultLexer::~DefaultLexer() {
+		if (m_context)
+			delete m_context;
 	}
 
-	bool DefaultLexer::addToken(const char *regex, int id, TokenCallbackFunction callback) {
-
+	bool DefaultLexer::addToken(const char *regex, int id, TokenCallbackFunction callback, TokenAction action) {
 		for(unsigned int i = 0; i < m_tokList.size(); ++i) {
 			if(m_tokList[i]->regex == regex) {
 				return false;
@@ -27,6 +31,7 @@ namespace syntacticanalyzer {
 		entry->id = id;
 		entry->matcher = createRegexMatcher(regex, NULL);
 		entry->callback = callback;
+		entry->defaultAction = action;
 		m_tokList.push_back(entry);
 		return true;
 	}
@@ -37,11 +42,10 @@ namespace syntacticanalyzer {
 		int biggestMatchEntryIndex = -1;
 		const char *c = &m_input[m_pos];
 		int matchLen = 0;
-		int curPos = 0;
-		int tok = -1;
+		TokenAction defaultAction = Error;
 
 		if(*c == '\0')
-			return 0;
+			return NULL;
 
 		for(unsigned int i = 0; i < m_tokList.size(); ++i) {
 			RegexMatcher *matcher = m_tokList[i]->matcher;
@@ -49,66 +53,45 @@ namespace syntacticanalyzer {
 				if(matchLen > biggestMatchLen) {
 					biggestMatchLen = matchLen;
 					biggestMatchEntryIndex = i;
+					defaultAction = Accept;
 				}
 			}
 		}
 
+		std::string text;
+		text.assign(c, biggestMatchLen);
+
+		m_context->m_pos = m_pos;
+		m_context->m_len = biggestMatchLen;
+		m_context->m_tokenValue = text;
+		m_context->m_action = defaultAction;
+
 		m_pos += biggestMatchLen;
 
-		std::string text;
-		text.assign(c,biggestMatchLen);
-		TokenImpl* token;
+		TokenImpl* token = NULL;
 
 		if(res) {
 			TokenEntry *entry = m_tokList[biggestMatchEntryIndex];
-			tok = entry->id;
-			token = new TokenImpl(tok, text.c_str());
-
-			if (m_tokenInterceptor) {
-				tok = m_tokenInterceptor(token, this);
-				token->id = tok;
-			}
-
-			if(tok != -1 && entry->callback) {
-				(*entry->callback)(token, this);
+			token = new TokenImpl(entry->id, text.c_str());
+			m_context->m_acceptedToken = entry->id;
+			m_context->m_action = entry->defaultAction;
+			if (entry->callback) {
+				(*entry->callback)(token, m_context);
 			}
 		}
 
 		//Can't be in else, matching function may change res value
-		if(tok == -1) {
-			token = new TokenImpl(tok, text.c_str());
-			if (m_defaultErrorFunction)
-				m_defaultErrorFunction(token, this);
-			biggestMatchLen = 1;
+		if(m_context->m_action == Error) {
+			if (m_errorFunction)
+				m_errorFunction(m_context);
 		}
 
+		if (m_context->m_action == Ignore)
+			return this->nextToken();
+
+		if (m_context->m_action == Accept && (token == NULL || m_context->m_acceptedToken != token->id()))
+			return new TokenImpl(m_context->m_acceptedToken, m_context->m_tokenValue.c_str());
 		return token;
-	}
-
-	void DefaultLexer::makeDefaultTerminalTokens(Grammar *grammar) {
-		/*
-		unsigned int termCount = grammar->terminalCount();
-		SymbolList terminals = grammar->terminalSymbols();
-
-		TerminalSymbol *eofSym = (TerminalSymbol*)grammar->symbol("$eof");
-		for(unsigned int i = 0; i < termCount; ++i) {
-			if(terminals[i] != eofSym) {
-				std::string name = terminals[i]->name();
-
-				const char *regexOrdinalChars = "^.[$()|*+?{";
-				std::size_t found = name.find_first_of(regexOrdinalChars);
-				while(found != std::string::npos)
-				{
-					char c = name[found];
-					std::string newChars = "\\";
-					newChars += c;
-					name.replace(found, 1, newChars);
-					found = name.find_first_of(regexOrdinalChars, found + newChars.length());
-				}
-				addToken(name.c_str(), terminals[i]->index());
-			}
-		}
-		*/
 	}
 
 	Lexer* createDefaultLexer() {

@@ -996,6 +996,7 @@ int main(int argc, char *argv) {
 	lexer->addToken("c", grammar->symbol("c")->index(), 0);
 	lexer->addToken("d", grammar->symbol("d")->index(), 0);
 	lexer->addToken("e", grammar->symbol("e")->index(), 0);
+	lexer->addToken(" +", -2, 0, Ignore);
 	LanguageParser* parser = createDefaultParser(grammar, lexer);
 	parser->parse("a e c");
 	return 0;
