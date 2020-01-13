@@ -5,11 +5,11 @@
 #define __SYNTACTIC_ANALYZER_TOKEN_IMPL_H__
 
 #include <string>
-#include "../lexer/Token.h" //TODO: adjust
+#include <dependencies/lexer/Token.h>
 
 namespace syntacticanalyzer {
 
-	class TokenImpl : public Token {
+	class TokenImpl : public lexer::Token {
 		int m_id;
 		std::string m_rawValue;
 

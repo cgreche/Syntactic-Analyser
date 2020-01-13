@@ -10,9 +10,10 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <regex-parser/RegexMatcher.h>
+#include <dependencies/lexer/Lexer.h>
+#include <dependencies/regex-parser/RegexMatcher.h>
 
-#include "../../lexer/Lexer.h" //TODO: adjust
+using namespace lexer;
 
 namespace syntacticanalyzer {
 
@@ -35,7 +36,7 @@ namespace syntacticanalyzer {
 			m_pos = 0;
 			m_len = 0;
 
-			m_action = Accept;
+			m_action = TokenAction::Accept;
 			m_acceptedToken = 0;
 		}
 
@@ -83,8 +84,6 @@ namespace syntacticanalyzer {
 
 		virtual Token* nextToken();
 	};
-
-	Lexer *createDefaultLexer();
 
 }
 #endif

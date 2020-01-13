@@ -5,7 +5,7 @@
 #ifndef __SYNTACTIC_ANALYZER_GRAMMAR_H___
 #define __SYNTACTIC_ANALYZER_GRAMMAR_H___
 
-#include <vector>
+#include "Production.h"
 
 namespace syntacticanalyzer {
 

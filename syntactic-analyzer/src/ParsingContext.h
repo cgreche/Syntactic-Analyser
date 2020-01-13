@@ -8,11 +8,6 @@ namespace syntacticanalyzer {
 	class LanguageParser;
 	class SemanticValue;
 
-	class ParsingContext
-	{
-		virtual LanguageParser* parser() = 0;
-		virtual SemanticValue* arg(int n) = 0;
-		virtual unsigned int argCount() = 0;
-	};
+
 
 }

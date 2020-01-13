@@ -1,6 +1,6 @@
 
 
-#include "../language/grammar.h"
+#include <Grammar.h>
 
 namespace C_language {
 

@@ -11,4 +11,17 @@
       <UniqueIdentifier>{88fb55e7-59f6-484f-ba6d-7736bc122273}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\c_language\c_grammar.cpp">
+      <Filter>src\c_language</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\c_language\c_actions_decl.h">
+      <Filter>src\c_language</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

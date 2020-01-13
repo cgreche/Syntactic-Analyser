@@ -1,5 +1,5 @@
 #include <iostream>
-#include "languageparser.h"
+#include "./parser.h"
 
 #ifdef _DEBUG
 	#define DEBUG_PRINT(s,t) (s << t)
@@ -7,9 +7,11 @@
 	#define DEBUG_PRINT(s,t)
 #endif
 
+using namespace lexer;
+
 namespace syntacticanalyzer {
 
-	bool LanguageParserImpl::_parse(std::ostream *stream)
+	bool ParserImpl::_parse(std::ostream *stream)
 	{
 		int curState;
 
@@ -144,25 +146,25 @@ namespace syntacticanalyzer {
 		return false;
 	}
 
-	Token* LanguageParserImpl::_getNextToken()
+	Token* ParserImpl::_getNextToken()
 	{
  		return m_lexer->nextToken();
 	}
 
-	LanguageParserImpl::LanguageParserImpl()
+	ParserImpl::ParserImpl()
 		: m_parsingState(*this), m_lexer(NULL), m_grammar(NULL), m_grammarAnalyzer(NULL) {
 	}
 
-	LanguageParserImpl::~LanguageParserImpl() {
+	ParserImpl::~ParserImpl() {
 		if (m_grammarAnalyzer)
 			delete m_grammarAnalyzer;
 	}
 
-	void LanguageParserImpl::setLexer(Lexer* lexer) {
+	void ParserImpl::setLexer(Lexer* lexer) {
 		m_lexer = lexer;
 	}
 
-	void LanguageParserImpl::setGrammar(Grammar* grammar) {
+	void ParserImpl::setGrammar(Grammar* grammar) {
 		m_grammar = grammar;
 		m_grammarAnalyzer = new GrammarAnalyzer(*grammar);
 		m_grammarAnalyzer->lr0(NULL);
@@ -173,7 +175,7 @@ namespace syntacticanalyzer {
 		m_grammarAnalyzer->generateParsingTable();
 	}
 
-	bool LanguageParserImpl::parse(const char* input, std::ostream* stream)
+	bool ParserImpl::parse(const char* input, std::ostream* stream)
 	{
 		if (!m_lexer)
 			return false;
@@ -182,13 +184,13 @@ namespace syntacticanalyzer {
 		return _parse(stream);
 	}
 
-	bool LanguageParserImpl::parse(const char* input)
+	bool ParserImpl::parse(const char* input)
 	{
 		return parse(input, NULL);
 	}
 
-	LanguageParser* createDefaultParser(Grammar* grammar, Lexer* lexer) {
-		LanguageParserImpl* parser = new LanguageParserImpl;
+	Parser* createDefaultParser(Grammar* grammar, Lexer* lexer) {
+		ParserImpl* parser = new ParserImpl;
 		parser->setGrammar(grammar);
 		parser->setLexer(lexer);
 		return parser;

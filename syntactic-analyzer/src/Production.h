@@ -6,10 +6,11 @@
 
 #include "Symbol.h"
 
+#include <dependencies/lexer/Token.h>
+
 namespace syntacticanalyzer {
 
-	class Token;
-	class ParsingState;
+	class ParsingContext;
 
 	class SemanticValue {
 	public:
@@ -29,14 +30,14 @@ namespace syntacticanalyzer {
 			void* pval;
 		} Value;
 
-		virtual Token* token() const = 0;
+		virtual lexer::Token* token() const = 0;
 		virtual Value value() const = 0;
 		virtual void setValue(Value value) = 0;
 
 	};
 
-	typedef void(*SemanticAction)(ParsingState& state, SemanticValue& ret);
-#define SEMANTIC_ACTION(x) void x(ParsingState& state, SemanticValue& ret)
+	typedef void(*SemanticAction)(ParsingContext& state, SemanticValue& ret);
+#define SEMANTIC_ACTION(x) void x(ParsingContext& state, SemanticValue& ret)
 #define SEMANTIC_ACTION_C(x,y) SEMANTIC_ACTION(x) //commented
 
 	class Production

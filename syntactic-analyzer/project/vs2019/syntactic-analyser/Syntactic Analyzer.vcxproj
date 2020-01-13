@@ -23,19 +23,23 @@
     <ClCompile Include="..\..\..\src\impl\language\production.cpp" />
     <ClCompile Include="..\..\..\src\impl\language\symbol.cpp" />
     <ClCompile Include="..\..\..\src\impl\lexer\defaultlexer.cpp" />
+    <ClCompile Include="..\..\..\src\impl\lib\file.cpp" />
+    <ClCompile Include="..\..\..\src\impl\lib\hashtable.cpp" />
+    <ClCompile Include="..\..\..\src\impl\lib\nametable.cpp" />
+    <ClCompile Include="..\..\..\src\impl\lib\osd_file.cpp" />
+    <ClCompile Include="..\..\..\src\impl\lib\stack.cpp" />
+    <ClCompile Include="..\..\..\src\impl\lib\string.cpp" />
     <ClCompile Include="..\..\..\src\impl\parser\grammaranalyzer.cpp" />
-    <ClCompile Include="..\..\..\src\impl\parser\languageparser.cpp" />
+    <ClCompile Include="..\..\..\src\impl\parser\parser.cpp" />
     <ClCompile Include="..\..\..\src\impl\parser\state.cpp" />
     <ClCompile Include="..\..\..\src\impl\test.cpp" />
     <ClCompile Include="..\..\..\src\impl\tools\grammarbuilder.cpp" />
-    <ClCompile Include="..\..\..\src\lib\file.cpp" />
-    <ClCompile Include="..\..\..\src\lib\hashtable.cpp" />
-    <ClCompile Include="..\..\..\src\lib\nametable.cpp" />
-    <ClCompile Include="..\..\..\src\lib\osd_file.cpp" />
-    <ClCompile Include="..\..\..\src\lib\stack.cpp" />
-    <ClCompile Include="..\..\..\src\lib\string.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\dependencies\lexer\Lexer.h" />
+    <ClInclude Include="..\..\..\src\dependencies\lexer\Token.h" />
+    <ClInclude Include="..\..\..\src\dependencies\regex-parser\Alphabet.h" />
+    <ClInclude Include="..\..\..\src\dependencies\regex-parser\RegexMatcher.h" />
     <ClInclude Include="..\..\..\src\Grammar.h" />
     <ClInclude Include="..\..\..\src\GrammarBuilder.h" />
     <ClInclude Include="..\..\..\src\impl\language\grammar.h" />
@@ -43,25 +47,21 @@
     <ClInclude Include="..\..\..\src\impl\language\symbol.h" />
     <ClInclude Include="..\..\..\src\impl\lexer\defaultlexer.h" />
     <ClInclude Include="..\..\..\src\impl\lexer\token.h" />
+    <ClInclude Include="..\..\..\src\impl\lib\file.h" />
+    <ClInclude Include="..\..\..\src\impl\lib\hashtable.h" />
+    <ClInclude Include="..\..\..\src\impl\lib\nametable.h" />
+    <ClInclude Include="..\..\..\src\impl\lib\osd_file.h" />
+    <ClInclude Include="..\..\..\src\impl\lib\stack.h" />
+    <ClInclude Include="..\..\..\src\impl\lib\string.h" />
+    <ClInclude Include="..\..\..\src\impl\lib\types.h" />
     <ClInclude Include="..\..\..\src\impl\parser\grammaranalyzer.h" />
-    <ClInclude Include="..\..\..\src\impl\parser\languageparser.h" />
+    <ClInclude Include="..\..\..\src\impl\parser\parser.h" />
     <ClInclude Include="..\..\..\src\impl\parser\state.h" />
     <ClInclude Include="..\..\..\src\impl\tools\grammarbuilder.h" />
-    <ClInclude Include="..\..\..\src\LanguageParser.h" />
-    <ClInclude Include="..\..\..\src\lexer\Lexer.h" />
-    <ClInclude Include="..\..\..\src\lexer\Token.h" />
-    <ClInclude Include="..\..\..\src\lib\file.h" />
-    <ClInclude Include="..\..\..\src\lib\hashtable.h" />
-    <ClInclude Include="..\..\..\src\lib\nametable.h" />
-    <ClInclude Include="..\..\..\src\lib\osd_file.h" />
-    <ClInclude Include="..\..\..\src\lib\regex-parser\Alphabet.h" />
-    <ClInclude Include="..\..\..\src\lib\regex-parser\RegexMatcher.h" />
-    <ClInclude Include="..\..\..\src\lib\stack.h" />
-    <ClInclude Include="..\..\..\src\lib\string.h" />
-    <ClInclude Include="..\..\..\src\lib\types.h" />
-    <ClInclude Include="..\..\..\src\ParsingContext.h" />
+    <ClInclude Include="..\..\..\src\Parser.h" />
     <ClInclude Include="..\..\..\src\Production.h" />
     <ClInclude Include="..\..\..\src\Symbol.h" />
+    <ClInclude Include="..\..\..\src\SyntacticAnalyzer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}</ProjectGuid>
@@ -117,7 +117,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)..\..\src\lib</IncludePath>
+    <IncludePath>$(SolutionDir)..\..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <SourcePath>$(VC_SourcePath);</SourcePath>
     <LibraryPath>$(SolutionDir)..\..\..\lib;$(LibraryPath)</LibraryPath>
     <ExecutablePath>C:\Users\Reche\Source\Repos\Syntactic-Analyser\ext-bin;$(ExecutablePath)</ExecutablePath>

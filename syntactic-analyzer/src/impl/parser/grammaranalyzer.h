@@ -4,7 +4,7 @@
 #ifndef __SYNATCTIC_ANALYZER_GRAMMAR_ANALYZER_H__
 #define __SYNTACTIC_ANALYZER_GRAMMAR_ANALYZER_H__
 
-#include "../language/grammar.h"
+#include <Grammar.h>
 #include "state.h"
 #include "../lexer/defaultlexer.h"
 

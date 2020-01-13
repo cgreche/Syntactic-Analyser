@@ -3,16 +3,9 @@
 #ifndef __SYNTACTIC_ANALYZER_GRAMMAR_BUILDER_H__
 #define __SYNTACTIC_ANALYZER_GRAMMAR_BUILDER_H__
 
-#include <vector>
-#include "lib/hashtable.h"
+#include "Grammar.h"
 
 namespace syntacticanalyzer {
-
-	class Symbol;
-	class TerminalSymbol;
-	class NonterminalSymbol;
-	class Production;
-	class Grammar;
 
 	class GrammarBuilder
 	{
@@ -51,8 +44,6 @@ namespace syntacticanalyzer {
 
 		virtual Grammar* build() = 0;
 	};
-
-	GrammarBuilder* createDefaultGrammarBuilder();
 
 }
 

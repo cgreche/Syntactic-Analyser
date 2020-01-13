@@ -1,12 +1,12 @@
 //Created in: 29/12/2019 03:19
-//Last edit: 29/12/2019 03:19
+//Last edit: 12/01/2020 19:11
 
 #pragma once
 
-#ifndef __SYNTACTIC_ANALYZER_TOKEN_H__
-#define __SYNTACTIC_ANALYZER_TOKEN_H__
+#ifndef __LEXER_TOKEN_H__
+#define __LEXER_TOKEN_H__
 
-namespace syntacticanalyzer {
+namespace lexer {
 
 	class Token
 	{

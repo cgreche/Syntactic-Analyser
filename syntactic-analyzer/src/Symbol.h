@@ -4,8 +4,6 @@
 #ifndef __SYNTACTIC_ANALYZER_SYMBOL_H__
 #define __SYNTACTIC_ANALYZER_SYMBOL_H__
 
-#include <vector>
-
 namespace syntacticanalyzer {
 
 	class Production;

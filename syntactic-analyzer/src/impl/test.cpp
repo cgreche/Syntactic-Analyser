@@ -4,11 +4,10 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 
-#include "../lib/file.h"
-#include "parser/languageparser.h"
-
-#include "../GrammarBuilder.h"
+#include "lib/file.h"
+#include <SyntacticAnalyzer.h>
 
 #undef min
 #undef max
@@ -28,6 +27,7 @@ unsigned int getTime() {
 }
 #endif
 
+using namespace lexer;
 using namespace syntacticanalyzer;
 
 struct GrammarTest
@@ -35,12 +35,12 @@ struct GrammarTest
 	const char *grammarName;
 	Grammar* (*grammarCreate)();
 	void (*grammarDestroy)(Grammar *grammar);
-	bool (*preParsing)(LanguageParser *parser);
-	void (*postParsing)(LanguageParser *parser, bool result);
+	bool (*preParsing)(Parser *parser);
+	void (*postParsing)(Parser *parser, bool result);
 };
 
 SEMANTIC_ACTION_C(test1, first test) {
-	std::cout << "aec";
+	std::cout << "aec ohohoh";
 }
 
 Grammar* testGrammar_create()
@@ -72,6 +72,47 @@ Grammar* testGrammar_create()
 		//P("C") D T("e") E
 
 	grammarBuilder->setStartSymbol((NonterminalSymbol*)grammarBuilder->symbol("S"));
+
+#undef P
+#undef D
+#undef T
+#undef N
+#undef S
+#undef E
+#undef O
+
+	return grammarBuilder->build();
+}
+
+Grammar* cacto_create()
+{
+	GrammarBuilder* grammarBuilder = createDefaultGrammarBuilder();
+
+#define P(x) { NonterminalSymbol* __X = grammarBuilder->addNonterminal(x);
+#define D grammarBuilder->newProduction(__X);
+#define T(x) grammarBuilder->addRHS(grammarBuilder->addTerminal(x)->name());
+#define N(x) grammarBuilder->addRHS(grammarBuilder->addNonterminal(x)->name());
+#define S(x) grammarBuilder->setSemanticAction(x);
+#define E grammarBuilder->addProduction(); }
+#define O grammarBuilder->addProduction(); grammarBuilder->newProduction(__X);
+
+	Symbol* a = grammarBuilder->addTerminal("a");
+	Symbol* b = grammarBuilder->addTerminal("b");
+	Symbol* c = grammarBuilder->addTerminal("c");
+	Symbol* d = grammarBuilder->addTerminal("d");
+	Symbol* e = grammarBuilder->addTerminal("e");
+
+	P("S")
+		D T("a") N("B") T("c") S(test1)
+		//O T("b") N("C") T("c")
+		//O T("a") N("C") T("d")
+		O T("b") N("B") T("d")
+		E
+
+	P("B") D T("e") E
+		//P("C") D T("e") E
+
+		grammarBuilder->setStartSymbol((NonterminalSymbol*)grammarBuilder->symbol("S"));
 
 #undef P
 #undef D
@@ -170,8 +211,8 @@ namespace C_language {
 extern Grammar *C_grammar_init();
 };
 
-bool C_preParsing(LanguageParser *parser);
-void C_postParsing(LanguageParser *parser, bool result);
+bool C_preParsing(Parser *parser);
+void C_postParsing(Parser*parser, bool result);
 GrammarTest c_grammarTest = {
 	"C Grammar",
 	C_language::C_grammar_init,
@@ -313,7 +354,7 @@ void xml_destroy(Grammar *grammar)
 		delete grammar;
 }
 
-bool xml_preParsing(LanguageParser *parser) {
+bool xml_preParsing(Parser *parser) {
 	DefaultLexer *lexer = new DefaultLexer;
 	Grammar *g = parser->grammar();
 	lexer->addToken("</",g->symbol("</")->index());
@@ -325,7 +366,7 @@ bool xml_preParsing(LanguageParser *parser) {
 	return true;
 }
 
-void xml_postparsing(LanguageParser *parser, bool result) {
+void xml_postparsing(Parser *parser, bool result) {
 	if(parser->lexer())
 		delete parser->lexer();
 }
@@ -446,7 +487,7 @@ bool GrammarsManager::selectGrammar(unsigned int i)
 
 void GrammarsManager::parseInput(const char *input) {
 //	std::ofstream file;
-	LanguageParser *parser = new LanguageParser(new Language(m_grammarAnalyzer->grammar(),m_grammarAnalyzer->parsingTable()));
+	Parser *parser = new Parser(new Language(m_grammarAnalyzer->grammar(),m_grammarAnalyzer->parsingTable()));
 
 	bool result = true;
 	if(m_usingGrammarInfo->preParsing)
@@ -848,12 +889,12 @@ void C_processLabeledStatement(C_language::LabeledStatement *stmt)
 	printf("Label: %s\n","todo");
 }
 
-bool C_preParsing(LanguageParser *parser) {
+bool C_preParsing(Parser *parser) {
 	parser->setTokenizer(new C_language::c_hcLexer(*parser));
 	return true;
 }
 
-void C_postParsing(LanguageParser *parser, bool result)
+void C_postParsing(Parser *parser, bool result)
 {
 	delete parser->lexer();
 	//Check for Main Symbol
@@ -896,7 +937,7 @@ void C_postParsing(LanguageParser *parser, bool result)
 
 
 class ParsingManager {
-	LanguageParser* m_currentParser;
+	Parser* m_currentParser;
 
 	Lexer* m_selectedLexer;
 	Grammar* m_selectedGrammar;
@@ -987,6 +1028,11 @@ public:
 
 ParsingManager parsingManager;
 
+
+void SkipBlankCallback(Token* token, TokenizationContext* ctx) {
+	printf("Skipping blanks");
+}
+
 int main(int argc, char *argv) {
 	//parsingManager.promptOptions();
 	Grammar* grammar = testGrammar_create();
@@ -996,8 +1042,8 @@ int main(int argc, char *argv) {
 	lexer->addToken("c", grammar->symbol("c")->index(), 0);
 	lexer->addToken("d", grammar->symbol("d")->index(), 0);
 	lexer->addToken("e", grammar->symbol("e")->index(), 0);
-	lexer->addToken(" +", -2, 0, Ignore);
-	LanguageParser* parser = createDefaultParser(grammar, lexer);
+	lexer->addToken("[ \\t\\n\\r]+", -2, SkipBlankCallback, Ignore);
+	Parser* parser = createDefaultParser(grammar, lexer);
 	parser->parse("a e c");
 	return 0;
 }

@@ -8,7 +8,7 @@
 
 #include "Token.h"
 
-namespace syntacticanalyzer {
+namespace lexer {
 
 	class Token;
 	class Lexer;
@@ -49,6 +49,7 @@ namespace syntacticanalyzer {
 		virtual Token* nextToken() = 0;
 	};
 
+	Lexer* createDefaultLexer();
 }
 
 #endif

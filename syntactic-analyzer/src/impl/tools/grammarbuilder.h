@@ -5,6 +5,8 @@
 
 #include <vector>
 #include "../../GrammarBuilder.h"
+#include "../lib/hashtable.h"
+
 
 namespace syntacticanalyzer {
 

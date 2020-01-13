@@ -53,7 +53,6 @@ namespace syntacticanalyzer {
 				if(matchLen > biggestMatchLen) {
 					biggestMatchLen = matchLen;
 					biggestMatchEntryIndex = i;
-					defaultAction = Accept;
 				}
 			}
 		}
@@ -78,6 +77,10 @@ namespace syntacticanalyzer {
 			if (entry->callback) {
 				(*entry->callback)(token, m_context);
 			}
+			else {
+				if (m_defaultCallbackFunction)
+					m_defaultCallbackFunction(token, m_context);
+			}
 		}
 
 		//Can't be in else, matching function may change res value
@@ -94,7 +97,10 @@ namespace syntacticanalyzer {
 		return token;
 	}
 
+}
+
+namespace lexer {
 	Lexer* createDefaultLexer() {
-		return new DefaultLexer;
+		return new syntacticanalyzer::DefaultLexer;
 	}
 }

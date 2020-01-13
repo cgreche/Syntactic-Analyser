@@ -6,7 +6,9 @@
 
 #include <vector>
 #include "symbol.h"
-#include "../../Production.h"
+#include <Production.h>
+
+using namespace lexer;
 
 namespace syntacticanalyzer {
 
