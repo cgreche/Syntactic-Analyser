@@ -1030,13 +1030,18 @@ ParsingManager parsingManager;
 
 
 void SkipBlankCallback(Token* token, TokenizationContext* ctx) {
-	printf("Skipping blanks");
+	printf("Skipping blanks\n");
+}
+
+void DefaultTokenCallbackFunction(Token* token, TokenizationContext* ctx) {
+	printf("Found: %s\n", token->rawValue());
 }
 
 int main(int argc, char *argv) {
 	//parsingManager.promptOptions();
 	Grammar* grammar = testGrammar_create();
 	Lexer* lexer = createDefaultLexer();
+	lexer->setDefaultTokenCallback(DefaultTokenCallbackFunction);
 	lexer->addToken("a", grammar->symbol("a")->index(), 0);
 	lexer->addToken("b", grammar->symbol("b")->index(), 0);
 	lexer->addToken("c", grammar->symbol("c")->index(), 0);
