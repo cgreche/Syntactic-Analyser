@@ -6,7 +6,7 @@
 
 namespace syntacticanalyzer {
 	
-	GrammarBuilder* createDefaultGrammarBuilder();
-	Parser* createDefaultParser(Grammar* grammar, Lexer* lexer);
+	extern "C" GrammarBuilder* createDefaultGrammarBuilder();
+	extern "C" Parser* createDefaultParser(Grammar* grammar, Lexer* lexer);
 
 }

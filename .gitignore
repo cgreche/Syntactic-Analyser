@@ -7,3 +7,6 @@ Syntactic Analyzer.VC.VC.opendb
 Syntactic Analyzer/Release
 Syntactic Analyzer/Debug
 Syntactic Analyzer/x64
+*.obj
+/syntactic-analyzer/project/vs2019/Release-lib
+/syntactic-analyzer/project/vs2019/CParser/Release-lib

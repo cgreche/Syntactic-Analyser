@@ -176,7 +176,7 @@ namespace syntacticanalyzer {
 		return new GrammarImpl(m_symList,m_proList,m_startSym);
 	}
 
-	GrammarBuilder* createDefaultGrammarBuilder() {
+	extern "C" GrammarBuilder* createDefaultGrammarBuilder() {
 		return new GrammarBuilderImpl;
 	}
 }

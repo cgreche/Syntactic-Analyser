@@ -189,7 +189,7 @@ namespace syntacticanalyzer {
 		return parse(input, NULL);
 	}
 
-	Parser* createDefaultParser(Grammar* grammar, Lexer* lexer) {
+	extern "C" Parser* createDefaultParser(Grammar* grammar, Lexer* lexer) {
 		ParserImpl* parser = new ParserImpl;
 		parser->setGrammar(grammar);
 		parser->setLexer(lexer);

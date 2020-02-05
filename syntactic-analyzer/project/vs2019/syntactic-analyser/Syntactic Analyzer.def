@@ -1,0 +1,4 @@
+LIBRARY   "Syntactic Analyzer"
+EXPORTS
+    createDefaultGrammarBuilder
+	createDefaultParser
