@@ -3,8 +3,7 @@
 
 //Hand coded C lexer
 
-#include "../languageparser.h"
-
+#include <SyntacticAnalyzer.h>
 #include "c_language.h"
 
 namespace C_language {
@@ -12,7 +11,6 @@ namespace C_language {
 using namespace syntacticanalyzer;
 
 class c_hcLexer : public Lexer {
-	LanguageParser &m_parser;
 
 	int getch() {
 		if(m_input[m_pos] == '\0')
@@ -25,7 +23,7 @@ class c_hcLexer : public Lexer {
 	}
 
 public:
-	c_hcLexer(LanguageParser& parser);
+	c_hcLexer();
 	virtual bool addToken(const char *,int,syntacticanalyzer::TokenFunction) { return true; }
 	virtual int nextToken(Token *pToken);
 };

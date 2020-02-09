@@ -1,9 +1,7 @@
 
 //Last edit: 18/02/2018 03:26
 
-#include "../languageparser.h"
-#include "../lib/stack.h"
-#include "../lib/nametable.h"
+#include <SyntacticAnalyzer.h>
 
 #include "c_language.h"
 
@@ -16,43 +14,56 @@ int g_expectIdentifier = 0;
 int g_funcParamCounter = 0;
 bool g_thisFuncHasVargs = false;
 
+#define SARG(x,t) ((t)state.arg(x)->value().pval)
+#define SARG_IVAL(x) (state.arg(x)->value().ival)
+#define SRET(x) do { SemanticValue::Value sval; sval.pval = x; ret.setValue(sval); } while (0)
+#define SRET_IVAL(x) do { SemanticValue::Value sval; sval.ival = x; ret.setValue(sval); } while (0)
+#define SRET_UVAL(x) do { SemanticValue::Value sval; sval.uival = x; ret.setValue(sval); } while (0)
+#define SARG_RAW(x) (state.arg(x)->token()->rawValue())
+
 //primary_expression
 
 SEMANTIC_ACTION_C(primary_expression1, IDENTIFIER)
 {
-	int a = 1;
-	const char *name = state->semanticStack[state->semanticArgsIndex].text;
+	const char *name = state.arg(0)->token()->rawValue();
 	CSymbol *sym = C_curScope()->findSymbol(name);
 	if(!sym) {
 		//undeclared idenifier
 		printf("undeclared identifier: %s\n",name);
 		int err = 1;
-		SRET(NULL);
 		return;
 	}
 	sym->use(); //increment use count
 
 	Value *value = Value::fromSymbol(sym);
-	SRET(Ast::newValue(*value));
+	SemanticValue::Value sval;
+	sval.pval = Ast::newValue(*value);
+	ret.setValue(sval);
 }
 
 SEMANTIC_ACTION_C(primary_expression2, CONSTANT)
 {
-	const char *str = SARG_TEXT(0);
+	const char *str = state.arg(0)->token()->rawValue();
 	Value *value = Value::fromConstant(str);
-	SRET(Ast::newValue(*value));
+	SemanticValue::Value sval;
+	sval.pval = Ast::newValue(*value);
+	ret.setValue(sval);
 }
 
 SEMANTIC_ACTION_C(primary_expression3, STRING_LITERAL)
 {
-	const char *str = SARG_TEXT(0);
+	const char *str = state.arg(0)->token()->rawValue();
 	Value *value = Value::fromString(str);
-	SRET(Ast::newValue(*value));
+	SemanticValue::Value sval;
+	sval.pval = Ast::newValue(*value);
+	ret.setValue(sval);
 }
 
 SEMANTIC_ACTION_C(primary_expression4, '(' expression ')')
 {
-	SRET(SARG(1,Ast*));
+	SemanticValue::Value sval;
+	sval.pval = (Ast*)state.arg(1)->value().pval;
+	ret.setValue(sval);
 }
 
 
@@ -65,15 +76,20 @@ SEMANTIC_ACTION_C(postfix_expression1, primary_expression)
 
 SEMANTIC_ACTION_C(postfix_expression2, postfix_expression '[' expression ']')
 {
-	Ast *expr1 = SARG(0,Ast*);
-	Ast *expr2 = SARG(2,Ast*);
-	SRET(Ast::newOperation(OP_ARRAY_SUBSCRIPT,expr1,expr2));
+	Ast *expr1 = (Ast*)state.arg(0)->value().pval;
+	Ast* expr2 = (Ast*)state.arg(2)->value().pval;
+	SemanticValue::Value sval;
+	sval.pval = Ast::newOperation(OP_ARRAY_SUBSCRIPT, expr1, expr2);
+	ret.setValue(sval);
 }
 
 SEMANTIC_ACTION_C(postfix_expression3, postfix_expression '(' ')')
 {
-	Ast *expr = SARG(0,Ast*);
-	SRET(Ast::newOperation(OP_CALL,expr,NULL));
+	Ast* expr = (Ast*)state.arg(0)->value().pval;
+	SemanticValue::Value sval;
+	sval.pval = Ast::newOperation(OP_CALL, expr, NULL);
+	ret.setValue(sval);
+
 }
 
 SEMANTIC_ACTION_C(postfix_expression4, postfix_expression '(' argument_expression_list ')')
@@ -88,7 +104,7 @@ SEMANTIC_ACTION_C(postfix_expression5, postfix_expression struct_member_accessor
 	//todo: complete
 	Ast *expr = SARG(0,Ast*);
 	int op = SARG_IVAL(1);
-	char *name = SARG_TEXT(2);
+	const char *name = SARG_RAW(2);
 
 	StructDef *stdef = NULL;
 	SymbolType *resultingType = expr->getResultingType();
@@ -501,7 +517,7 @@ SEMANTIC_ACTION_C(assignment_expression1, conditional_expression)
 SEMANTIC_ACTION_C(assignment_expression2, unary_expression assignment_operator assignment_expression)
 {
 	Ast *expr1 = SARG(0,Ast*);
-	unsigned int op = SARG_UVAL(1);
+	unsigned int op = state.arg(1)->value().uival;
 	Ast *expr2 = SARG(2,Ast*);
 	//todo: check type compability
 	SRET(Ast::newOperation((C_operator)op,expr1,expr2));
@@ -816,7 +832,7 @@ SEMANTIC_ACTION_C(type_specifier11, enum_specifier)
 
 SEMANTIC_ACTION_C(type_specifier12, TYPE_NAME)
 {
-	char *token = SARG_TEXT(0);
+	const char *token = SARG_RAW(0);
 	CSymbol *sym = C_curScope()->findSymbol(token);
 
 	SymbolType *type = sym->type();
@@ -833,7 +849,7 @@ SEMANTIC_ACTION_C(type_specifier12, TYPE_NAME)
 SEMANTIC_ACTION_C(struct_or_union_specifier1, struct_or_union struct_tag_opt '{' struct_declaration_list '}')
 {
 	//todo: complete
-	unsigned long type = SARG_ULVAL(0); //struct or union
+	unsigned long type = state.arg(0)->value().ulval; //struct or union
 	StructDef* stdef = SARG(1,StructDef*);
 	
 	if(stdef->isComplete()) {
@@ -860,8 +876,8 @@ SEMANTIC_ACTION_C(struct_or_union_specifier1, struct_or_union struct_tag_opt '{'
 SEMANTIC_ACTION_C(struct_or_union_specifier2, struct_or_union IDENTIFIER)
 {
 	int curLevel = C_curScope()->level();
-	unsigned long type = SARG_ULVAL(0);
-	char *tag = SARG_TEXT(1);
+	unsigned long type = state.arg(0)->value().ulval;
+	const char *tag = SARG_RAW(1);
 	StructDef* stdef = C_curScope()->findStruct(tag);
 	if(stdef) {
 		SRET(stdef);
@@ -881,7 +897,7 @@ SEMANTIC_ACTION_C(struct_or_union_specifier2, struct_or_union IDENTIFIER)
 
 SEMANTIC_ACTION_C(struct_tag_opt1, IDENTIFIER)
 {
-	char *tag = SARG_TEXT(0);
+	const char *tag = SARG_RAW(0);
 	StructDef* stdef = C_curScope()->findStruct(tag);
 	if(stdef) {
 		SRET(stdef);
@@ -931,13 +947,17 @@ SEMANTIC_ACTION_C(struct_definition_end1, '}')
 
 SEMANTIC_ACTION_C(struct_or_union1, STRUCT)
 {
-	SRET_LVAL(STYPE_STRUCT);
+	SemanticValue::Value sval;
+	sval.lval = STYPE_STRUCT;
+	ret.setValue(sval);
 	g_expectIdentifier = true;
 }
 
 SEMANTIC_ACTION_C(struct_or_union2, UNION)
 {
-	SRET_LVAL(STYPE_UNION);
+	SemanticValue::Value sval;
+	sval.lval = STYPE_UNION;
+	ret.setValue(sval);
 	g_expectIdentifier = true;
 }
 
@@ -1118,7 +1138,7 @@ SEMANTIC_ACTION_C(declarator2, direct_declarator)
 
 SEMANTIC_ACTION_C(direct_declarator1, IDENTIFIER)
 {
-	const char *name = SARG_TEXT(0);
+	const char *name = SARG_RAW(0);
 	CSymbol *symbol = new CSymbol;
 	symbol->setIdentifier(name);
 	symbol->setScopeSeen(C_curScope());
@@ -1841,7 +1861,7 @@ void printDeclInfo(CSymbol *symbol)
 
 			DataType dataType = ((TypeSpecifier*)type)->dataType();
 			bool isInt = false;
-			char *declType = NULL;
+			const char *declType = NULL;
 			switch(dataType) {
 				case DT_VOID:
 					declType = "void";

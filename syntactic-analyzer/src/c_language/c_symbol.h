@@ -1,7 +1,6 @@
 #ifndef __C_SYMBOL_H__
 #define __C_SYMBOL_H__
 
-#include "../lib/nametable.h"
 #include <vector>
 
 #include "c_object.h"

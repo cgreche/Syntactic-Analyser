@@ -26,6 +26,7 @@ namespace syntacticanalyzer {
 
 	class ParsingContext
 	{
+	public:
 		virtual Parser* parser() = 0;
 		virtual SemanticValue* arg(int n) = 0;
 		virtual unsigned int argCount() = 0;

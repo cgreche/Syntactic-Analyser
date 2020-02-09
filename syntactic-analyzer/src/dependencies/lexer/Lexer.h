@@ -49,7 +49,7 @@ namespace lexer {
 		virtual Token* nextToken() = 0;
 	};
 
-	Lexer* createDefaultLexer();
+	extern "C" Lexer* createDefaultLexer();
 }
 
 #endif

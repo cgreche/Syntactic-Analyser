@@ -25,6 +25,14 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="teste3|Win32">
+      <Configuration>teste3</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="teste3|x64">
+      <Configuration>teste3</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\impl\language\grammar.cpp" />
@@ -119,6 +127,12 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='teste3|x64'">
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='teste3|Win32'">
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -148,7 +162,7 @@
     <IncludePath>$(SolutionDir)..\..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <SourcePath>$(VC_SourcePath);</SourcePath>
     <LibraryPath>$(SolutionDir)..\..\..\lib;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>$(VC_ExecutablePath_x86);$(CommonExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -237,6 +251,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>Syntactic Analyzer.def</ModuleDefinitionFile>
       <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
+      <AdditionalDependencies>regex_parser.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

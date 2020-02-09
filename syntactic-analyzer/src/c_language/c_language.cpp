@@ -1,6 +1,6 @@
 
 #include "c_language.h"
-#include "../lib/stack.h"
+#include "../../project/vs2019/CParser/lib/stack.h"
 
 namespace C_language {
 

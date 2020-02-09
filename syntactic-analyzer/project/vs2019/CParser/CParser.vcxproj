@@ -25,6 +25,14 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="teste3|Win32">
+      <Configuration>teste3</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="teste3|x64">
+      <Configuration>teste3</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -73,6 +81,12 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='teste3|x64'">
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='teste3|Win32'">
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -99,12 +113,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)..\..\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>C:\Users\Reche\Source\Repos\Syntactic-Analyser\syntactic-analyzer\src;C:\Users\Reche\Source\Repos\Syntactic-Analyser\syntactic-analyzer\src\lib;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-lib|Win32'">
-    <IncludePath>C:\Users\Reche\Source\Repos\Syntactic-Analyser\syntactic-analyzer\src;C:\Users\Reche\Source\Repos\Syntactic-Analyser\syntactic-analyzer\src\lib;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)..\..\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -114,6 +129,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,6 +145,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,9 +159,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -153,6 +172,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -166,6 +186,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -181,6 +202,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -188,12 +210,55 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='teste3|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='teste3|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\c_language\c_actions.cpp" />
+    <ClCompile Include="..\..\..\src\c_language\c_ast.cpp" />
     <ClCompile Include="..\..\..\src\c_language\c_grammar.cpp" />
+    <ClCompile Include="..\..\..\src\c_language\c_hc_lexer.cpp" />
+    <ClCompile Include="..\..\..\src\c_language\c_language.cpp" />
+    <ClCompile Include="..\..\..\src\c_language\c_object.cpp" />
+    <ClCompile Include="..\..\..\src\c_language\c_scope.cpp" />
+    <ClCompile Include="..\..\..\src\c_language\c_statement.cpp" />
+    <ClCompile Include="..\..\..\src\c_language\c_symbol.cpp" />
+    <ClCompile Include="..\..\..\src\c_language\c_symboltype.cpp" />
+    <ClCompile Include="..\..\..\src\c_language\c_value.cpp" />
+    <ClCompile Include="lib\file.cpp" />
+    <ClCompile Include="lib\hashtable.cpp" />
+    <ClCompile Include="lib\nametable.cpp" />
+    <ClCompile Include="lib\osd_file.cpp" />
+    <ClCompile Include="lib\stack.cpp" />
+    <ClCompile Include="lib\string.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\c_language\c_actions_decl.h" />
+    <ClInclude Include="..\..\..\src\c_language\c_ast.h" />
+    <ClInclude Include="..\..\..\src\c_language\c_defs.h" />
+    <ClInclude Include="..\..\..\src\c_language\c_hc_lexer.h" />
+    <ClInclude Include="..\..\..\src\c_language\c_language.h" />
+    <ClInclude Include="..\..\..\src\c_language\c_object.h" />
+    <ClInclude Include="..\..\..\src\c_language\c_scope.h" />
+    <ClInclude Include="..\..\..\src\c_language\c_statement.h" />
+    <ClInclude Include="..\..\..\src\c_language\c_symbol.h" />
+    <ClInclude Include="..\..\..\src\c_language\c_symboltype.h" />
+    <ClInclude Include="..\..\..\src\c_language\c_value.h" />
+    <ClInclude Include="lib\file.h" />
+    <ClInclude Include="lib\hashtable.h" />
+    <ClInclude Include="lib\nametable.h" />
+    <ClInclude Include="lib\osd_file.h" />
+    <ClInclude Include="lib\stack.h" />
+    <ClInclude Include="lib\string.h" />
+    <ClInclude Include="lib\types.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\syntactic-analyser\Syntactic Analyzer.vcxproj">

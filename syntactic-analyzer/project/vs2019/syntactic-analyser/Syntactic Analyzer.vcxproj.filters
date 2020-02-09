@@ -113,9 +113,6 @@
     <ClInclude Include="..\..\..\src\impl\lexer\defaultlexer.h">
       <Filter>src\impl\lexer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\impl\lexer\token.h">
-      <Filter>src\impl\lexer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\impl\lib\file.h">
       <Filter>src\impl\lib</Filter>
     </ClInclude>
@@ -157,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\impl\parser\parser.h">
       <Filter>src\impl\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\impl\lexer\token.h">
+      <Filter>src\impl\lib</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

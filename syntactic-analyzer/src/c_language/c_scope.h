@@ -1,7 +1,7 @@
 #ifndef __C_SCOPE_H__
 #define __C_SCOPE_H__
 
-#include "../lib/nametable.h"
+#include "../../project/vs2019/CParser/lib/nametable.h"
 
 #include "c_object.h"
 

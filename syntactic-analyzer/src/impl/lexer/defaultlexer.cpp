@@ -100,7 +100,7 @@ namespace syntacticanalyzer {
 }
 
 namespace lexer {
-	Lexer* createDefaultLexer() {
+	extern "C" Lexer* createDefaultLexer() {
 		return new syntacticanalyzer::DefaultLexer;
 	}
 }

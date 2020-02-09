@@ -57,7 +57,7 @@ Grammar *C_grammar_create()
 		;
 	*/
 	P("postfix_expression")
-		D  N("primary_expression")													S(postfix_expression1)
+		D N("primary_expression")													S(postfix_expression1)
 		O N("postfix_expression") T("[") N("expression") T("]")					S(postfix_expression2)
 		O N("postfix_expression") T("(") T(")")									S(postfix_expression3)
 		O N("postfix_expression") T("(") N("argument_expression_list") T(")")	S(postfix_expression4)

@@ -9,18 +9,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CParser", "CParser\CParser.
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
+		CParser-DEBUG|x64 = CParser-DEBUG|x64
+		CParser-DEBUG|x86 = CParser-DEBUG|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 		Release-lib|x64 = Release-lib|x64
 		Release-lib|x86 = Release-lib|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.Debug|x64.ActiveCfg = Debug|x64
-		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.Debug|x64.Build.0 = Debug|x64
-		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.Debug|x86.ActiveCfg = Debug|Win32
-		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.Debug|x86.Build.0 = Debug|Win32
+		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.CParser-DEBUG|x64.ActiveCfg = Debug|x64
+		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.CParser-DEBUG|x64.Build.0 = Debug|x64
+		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.CParser-DEBUG|x86.ActiveCfg = Release-lib|Win32
+		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.CParser-DEBUG|x86.Build.0 = Release-lib|Win32
 		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.Release|x64.ActiveCfg = Release|x64
 		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.Release|x64.Build.0 = Release|x64
 		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.Release|x86.ActiveCfg = Release|Win32
@@ -29,10 +29,10 @@ Global
 		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.Release-lib|x64.Build.0 = Release-lib|x64
 		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.Release-lib|x86.ActiveCfg = Release-lib|Win32
 		{5D4459C3-FE5C-43EF-A45B-5FFB654B24D3}.Release-lib|x86.Build.0 = Release-lib|Win32
-		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Debug|x64.ActiveCfg = Debug|x64
-		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Debug|x64.Build.0 = Debug|x64
-		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Debug|x86.ActiveCfg = Debug|Win32
-		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Debug|x86.Build.0 = Debug|Win32
+		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.CParser-DEBUG|x64.ActiveCfg = Debug|x64
+		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.CParser-DEBUG|x64.Build.0 = Debug|x64
+		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.CParser-DEBUG|x86.ActiveCfg = Debug|Win32
+		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.CParser-DEBUG|x86.Build.0 = Debug|Win32
 		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Release|x64.ActiveCfg = Release|x64
 		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Release|x64.Build.0 = Release|x64
 		{E7AFC1BA-09A4-4304-B8B6-BD8BB230187A}.Release|x86.ActiveCfg = Release|Win32

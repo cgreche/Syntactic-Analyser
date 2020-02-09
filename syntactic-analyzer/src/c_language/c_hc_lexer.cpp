@@ -3,8 +3,6 @@
 
 //Hand coded C lexer
 
-#include "../languageparser.h"
-#include "../lib/nametable.h"
 #include "c_hc_lexer.h"
 
 #include "c_language.h"
